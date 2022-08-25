@@ -12,5 +12,6 @@ namespace BusinessLogic.Interfaces
 		ResponseModel Authenticate(UserCredential userCredential);
 		ResponseModel GenerateCode(string email);
 		ResponseModel Reset(UserCredential userCredential);
+		ResponseModel _isEmptyOrInvalid(string token);
 	}
 }

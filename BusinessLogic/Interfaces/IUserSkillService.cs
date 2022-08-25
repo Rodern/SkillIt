@@ -14,6 +14,7 @@ namespace BusinessLogic.Interfaces
 		ObservableCollection<UserSkill> GetUserSkills();
 		List<UserSkill> GetUserSkillForUser(int userId);
 		ResponseModel AddUserSkills(List<UserSkill> userSkills);
+		ResponseModel AddUserSkill(UserSkill userSkill);
 		ResponseModel UpdateUserSkill(int id, UserSkill userSkill);
 		ResponseModel DeleteUserSkill(int id);
 	}

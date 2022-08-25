@@ -12,7 +12,7 @@ namespace SkillItModels.Models
 		{
 
 		}
-		public Login_Info(string longitude, string latitude, DateTime dateTime, bool isOnline, bool isLoggedOut, string ip, string deviceName)
+		public Login_Info(string longitude, string latitude, DateTime dateTime, bool isOnline, bool isLoggedOut, string ip, string deviceName, string imgBase64)
 		{
 			Longitude = longitude;
 			Latitude = latitude;
@@ -21,6 +21,7 @@ namespace SkillItModels.Models
 			IsLoggedOut = isLoggedOut;
 			Ip = ip;
 			DeviceName = deviceName;
+			ImgBase64 = imgBase64;
 		}
 
 		public string Longitude { get; set; }
@@ -30,5 +31,6 @@ namespace SkillItModels.Models
 		public bool	IsLoggedOut { get; set; }
 		public string Ip { get; set; }
 		public string DeviceName { get; set; }
+		public string ImgBase64 { get; set; }
 	}
 }

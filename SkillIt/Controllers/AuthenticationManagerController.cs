@@ -41,5 +41,13 @@ namespace SkillItAPI.Controllers
 		{
 			return Ok(authenticationManager.Reset(userCredential));
 		}
+
+		[AllowAnonymous]
+		[HttpPost]
+		[Route("CheckTokenValidity")]
+		public IActionResult _isEmptyOrInvalid(string token)
+		{
+			return Ok(authenticationManager._isEmptyOrInvalid(token));
+		}
 	}
 }

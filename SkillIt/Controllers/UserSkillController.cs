@@ -31,23 +31,30 @@ namespace SkillItAPI.Controllers
 			return Ok(UserSkillService.AddUserSkills(userSkills));
 		}
 
-		[HttpPut]
-		[Route("GetUserSkill/{userId:int}")]
-		public IActionResult GetUserSkill([FromRoute] int userId)
+		[HttpPost]
+		[Route("AddUserSkill")]
+		public IActionResult AddUserSkill(UserSkill userSkill)
+		{
+			return Ok(UserSkillService.AddUserSkill(userSkill));
+		}
+
+		[HttpPost]
+		[Route("GetUserSkillForUser")]
+		public IActionResult GetUserSkillForUser(int userId)
 		{
 			return Ok(UserSkillService.GetUserSkillForUser(userId));
 		}
 
-		[HttpPut]
-		[Route("DeleteUserSkill/{id:int}")]
-		public IActionResult DeleteUserSkill([FromRoute] int id)
+		[HttpPost]
+		[Route("DeleteUserSkill")]
+		public IActionResult DeleteUserSkill(int id)
 		{
 			return Ok(UserSkillService.DeleteUserSkill(id));
 		}
 
-		[HttpPut]
-		[Route("UpdateUserSkill/{id:int}")]
-		public IActionResult UpdateUserSkill([FromRoute] int id, UserSkill userSkill)
+		[HttpPost]
+		[Route("UpdateUserSkill")]
+		public IActionResult UpdateUserSkill(int id, UserSkill userSkill)
 		{
 			return Ok(UserSkillService.UpdateUserSkill(id, userSkill));
 		}
