@@ -21,9 +21,6 @@ namespace BusinessLogic
 		{
 			try
 			{
-				//var catalogs = DatabaseContext.Catalogs.Where(cat => cat.CatalogId == catalog.CatalogId).ToList();
-				//if (catalogs.Count == 0)
-				//{
 				Catalog catalog = new()
 				{
 					Caption = catalogModel.Caption,
@@ -34,8 +31,6 @@ namespace BusinessLogic
 				DatabaseContext.Catalogs.Add(catalog);
 				DatabaseContext.SaveChanges();
 				return new ResponseModel(true, "Success");
-				//}
-				//return new ResponseModel(false, "Failed");
 			}
 			catch (Exception ex)
 			{

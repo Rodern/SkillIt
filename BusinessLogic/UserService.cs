@@ -98,7 +98,7 @@ namespace BusinessLogic
 					user.Email = userModel.Email;
 					user.FirstName = userModel.FirstName;
 					user.LastName = userModel.LastName;
-					user.Password = userModel.Password;
+					user.Password = Authentication.EncryptPassword(userModel.Password);
 					user.Dob = userModel.Dob;
 					user.Phone = userModel.Phone;
 					user.UserSkillId = userModel.UserSkillId;
