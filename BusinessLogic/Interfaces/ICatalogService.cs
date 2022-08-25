@@ -15,5 +15,6 @@ namespace BusinessLogic.Interfaces
 		ResponseModel AddCatalog(CatalogModel catalogModel);
 		Catalog GetCatalog(int id);
 		ResponseModel UpdateCatalog(int id, CatalogModel catalogModel);
+		ResponseModel DeleteCatalog(int id);
 	}
 }

@@ -32,6 +32,13 @@ namespace SkillItAPI.Controllers
 		}
 
 		[HttpPost]
+		[Route("DeleteCatalog")]
+		public IActionResult DeleteCatalog(int id)
+		{
+			return Ok(_catalogService.DeleteCatalog(id));
+		}
+
+		[HttpPost]
 		[Route("AddCatalog")]
 		public IActionResult AddCatalog(CatalogModel catalogModel)
 		{
@@ -39,8 +46,8 @@ namespace SkillItAPI.Controllers
 		}
 
 		[HttpPut]
-		[Route("UpdateCatalog/{id:int}")]
-		public IActionResult UpdateCatalog([FromRoute] int id, CatalogModel catalogModel)
+		[Route("UpdateCatalog")]
+		public IActionResult UpdateCatalog(int id, CatalogModel catalogModel)
 		{
 			return Ok(_catalogService.UpdateCatalog(id, catalogModel));
 		}

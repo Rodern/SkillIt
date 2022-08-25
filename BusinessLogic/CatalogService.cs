@@ -33,7 +33,7 @@ namespace BusinessLogic
 				};
 				DatabaseContext.Catalogs.Add(catalog);
 				DatabaseContext.SaveChanges();
-				return new ResponseModel(true, "Succes");
+				return new ResponseModel(true, "Success");
 				//}
 				//return new ResponseModel(false, "Failed");
 			}
@@ -41,6 +41,24 @@ namespace BusinessLogic
 			{
 
 				return new(false, ex.Message);
+			}
+		}
+
+		public ResponseModel DeleteCatalog(int id)
+		{
+			try
+			{
+				Catalog catalog = DatabaseContext.Catalogs.Find(id);
+				if(catalog != null)
+				{
+					DatabaseContext.Catalogs.Remove(catalog);
+					return new ResponseModel(true, "Success");
+				}
+				return new ResponseModel(false, "DeleteFailed");
+			}
+			catch (Exception ex)
+			{
+				return new(false, $"Error: {ex.Message}");
 			}
 		}
 
