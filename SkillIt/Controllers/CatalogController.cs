@@ -16,7 +16,8 @@ namespace SkillItAPI.Controllers
 		{
 			this._catalogService = catalogService;
 		}
-
+		
+		[AllowAnonymous]
 		[HttpGet]
 		[Route("GetAllCatalogs")]
 		public IActionResult GetAllCatalogs()
