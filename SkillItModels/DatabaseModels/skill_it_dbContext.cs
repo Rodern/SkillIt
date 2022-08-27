@@ -94,7 +94,7 @@ namespace SkillItModels.DatabaseModels
 
                 entity.Property(e => e.CatalogLink)
                     .IsRequired()
-                    .HasMaxLength(100)
+                    .HasMaxLength(10000000)
                     .HasColumnName("catalog_link");
 
                 entity.Property(e => e.Description)
