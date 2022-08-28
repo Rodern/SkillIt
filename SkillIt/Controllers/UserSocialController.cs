@@ -44,7 +44,7 @@ namespace SkillItAPI.Controllers
 			return Ok(UserSocialService.DeleteUserSocial(id));
 		}
 
-		[HttpPut]
+		[HttpPost]
 		[Route("UpdateUserSocial")]
 		public IActionResult UpdateUserSocial(int id, UserSocial userSocial)
 		{
