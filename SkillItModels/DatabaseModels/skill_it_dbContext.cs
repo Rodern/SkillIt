@@ -203,7 +203,7 @@ namespace SkillItModels.DatabaseModels
 
                 entity.Property(e => e.Username)
 					.IsRequired()
-					.HasMaxLength(10000000)
+					.HasMaxLength(15)
 					.HasColumnName("username");
             });
 
