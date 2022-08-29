@@ -40,7 +40,7 @@ namespace SkillItAPI.Controllers
 
 		[HttpPost]
 		[Route("GetUserSkillForUser")]
-		public IActionResult GetUserSkillForUser(int userId)
+		public IActionResult GetUserSkillForUser(long userId)
 		{
 			return Ok(UserSkillService.GetUserSkillForUser(userId));
 		}

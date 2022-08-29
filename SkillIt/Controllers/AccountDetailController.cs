@@ -5,7 +5,7 @@ using SkillItModels.DatabaseModels;
 
 namespace SkillItAPI.Controllers
 {
-	[Authorize]
+	[Authorize]	
 	[Route("api/[controller]")]
 	[ApiController]
 	public class AccountDetailController : ControllerBase
@@ -23,9 +23,10 @@ namespace SkillItAPI.Controllers
 			return Ok(AccountDetailService.AddAccountDetail(accountDetail));
 		}
 
+		[AllowAnonymous]
 		[HttpPost]
 		[Route("GetAccountDetail")]
-		public IActionResult GetAccountDetail(int userId)
+		public IActionResult GetAccountDetail(long userId)
 		{
 			return Ok(AccountDetailService.GetAccountDetail(userId));
 		}
@@ -39,7 +40,7 @@ namespace SkillItAPI.Controllers
 
 		[HttpPost]
 		[Route("UpdateAccountDetail")]
-		public IActionResult UpdateAccountDetail(int id, int id2, AccountDetail accountDetail)
+		public IActionResult UpdateAccountDetail(int id, long id2, AccountDetail accountDetail)
 		{
 			return Ok(AccountDetailService.UpdateAccountDetail(id, id2, accountDetail));
 		}

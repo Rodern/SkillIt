@@ -13,7 +13,7 @@ namespace BusinessLogic.Interfaces
 	{
 		ObservableCollection<AccountDetail> GetAllAccountDetails();
 		ResponseModel AddAccountDetail(AccountDetail accountDetail);
-		AccountDetail GetAccountDetail(int userId);
-		ResponseModel UpdateAccountDetail(int id, int id2, AccountDetail accountDetail);
+		AccountDetail GetAccountDetail(long userId);
+		ResponseModel UpdateAccountDetail(int id, long id2, AccountDetail accountDetail);
 	}
 }

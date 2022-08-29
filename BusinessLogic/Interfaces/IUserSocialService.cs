@@ -12,7 +12,7 @@ namespace BusinessLogic.Interfaces
 	public interface IUserSocialService
 	{
 		ObservableCollection<UserSocial> GetUserSocials();
-		List<UserSocial> GetUserSocialForUser(int userId);
+		List<UserSocial> GetUserSocialForUser(long userId);
 		ResponseModel AddUserSocial(UserSocial userSocial);
 		ResponseModel UpdateUserSocial(int id, UserSocial userSocial);
 		ResponseModel DeleteUserSocial(int id);

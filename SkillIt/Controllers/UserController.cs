@@ -27,7 +27,7 @@ namespace SkillItAPI.Controllers
 
 		[HttpPost]
 		[Route("GetUser")]
-		public IActionResult GetUser(int id)
+		public IActionResult GetUser(long id)
 		{
 			var data = userService.GetUser(id);
 			return Ok(data);
@@ -50,9 +50,9 @@ namespace SkillItAPI.Controllers
 			return Ok(data);
 		}
 
-		[HttpPut]
-		[Route("UpdateUser/{id:int}")]
-		public IActionResult UpdateUser([FromRoute] int id, UserModel user)
+		[HttpPost]
+		[Route("UpdateUser")]
+		public IActionResult UpdateUser(long id, UserModel user)
 		{
 			var data = userService.UpdateUser(id, user);
 			return Ok(data);

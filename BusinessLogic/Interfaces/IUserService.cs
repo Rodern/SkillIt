@@ -14,7 +14,7 @@ namespace BusinessLogic.Interfaces
 		ObservableCollection<User> GetAllUsers();
 		ResponseModel CheckEmailExistence(string email);
 		ResponseModel AddUser(UserModel user);
-		User GetUser(int id);
-		ResponseModel UpdateUser(int id, UserModel user);
+		User GetUser(long id);
+		ResponseModel UpdateUser(long id, UserModel user);
 	}
 }

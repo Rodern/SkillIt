@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace SkillItModels.DatabaseModels
 {
-    public partial class skill_it_dbContext : DbContext
+    public partial class skillit_dbContext : DbContext
     {
-        public skill_it_dbContext()
+        public skillit_dbContext()
         {
         }
 
-        public skill_it_dbContext(DbContextOptions<skill_it_dbContext> options)
+        public skillit_dbContext(DbContextOptions<skillit_dbContext> options)
             : base(options)
         {
         }
@@ -30,7 +30,7 @@ namespace SkillItModels.DatabaseModels
             if (!optionsBuilder.IsConfigured)
             {
                 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                //optionsBuilder.UseMySQL("server=localhost;port=3306;database=skill_it_db;user=root;password=");
+                //optionsBuilder.UseMySQL("server=localhost;port=3306;database=skillit_db;user=root;password=");
             }
         }
 
@@ -51,13 +51,18 @@ namespace SkillItModels.DatabaseModels
                     .HasColumnName("acID");
 
                 entity.Property(e => e.UserId)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("bigint(20)")
                     .HasColumnName("userID");
 
                 entity.Property(e => e.AccountStatus)
                     .IsRequired()
                     .HasColumnType("enum('suspended','not_verified','verified','banned')")
                     .HasColumnName("account_status");
+
+                entity.Property(e => e.AccountType)
+                    .IsRequired()
+                    .HasColumnType("enum('user','admin')")
+                    .HasColumnName("accountType");
 
                 entity.Property(e => e.LastLogin).HasColumnName("last_login");
 
@@ -74,23 +79,21 @@ namespace SkillItModels.DatabaseModels
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AccountDetails)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("detail_of");
+                    .HasConstraintName("user");
             });
 
             modelBuilder.Entity<Catalog>(entity =>
             {
-                //entity.HasKey(e.cata);
-
                 entity.ToTable("catalog");
+
+                entity.Property(e => e.CatalogId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("catalogID");
 
                 entity.Property(e => e.Caption)
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("caption");
-
-                entity.Property(e => e.CatalogId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("catalogID");
 
                 entity.Property(e => e.CatalogLink)
                     .IsRequired()
@@ -102,10 +105,10 @@ namespace SkillItModels.DatabaseModels
                     .HasMaxLength(250)
                     .HasColumnName("description");
 
-                entity.Property(e => e.ImgLink)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .HasColumnName("img_link");
+                entity.Property(e => e.ImgBase64)
+                    .HasColumnType("longtext")
+                    .HasColumnName("imgBase64")
+                    .HasDefaultValueSql("'NULL'");
             });
 
             modelBuilder.Entity<Skill>(entity =>
@@ -140,9 +143,9 @@ namespace SkillItModels.DatabaseModels
                     .HasColumnName("link");
 
                 entity.Property(e => e.Name)
-					.IsRequired()
-					.HasMaxLength(20)
-					.HasColumnName("name");
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .HasColumnName("name");
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -150,7 +153,7 @@ namespace SkillItModels.DatabaseModels
                 entity.ToTable("user");
 
                 entity.Property(e => e.UserId)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("bigint(20)")
                     .HasColumnName("userID");
 
                 entity.Property(e => e.Address)
@@ -158,9 +161,7 @@ namespace SkillItModels.DatabaseModels
                     .HasMaxLength(100)
                     .HasColumnName("address");
 
-                entity.Property(e => e.DateCreated)
-                    .HasColumnName("date_created")
-                    .HasDefaultValueSql("'current_timestamp()'");
+                entity.Property(e => e.DateCreated).HasColumnName("date_created");
 
                 entity.Property(e => e.Dob)
                     .HasColumnType("date")
@@ -176,6 +177,16 @@ namespace SkillItModels.DatabaseModels
                     .HasMaxLength(15)
                     .HasColumnName("first_name");
 
+                entity.Property(e => e.Gender)
+                    .IsRequired()
+                    .HasColumnType("enum('M','F')")
+                    .HasColumnName("gender");
+
+                entity.Property(e => e.ImgBase64)
+                    .HasColumnType("longtext")
+                    .HasColumnName("imgBase64")
+                    .HasDefaultValueSql("'NULL'");
+
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(15)
@@ -183,37 +194,22 @@ namespace SkillItModels.DatabaseModels
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(15)
+                    .HasMaxLength(250)
                     .HasColumnName("password");
 
                 entity.Property(e => e.Phone)
                     .IsRequired()
                     .HasMaxLength(9)
                     .HasColumnName("phone");
-
-                entity.Property(e => e.UserSkillId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("user_skillID")
-                    .HasDefaultValueSql("'NULL'");
-
-                entity.Property(e => e.UserSocialId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("user_socialID")
-                    .HasDefaultValueSql("'NULL'");
-
-                entity.Property(e => e.Username)
-					.IsRequired()
-					.HasMaxLength(15)
-					.HasColumnName("username");
             });
 
             modelBuilder.Entity<UserSkill>(entity =>
             {
                 entity.ToTable("user_skill");
 
-                entity.HasIndex(e => e.SkillId, "has_skill");
+                entity.HasIndex(e => e.SkillId, "skill");
 
-                entity.HasIndex(e => e.UserId, "user_has");
+                entity.HasIndex(e => e.UserId, "user_has_skill");
 
                 entity.Property(e => e.UserSkillId)
                     .HasColumnType("int(11)")
@@ -224,27 +220,27 @@ namespace SkillItModels.DatabaseModels
                     .HasColumnName("skillID");
 
                 entity.Property(e => e.UserId)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("bigint(20)")
                     .HasColumnName("userID");
 
                 entity.HasOne(d => d.Skill)
                     .WithMany(p => p.UserSkills)
                     .HasForeignKey(d => d.SkillId)
-                    .HasConstraintName("has_skill");
+                    .HasConstraintName("skill");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserSkills)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("user_has");
+                    .HasConstraintName("user_has_skill");
             });
 
             modelBuilder.Entity<UserSocial>(entity =>
             {
                 entity.ToTable("user_social");
 
-                entity.HasIndex(e => e.UserId, "has_social");
+                entity.HasIndex(e => e.SocialId, "social");
 
-                entity.HasIndex(e => e.SocialId, "user_is_on");
+                entity.HasIndex(e => e.UserId, "user_has_social");
 
                 entity.Property(e => e.UserSocialId)
                     .HasColumnType("int(11)")
@@ -255,18 +251,18 @@ namespace SkillItModels.DatabaseModels
                     .HasColumnName("socialID");
 
                 entity.Property(e => e.UserId)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("bigint(20)")
                     .HasColumnName("userID");
 
                 entity.HasOne(d => d.Social)
                     .WithMany(p => p.UserSocials)
                     .HasForeignKey(d => d.SocialId)
-                    .HasConstraintName("user_is_on");
+                    .HasConstraintName("social");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserSocials)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("has_social");
+                    .HasConstraintName("user_has_social");
             });
 
             OnModelCreatingPartial(modelBuilder);

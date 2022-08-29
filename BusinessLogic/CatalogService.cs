@@ -12,8 +12,8 @@ namespace BusinessLogic
 {
 	public class CatalogService : ICatalogService
 	{
-		private readonly skill_it_dbContext DatabaseContext;
-		public CatalogService(skill_it_dbContext skill_It_DbContext)
+		private readonly skillit_dbContext DatabaseContext;
+		public CatalogService(skillit_dbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}
@@ -25,7 +25,7 @@ namespace BusinessLogic
 				{
 					Caption = catalogModel.Caption,
 					Description = catalogModel.Description,
-					ImgLink = catalogModel.ImgLink,
+					ImgBase64 = catalogModel.ImgBase64,
 					CatalogLink = catalogModel.CatalogLink
 				};
 				DatabaseContext.Catalogs.Add(catalog);
@@ -75,7 +75,7 @@ namespace BusinessLogic
 					{
 						this_catalog.Caption = catalogModel.Caption;
 						this_catalog.Description = catalogModel.Description;
-						this_catalog.ImgLink = catalogModel.ImgLink;
+						this_catalog.ImgBase64 = catalogModel.ImgBase64;
 						this_catalog.CatalogLink = catalogModel.CatalogLink;
 						DatabaseContext.Catalogs.Update(this_catalog);
 						DatabaseContext.SaveChanges();

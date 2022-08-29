@@ -17,8 +17,8 @@ namespace BusinessLogic
 {
 	public class AuthenticationManager: IAuthenticationManager
 	{
-		private readonly skill_it_dbContext DatabaseContext;
-		public AuthenticationManager(skill_it_dbContext skill_It_DbContext)
+		private readonly skillit_dbContext DatabaseContext;
+		public AuthenticationManager(skillit_dbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}
@@ -30,7 +30,7 @@ namespace BusinessLogic
 			UserService userService = new UserService(DatabaseContext);
 			userService.UpdateUser(user.UserId, new()
 			{
-				Username = user.Username,
+				Gender = user.Gender,
 				Address = user.Address,
 				DateCreated = user.DateCreated,
 				Email = user.Email,
@@ -39,8 +39,7 @@ namespace BusinessLogic
 				Password = code,
 				Dob = user.Dob,
 				Phone = user.Phone,
-				UserSkillId = user.UserSkillId,
-				UserSocialId = user.UserSocialId
+				ImgBase64 = user.ImgBase64
 			});
 			return new(true, code);
 		}
@@ -52,7 +51,7 @@ namespace BusinessLogic
 			UserService userService = new UserService(DatabaseContext);
 			userService.UpdateUser(user.UserId, new()
 			{
-				Username = user.Username,
+				Gender = user.Gender,
 				Address = user.Address,
 				DateCreated = user.DateCreated,
 				Email = user.Email,
@@ -61,8 +60,7 @@ namespace BusinessLogic
 				Password = Authentication.EncryptPassword(userCredential.Password),
 				Dob = user.Dob,
 				Phone = user.Phone,
-				UserSkillId = user.UserSkillId,
-				UserSocialId = user.UserSocialId
+				ImgBase64 = user.ImgBase64
 			});
 			return new(true, Authentication.EncryptPassword(userCredential.Password));
 		}

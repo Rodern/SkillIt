@@ -12,8 +12,8 @@ namespace BusinessLogic
 {
 	public class SocialService : ISocialService
 	{
-		private readonly skill_it_dbContext DatabaseContext;
-		public SocialService(skill_it_dbContext skill_It_DbContext)
+		private readonly skillit_dbContext DatabaseContext;
+		public SocialService(skillit_dbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}

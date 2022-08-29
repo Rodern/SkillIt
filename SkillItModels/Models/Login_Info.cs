@@ -20,8 +20,6 @@ namespace SkillItModels.Models
 			IsOnline = isOnline;
 			IsLoggedOut = isLoggedOut;
 			Ip = ip;
-			DeviceName = deviceName;
-			ImgBase64 = imgBase64;
 		}
 
 		public string Longitude { get; set; }
@@ -30,7 +28,5 @@ namespace SkillItModels.Models
 		public bool IsOnline { get; set; }
 		public bool	IsLoggedOut { get; set; }
 		public string Ip { get; set; }
-		public string DeviceName { get; set; }
-		public string ImgBase64 { get; set; }
 	}
 }

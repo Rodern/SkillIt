@@ -8,8 +8,9 @@ namespace SkillItModels.Models
 {
 	public class UserModel
 	{
-		public int UserId { get; set; }
-		public string Username { get; set; }
+
+		public long UserId { get; set; }
+		public string Gender { get; set; }
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public string Email { get; set; }
@@ -18,8 +19,7 @@ namespace SkillItModels.Models
 		public string Address { get; set; }
 		public DateTime DateCreated { get; set; }
 		public string Phone { get; set; }
-		public int? UserSocialId { get; set; }
-		public int? UserSkillId { get; set; }
+		public string ImgBase64 { get; set; }
 		public List<Login_Info> LoginInfos { get; set; }
 		public List<Login_Attemp> LoginAttemps { get; set; }
 	}

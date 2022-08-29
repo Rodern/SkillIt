@@ -12,8 +12,8 @@ namespace BusinessLogic
 {
 	public class UserSocialService : IUserSocialService
 	{
-		private readonly skill_it_dbContext DatabaseContext;
-		public UserSocialService(skill_it_dbContext databaseContext)
+		private readonly skillit_dbContext DatabaseContext;
+		public UserSocialService(skillit_dbContext databaseContext)
 		{
 			DatabaseContext = databaseContext;
 		}
@@ -45,10 +45,10 @@ namespace BusinessLogic
 		{
 			try
 			{
-				UserSocial userSocial = DatabaseContext.UserSocials.Find(id);
-				Social social = DatabaseContext.Socials.Where(s => s.SocialId == userSocial.SocialId).FirstOrDefault();
+				UserSocial userSocial = DatabaseContext.UserSocials.Where(us => us.UserSocialId == id).FirstOrDefault();
+				//Social social = DatabaseContext.Socials.Where(s => s.SocialId == userSocial.SocialId).FirstOrDefault();
 				DatabaseContext.UserSocials.Remove(userSocial);
-				DatabaseContext.Socials.Remove(social);
+				//DatabaseContext.Socials.Remove(social);
 				DatabaseContext.SaveChanges();
 				return new(true, "Success");
 			}
@@ -58,7 +58,7 @@ namespace BusinessLogic
 			}
 		}
 
-		public List<UserSocial> GetUserSocialForUser(int userId)
+		public List<UserSocial> GetUserSocialForUser(long userId)
 		{
 			List<UserSocial> userSocials = new List<UserSocial>(DatabaseContext.UserSocials.Where(s => s.UserId == userId));
 			return addSocial(userSocials);

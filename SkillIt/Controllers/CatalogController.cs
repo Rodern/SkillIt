@@ -17,6 +17,7 @@ namespace SkillItAPI.Controllers
 			this._catalogService = catalogService;
 		}
 
+		[AllowAnonymous]
 		[HttpGet]
 		[Route("GetAllCatalogs")]
 		public IActionResult GetAllCatalogs()
@@ -45,7 +46,7 @@ namespace SkillItAPI.Controllers
 			return Ok(_catalogService.AddCatalog(catalogModel));
 		}
 
-		[HttpPut]
+		[HttpPost]
 		[Route("UpdateCatalog")]
 		public IActionResult UpdateCatalog(int id, CatalogModel catalogModel)
 		{

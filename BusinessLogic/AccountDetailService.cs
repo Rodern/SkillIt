@@ -13,8 +13,8 @@ namespace BusinessLogic
 {
 	public class AccountDetailService : IAccountDetailService
 	{
-		private readonly skill_it_dbContext DatabaseContext;
-		public AccountDetailService(skill_it_dbContext databaseContext)
+		private readonly skillit_dbContext DatabaseContext;
+		public AccountDetailService(skillit_dbContext databaseContext)
 		{
 			this.DatabaseContext = databaseContext;
 		}
@@ -35,7 +35,7 @@ namespace BusinessLogic
 			}
 		}
 
-		public AccountDetail GetAccountDetail(int userId)
+		public AccountDetail GetAccountDetail(long userId)
 		{
 			return DatabaseContext.AccountDetails.Where(ac => ac.UserId == userId).ToList().FirstOrDefault();
 		}
@@ -45,7 +45,7 @@ namespace BusinessLogic
 			return new ObservableCollection<AccountDetail>(DatabaseContext.AccountDetails.ToList());
 		}
 
-		public ResponseModel UpdateAccountDetail(int id, int id2, AccountDetail accountDetail)
+		public ResponseModel UpdateAccountDetail(int id, long id2, AccountDetail accountDetail)
 		{
 			var detail = DatabaseContext.AccountDetails.Where(ac => ac.AcId == id && ac.UserId == id2).FirstOrDefault();
 			try
@@ -56,6 +56,7 @@ namespace BusinessLogic
 					detail.AccountStatus = accountDetail.AccountStatus;
 					detail.LoginInfo = accountDetail.LoginInfo;
 					detail.LoginAttemp = accountDetail.LoginAttemp;
+					detail.AccountType = accountDetail.AccountType;
 					detail.User = DatabaseContext.Users.Where(u => u.UserId == id2).ToList().FirstOrDefault();
 					detail.LastLogin = accountDetail.LastLogin;
 					DatabaseContext.AccountDetails.Update(detail);

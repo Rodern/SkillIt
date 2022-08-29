@@ -8,7 +8,8 @@ namespace SkillItModels.DatabaseModels
     public partial class AccountDetail
     {
         public int AcId { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
+        public string AccountType { get; set; }
         public DateTime LastLogin { get; set; }
         public string LoginInfo { get; set; }
         public string AccountStatus { get; set; }

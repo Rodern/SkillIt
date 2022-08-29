@@ -32,19 +32,19 @@ namespace SkillItAPI.Controllers
 
 		[HttpPost]
 		[Route("GetUserSocialForUser")]
-		public IActionResult GetUserSocialForUser(int userId)
+		public IActionResult GetUserSocialForUser(long userId)
 		{
 			return Ok(UserSocialService.GetUserSocialForUser(userId));
 		}
 
-		[HttpPost]
+		[HttpDelete]
 		[Route("DeleteUserSocial")]
 		public IActionResult DeleteUserSocial(int id)
 		{
 			return Ok(UserSocialService.DeleteUserSocial(id));
 		}
 
-		[HttpPut]
+		[HttpPost]
 		[Route("UpdateUserSocial")]
 		public IActionResult UpdateUserSocial(int id, UserSocial userSocial)
 		{

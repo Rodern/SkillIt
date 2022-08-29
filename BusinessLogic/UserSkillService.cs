@@ -12,8 +12,8 @@ namespace BusinessLogic
 {
 	public class UserSkillService : IUserSkillService
 	{
-		private readonly skill_it_dbContext DatabaseContext;
-		public UserSkillService(skill_it_dbContext databaseContext)
+		private readonly skillit_dbContext DatabaseContext;
+		public UserSkillService(skillit_dbContext databaseContext)
 		{
 			DatabaseContext = databaseContext;
 		}
@@ -72,7 +72,7 @@ namespace BusinessLogic
 			}
 		}
 
-		public List<UserSkill> GetUserSkillForUser(int userId)
+		public List<UserSkill> GetUserSkillForUser(long userId)
 		{
 			List<UserSkill> userSkills = new List<UserSkill>(DatabaseContext.UserSkills.Where(s => s.UserId == userId));
 			return addSkill(userSkills);

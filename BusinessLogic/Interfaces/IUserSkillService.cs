@@ -12,7 +12,7 @@ namespace BusinessLogic.Interfaces
 	public interface IUserSkillService
 	{
 		ObservableCollection<UserSkill> GetUserSkills();
-		List<UserSkill> GetUserSkillForUser(int userId);
+		List<UserSkill> GetUserSkillForUser(long userId);
 		ResponseModel AddUserSkills(List<UserSkill> userSkills);
 		ResponseModel AddUserSkill(UserSkill userSkill);
 		ResponseModel UpdateUserSkill(int id, UserSkill userSkill);

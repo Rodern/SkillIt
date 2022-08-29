@@ -9,9 +9,9 @@ namespace BusinessLogic
 {
 	public class UserService: IUserService
 	{
-		private readonly skill_it_dbContext DatabaseContext;
+		private readonly skillit_dbContext DatabaseContext;
 		public AccountStatus AccountStatus = new AccountStatus();
-		public UserService(skill_it_dbContext skill_It_DbContext)
+		public UserService(skillit_dbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}
@@ -47,9 +47,8 @@ namespace BusinessLogic
 						Password = Authentication.EncryptPassword(userModel.Password),
 						Dob = userModel.Dob,
 						Phone = userModel.Phone,
-						Username = userModel.Username,
-						UserSkillId = userModel.UserSkillId,
-						UserSocialId = userModel.UserSocialId
+						Gender = userModel.Gender,
+						ImgBase64 = userModel.ImgBase64
 					};
 
 					AccountDetail accountDetail = new AccountDetail
@@ -58,6 +57,7 @@ namespace BusinessLogic
 						AccountStatus = "not_verified",
 						LoginInfo = JsonConvert.SerializeObject(userModel.LoginInfos),
 						LoginAttemp = JsonConvert.SerializeObject(userModel.LoginAttemps),
+						AccountType	= "user",
 						User = user,
 						LastLogin = DateTime.Now
 					};
@@ -75,7 +75,7 @@ namespace BusinessLogic
 			}
 		}
 
-		public User GetUser(int id)
+		public User GetUser(long id)
 		{
 			var user = DatabaseContext.Users.Where(u => u.UserId == id).FirstOrDefault();
 			if(user != null)
@@ -85,14 +85,14 @@ namespace BusinessLogic
 			return new();
 		}
 
-		public ResponseModel UpdateUser(int id, UserModel userModel)
+		public ResponseModel UpdateUser(long id, UserModel userModel)
 		{
 			try
 			{
 				var user = DatabaseContext.Users.Where(u => u.UserId == id).FirstOrDefault();
 				if (user != null)
 				{
-					user.Username = userModel.Username;
+					user.Gender = userModel.Gender;
 					user.Address = userModel.Address;
 					user.DateCreated = userModel.DateCreated;
 					user.Email = userModel.Email;
@@ -101,8 +101,7 @@ namespace BusinessLogic
 					user.Password = Authentication.EncryptPassword(userModel.Password);
 					user.Dob = userModel.Dob;
 					user.Phone = userModel.Phone;
-					user.UserSkillId = userModel.UserSkillId;
-					user.UserSocialId = userModel.UserSocialId;
+					user.ImgBase64 = userModel.ImgBase64;
 					DatabaseContext.Users.Update(user);
 					DatabaseContext.SaveChanges();
 					return new(true, "Success");

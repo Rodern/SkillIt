@@ -12,8 +12,8 @@ namespace BusinessLogic
 {
 	public class SkillService : ISkillService
 	{
-		private readonly skill_it_dbContext DatabaseContext;
-		public SkillService(skill_it_dbContext databaseContext)
+		private readonly skillit_dbContext DatabaseContext;
+		public SkillService(skillit_dbContext databaseContext)
 		{
 			DatabaseContext = databaseContext;
 		}
