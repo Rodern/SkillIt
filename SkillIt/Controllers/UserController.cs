@@ -50,11 +50,11 @@ namespace SkillItAPI.Controllers
 			return Ok(data);
 		}
 
-		[HttpPost]
-		[Route("UpdateUser")]
-		public IActionResult UpdateUser(long id, UserModel user)
+		[HttpPut]
+		[Route("UpdateUser/{userId}")]
+		public IActionResult UpdateUser([FromRoute] long userId, UserModel user)
 		{
-			var data = userService.UpdateUser(id, user);
+			var data = userService.UpdateUser(userId, user);
 			return Ok(data);
 		}
 	}

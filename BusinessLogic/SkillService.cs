@@ -40,6 +40,7 @@ namespace BusinessLogic
 			{
 				Skill skill = DatabaseContext.Skills.Where(s => s.SkillId == id).FirstOrDefault();
 				if (skill == null) return new(false, "NotFound");
+				DatabaseContext.Entry<Skill>(skill).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
 				DatabaseContext.Skills.Remove(skill);
 				DatabaseContext.SaveChanges();
 				return new(true, "Success");
@@ -69,6 +70,7 @@ namespace BusinessLogic
 				//this_skill.SkillId = skill.SkillId;
 				this_skill.Name	= skill.Name;
 				this_skill.Level = skill.Level;
+				DatabaseContext.Entry<Skill>(this_skill).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
 				DatabaseContext.Skills.Update(this_skill);
 				DatabaseContext.SaveChanges();
 				return new(true, "Success");

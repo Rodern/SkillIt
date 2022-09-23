@@ -46,6 +46,7 @@ namespace BusinessLogic
 				Catalog catalog = DatabaseContext.Catalogs.Find(id);
 				if(catalog != null)
 				{
+					DatabaseContext.Entry<Catalog>(catalog).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
 					DatabaseContext.Catalogs.Remove(catalog);
 					return new ResponseModel(true, "Success");
 				}
@@ -77,6 +78,7 @@ namespace BusinessLogic
 						this_catalog.Description = catalogModel.Description;
 						this_catalog.ImgBase64 = catalogModel.ImgBase64;
 						this_catalog.CatalogLink = catalogModel.CatalogLink;
+						DatabaseContext.Entry<Catalog>(this_catalog).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
 						DatabaseContext.Catalogs.Update(this_catalog);
 						DatabaseContext.SaveChanges();
 						return new ResponseModel(true, "Success");

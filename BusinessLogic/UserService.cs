@@ -85,11 +85,11 @@ namespace BusinessLogic
 			return new();
 		}
 
-		public ResponseModel UpdateUser(long id, UserModel userModel)
+		public ResponseModel UpdateUser(long userId, UserModel userModel)
 		{
 			try
 			{
-				var user = DatabaseContext.Users.Where(u => u.UserId == id).FirstOrDefault();
+				var user = DatabaseContext.Users.Where(u => u.UserId == userId).FirstOrDefault();
 				if (user != null)
 				{
 					user.Gender = userModel.Gender;
@@ -102,11 +102,12 @@ namespace BusinessLogic
 					user.Dob = userModel.Dob;
 					user.Phone = userModel.Phone;
 					user.ImgBase64 = userModel.ImgBase64;
+					DatabaseContext.Entry<User>(user).State = EntityState.Detached;
 					DatabaseContext.Users.Update(user);
 					DatabaseContext.SaveChanges();
 					return new(true, "Success");
 				}
-				return new(false, "NotFound");
+				return new(false, Convert.ToString(userId));
 			}
 			catch (Exception ex)
 			{

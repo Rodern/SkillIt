@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using SkillItModels.DatabaseModels;
 using SkillItModels.Models;
 using System;
@@ -60,9 +61,11 @@ namespace BusinessLogic
 			try
 			{
 				UserSkill userSkill = DatabaseContext.UserSkills.Find(id);
-				Skill social = DatabaseContext.Skills.Where(s => s.SkillId == userSkill.SkillId).FirstOrDefault();
+				Skill skill = DatabaseContext.Skills.Where(s => s.SkillId == userSkill.SkillId).FirstOrDefault();
+				DatabaseContext.Entry<UserSkill>(userSkill).State = EntityState.Detached;
+				DatabaseContext.Entry<Skill>(skill).State = EntityState.Detached;
 				DatabaseContext.UserSkills.Remove(userSkill);
-				DatabaseContext.Skills.Remove(social);
+				DatabaseContext.Skills.Remove(skill);
 				DatabaseContext.SaveChanges();
 				return new(true, "Success");
 			}
@@ -88,7 +91,7 @@ namespace BusinessLogic
 			try
 			{
 				UserSkill this_userSkill = DatabaseContext.UserSkills.Where(s => s.UserSkillId == id).FirstOrDefault();
-				if (this_userSkill == null) return new(false, "NotFound");
+				if (this_userSkill == null) return new(false, $"NotFound {id}");
 				//this_userSkill = userSkill;
 				DeleteUserSkill(id);
 				AddUserSkill(userSkill);

@@ -45,16 +45,16 @@ namespace SkillItAPI.Controllers
 			return Ok(UserSkillService.GetUserSkillForUser(userId));
 		}
 
-		[HttpPost]
-		[Route("DeleteUserSkill")]
-		public IActionResult DeleteUserSkill(int id)
+		[HttpDelete]
+		[Route("DeleteUserSkill/{id}")]
+		public IActionResult DeleteUserSkill([FromRoute] int id)
 		{
 			return Ok(UserSkillService.DeleteUserSkill(id));
 		}
 
-		[HttpPost]
-		[Route("UpdateUserSkill")]
-		public IActionResult UpdateUserSkill(int id, UserSkill userSkill)
+		[HttpPut]
+		[Route("UpdateUserSkill/{id}")]
+		public IActionResult UpdateUserSkill([FromRoute] int id, UserSkill userSkill)
 		{
 			return Ok(UserSkillService.UpdateUserSkill(id, userSkill));
 		}

@@ -41,6 +41,7 @@ namespace BusinessLogic
 			try
 			{
 				var social = DatabaseContext.Socials.Where(s => s.SocialId == id).FirstOrDefault();
+				DatabaseContext.Entry<Social>(social).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
 				DatabaseContext.Socials.Remove(social);
 				DatabaseContext.SaveChanges();
 				return new(true, "Success");
@@ -72,6 +73,9 @@ namespace BusinessLogic
 				}
 				this_social.Name = social.Name;
 				this_social.Link = social.Link;
+				DatabaseContext.Entry<Social>(this_social).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+				DatabaseContext.Update(this_social);
+				DatabaseContext.SaveChanges();
 				return new(true, "Success");
 			}
 			catch (Exception ex)

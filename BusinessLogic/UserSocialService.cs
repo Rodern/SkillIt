@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using SkillItModels.DatabaseModels;
 using SkillItModels.Models;
 using System;
@@ -46,9 +47,11 @@ namespace BusinessLogic
 			try
 			{
 				UserSocial userSocial = DatabaseContext.UserSocials.Where(us => us.UserSocialId == id).FirstOrDefault();
-				//Social social = DatabaseContext.Socials.Where(s => s.SocialId == userSocial.SocialId).FirstOrDefault();
+				Social social = DatabaseContext.Socials.Where(s => s.SocialId == userSocial.SocialId).FirstOrDefault();
+				DatabaseContext.Entry<UserSocial>(userSocial).State = EntityState.Detached;
+				DatabaseContext.Entry<Social>(social).State = EntityState.Detached;
 				DatabaseContext.UserSocials.Remove(userSocial);
-				//DatabaseContext.Socials.Remove(social);
+				DatabaseContext.Socials.Remove(social);
 				DatabaseContext.SaveChanges();
 				return new(true, "Success");
 			}
