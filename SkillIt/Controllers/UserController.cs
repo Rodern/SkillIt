@@ -1,8 +1,10 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SkillItModels.DatabaseModels;
 using SkillItModels.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SkillItAPI.Controllers
 {
@@ -44,18 +46,22 @@ namespace SkillItAPI.Controllers
 		[AllowAnonymous]
 		[HttpPost]
 		[Route("AddUser")]
-		public IActionResult AddUser(UserModel user)
+		public IActionResult AddUser(string userJson, IFormFile image)
 		{
-			var data = userService.AddUser(user);
-			return Ok(data);
+			if (userJson.Length <= 0 || image == null) return BadRequest();
+            UserModel userModel = JsonConvert.DeserializeObject<UserModel>(userJson);
+            userModel.Image = ImageUpload.GetBytes(image);
+            return Ok(userService.AddUser(userModel));
 		}
 
 		[HttpPut]
-		[Route("UpdateUser/{userId}")]
-		public IActionResult UpdateUser([FromRoute] long userId, UserModel user)
-		{
-			var data = userService.UpdateUser(userId, user);
-			return Ok(data);
+		[Route("UpdateUser")]
+		public IActionResult UpdateUser(string userJson, IFormFile image)
+        {
+            if (userJson.Length <= 0 || image == null) return BadRequest();
+            UserModel userModel = JsonConvert.DeserializeObject<UserModel>(userJson);
+			userModel.Image = ImageUpload.GetBytes(image);
+			return Ok(userService.UpdateUser(userModel.UserId, userModel));
 		}
 	}
 }

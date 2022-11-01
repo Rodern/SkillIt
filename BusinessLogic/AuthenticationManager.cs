@@ -17,8 +17,8 @@ namespace BusinessLogic
 {
 	public class AuthenticationManager: IAuthenticationManager
 	{
-		private readonly skillit_dbContext DatabaseContext;
-		public AuthenticationManager(skillit_dbContext skill_It_DbContext)
+		private readonly SkillItModels.DatabaseModels.skillit_dbContext DatabaseContext;
+		public AuthenticationManager(SkillItModels.DatabaseModels.skillit_dbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}
@@ -39,7 +39,7 @@ namespace BusinessLogic
 				Password = code,
 				Dob = user.Dob,
 				Phone = user.Phone,
-				ImgBase64 = user.ImgBase64
+				Image = user.Image
 			});
 			return new(true, code);
 		}
@@ -60,7 +60,7 @@ namespace BusinessLogic
 				Password = Authentication.EncryptPassword(userCredential.Password),
 				Dob = user.Dob,
 				Phone = user.Phone,
-				ImgBase64 = user.ImgBase64
+				Image = user.Image,
 			});
 			return new(true, Authentication.EncryptPassword(userCredential.Password));
 		}

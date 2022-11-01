@@ -10,7 +10,7 @@ namespace SkillItModels.DatabaseModels
         public int CatalogId { get; set; }
         public string Caption { get; set; }
         public string Description { get; set; }
-        public string ImgBase64 { get; set; }
+        public byte[] Image { get; set; }
         public string CatalogLink { get; set; }
     }
 }

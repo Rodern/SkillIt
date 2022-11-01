@@ -9,9 +9,9 @@ namespace BusinessLogic
 {
 	public class UserService: IUserService
 	{
-		private readonly skillit_dbContext DatabaseContext;
+		private readonly SkillItModels.DatabaseModels.skillit_dbContext DatabaseContext;
 		public AccountStatus AccountStatus = new AccountStatus();
-		public UserService(skillit_dbContext skill_It_DbContext)
+		public UserService(SkillItModels.DatabaseModels.skillit_dbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}
@@ -48,7 +48,7 @@ namespace BusinessLogic
 						Dob = userModel.Dob,
 						Phone = userModel.Phone,
 						Gender = userModel.Gender,
-						ImgBase64 = userModel.ImgBase64
+						Image = userModel.Image
 					};
 
 					AccountDetail accountDetail = new AccountDetail
@@ -101,7 +101,7 @@ namespace BusinessLogic
 					user.Password = Authentication.EncryptPassword(userModel.Password);
 					user.Dob = userModel.Dob;
 					user.Phone = userModel.Phone;
-					user.ImgBase64 = userModel.ImgBase64;
+					user.Image = userModel.Image;
 					DatabaseContext.Entry<User>(user).State = EntityState.Detached;
 					DatabaseContext.Users.Update(user);
 					DatabaseContext.SaveChanges();

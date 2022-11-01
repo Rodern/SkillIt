@@ -19,7 +19,7 @@ namespace SkillItModels.Models
 		public string Address { get; set; }
 		public DateTime DateCreated { get; set; }
 		public string Phone { get; set; }
-		public string ImgBase64 { get; set; }
+		public byte[] Image { get; set; }
 		public List<Login_Info> LoginInfos { get; set; }
 		public List<Login_Attemp> LoginAttemps { get; set; }
 	}

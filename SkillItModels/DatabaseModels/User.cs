@@ -24,7 +24,7 @@ namespace SkillItModels.DatabaseModels
         public string Address { get; set; }
         public DateTime DateCreated { get; set; }
         public string Phone { get; set; }
-        public string ImgBase64 { get; set; }
+        public byte[] Image { get; set; }
 
         public virtual ICollection<AccountDetail> AccountDetails { get; set; }
         public virtual ICollection<UserSkill> UserSkills { get; set; }

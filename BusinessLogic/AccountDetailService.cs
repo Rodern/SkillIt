@@ -13,8 +13,8 @@ namespace BusinessLogic
 {
 	public class AccountDetailService : IAccountDetailService
 	{
-		private readonly skillit_dbContext DatabaseContext;
-		public AccountDetailService(skillit_dbContext databaseContext)
+		private readonly SkillItModels.DatabaseModels.skillit_dbContext DatabaseContext;
+		public AccountDetailService(SkillItModels.DatabaseModels.skillit_dbContext databaseContext)
 		{
 			this.DatabaseContext = databaseContext;
 		}

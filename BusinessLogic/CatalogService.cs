@@ -1,10 +1,12 @@
 ﻿using BusinessLogic.Interfaces;
+using Microsoft.AspNetCore.Http;
 using SkillItModels.DatabaseModels;
 using SkillItModels.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,17 +19,12 @@ namespace BusinessLogic
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}
-		public ResponseModel AddCatalog(CatalogModel catalogModel)
+		public ResponseModel AddCatalog(Catalog catalog)
 		{
 			try
 			{
-				Catalog catalog = new()
-				{
-					Caption = catalogModel.Caption,
-					Description = catalogModel.Description,
-					ImgBase64 = catalogModel.ImgBase64,
-					CatalogLink = catalogModel.CatalogLink
-				};
+				if (catalog == null) return new(false, "CatalogNull");
+				//catalog.Image = Encoding.UTF8.GetBytes(imageString);// Convert.(imageString);
 				DatabaseContext.Catalogs.Add(catalog);
 				DatabaseContext.SaveChanges();
 				return new ResponseModel(true, "Success");
@@ -46,8 +43,9 @@ namespace BusinessLogic
 				Catalog catalog = DatabaseContext.Catalogs.Find(id);
 				if(catalog != null)
 				{
-					DatabaseContext.Entry<Catalog>(catalog).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+					DatabaseContext.Entry(catalog).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
 					DatabaseContext.Catalogs.Remove(catalog);
+					DatabaseContext.SaveChanges();
 					return new ResponseModel(true, "Success");
 				}
 				return new ResponseModel(false, "DeleteFailed");
@@ -65,21 +63,17 @@ namespace BusinessLogic
 
 		public Catalog GetCatalog(int id) => DatabaseContext.Catalogs.Where(cat => cat.CatalogId == id).FirstOrDefault();
 
-		public ResponseModel UpdateCatalog(int id, CatalogModel catalogModel)
+		public ResponseModel UpdateCatalog(int id, Catalog catalog)
 		{
 			try
 			{
 				var this_catalog = DatabaseContext.Catalogs.Where(cat => cat.CatalogId == id).ToList().FirstOrDefault();
-				if (this_catalog != null && catalogModel != null)
+				if (this_catalog != null && catalog != null)
 				{
 					if (this_catalog.CatalogId == id)
 					{
-						this_catalog.Caption = catalogModel.Caption;
-						this_catalog.Description = catalogModel.Description;
-						this_catalog.ImgBase64 = catalogModel.ImgBase64;
-						this_catalog.CatalogLink = catalogModel.CatalogLink;
-						DatabaseContext.Entry<Catalog>(this_catalog).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
-						DatabaseContext.Catalogs.Update(this_catalog);
+						DatabaseContext.Entry(this_catalog).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+						DatabaseContext.Catalogs.Update(catalog);
 						DatabaseContext.SaveChanges();
 						return new ResponseModel(true, "Success");
 					}

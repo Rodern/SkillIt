@@ -13,8 +13,8 @@ namespace BusinessLogic
 {
 	public class UserSkillService : IUserSkillService
 	{
-		private readonly skillit_dbContext DatabaseContext;
-		public UserSkillService(skillit_dbContext databaseContext)
+		private readonly SkillItModels.DatabaseModels.skillit_dbContext DatabaseContext;
+		public UserSkillService(SkillItModels.DatabaseModels.skillit_dbContext databaseContext)
 		{
 			DatabaseContext = databaseContext;
 		}

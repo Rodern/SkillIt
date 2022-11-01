@@ -13,9 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<skillit_dbContext>(options =>
+builder.Services.AddDbContext<SkillItModels.DatabaseModels.skillit_dbContext>(options =>
 {
-	options.UseMySQL(builder.Configuration.GetConnectionString("Default"));
+	options.UseMySQL(builder.Configuration.GetConnectionString("DbOnline"));
 });
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICatalogService, CatalogService>();

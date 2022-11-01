@@ -30,7 +30,7 @@ namespace SkillItModels.DatabaseModels
             if (!optionsBuilder.IsConfigured)
             {
                 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                //optionsBuilder.UseMySQL("server=localhost;port=3306;database=skillit_db;user=root;password=");
+                //optionsBuilder.UseMySQL("server=localhost;port=3306;database=skill_it_db;user=root;password=");
             }
         }
 
@@ -105,9 +105,9 @@ namespace SkillItModels.DatabaseModels
                     .HasMaxLength(250)
                     .HasColumnName("description");
 
-                entity.Property(e => e.ImgBase64)
-                    .HasColumnType("longtext")
-                    .HasColumnName("imgBase64")
+                entity.Property(e => e.Image)
+                    .HasColumnType("longblob")
+                    .HasColumnName("image")
                     .HasDefaultValueSql("'NULL'");
             });
 
@@ -182,9 +182,9 @@ namespace SkillItModels.DatabaseModels
                     .HasColumnType("enum('M','F')")
                     .HasColumnName("gender");
 
-                entity.Property(e => e.ImgBase64)
-                    .HasColumnType("longtext")
-                    .HasColumnName("imgBase64")
+                entity.Property(e => e.Image)
+                    .HasColumnType("longblob")
+                    .HasColumnName("image")
                     .HasDefaultValueSql("'NULL'");
 
                 entity.Property(e => e.LastName)
