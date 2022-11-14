@@ -85,6 +85,36 @@ namespace BusinessLogic
 			return new();
 		}
 
+		public ResponseModel UpdatePassword(long userId, UserModel userModel)
+		{
+			try
+			{
+				var user = DatabaseContext.Users.Where(u => u.UserId == userId).FirstOrDefault();
+				if (user != null)
+				{
+					user.Gender = userModel.Gender;
+					user.Address = userModel.Address;
+					user.DateCreated = userModel.DateCreated;
+					user.Email = userModel.Email;
+					user.FirstName = userModel.FirstName;
+					user.LastName = userModel.LastName;
+					user.Password = userModel.Password;
+					user.Dob = userModel.Dob;
+					user.Phone = userModel.Phone;
+					user.Image = userModel.Image;
+					DatabaseContext.Entry<User>(user).State = EntityState.Detached;
+					DatabaseContext.Users.Update(user);
+					DatabaseContext.SaveChanges();
+					return new(true, "Success");
+				}
+				return new(false, Convert.ToString(userId));
+			}
+			catch (Exception ex)
+			{
+				return new(false, ex.Message);
+			}
+		}
+
 		public ResponseModel UpdateUser(long userId, UserModel userModel)
 		{
 			try
