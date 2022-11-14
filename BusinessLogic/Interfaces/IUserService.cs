@@ -15,6 +15,7 @@ namespace BusinessLogic.Interfaces
 		ResponseModel CheckEmailExistence(string email);
 		ResponseModel AddUser(UserModel user);
 		User GetUser(long id);
+		ResponseModel UpdatePassword(long userId, UserModel user);
 		ResponseModel UpdateUser(long userId, UserModel user);
 	}
 }

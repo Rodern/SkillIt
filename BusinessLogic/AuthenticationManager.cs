@@ -28,7 +28,7 @@ namespace BusinessLogic
 			if (user == null) return new(false, "UserNotFound");
 			string code = Convert.ToString(Guid.NewGuid());
 			UserService userService = new UserService(DatabaseContext);
-			userService.UpdateUser(user.UserId, new()
+			userService.UpdatePassword(user.UserId, new()
 			{
 				Gender = user.Gender,
 				Address = user.Address,
@@ -49,7 +49,7 @@ namespace BusinessLogic
 			if (user == null) return new(false, "UserNotFound");
 			if (user.Password != userCredential.Code) return new(false, "IncorrectCode");
 			UserService userService = new UserService(DatabaseContext);
-			userService.UpdateUser(user.UserId, new()
+			userService.UpdatePassword(user.UserId, new()
 			{
 				Gender = user.Gender,
 				Address = user.Address,
@@ -62,7 +62,7 @@ namespace BusinessLogic
 				Phone = user.Phone,
 				Image = user.Image,
 			});
-			return new(true, Authentication.EncryptPassword(userCredential.Password));
+			return new(true, "ResetSuccess");
 		}
 
 		public ResponseModel _isEmptyOrInvalid(string token)
