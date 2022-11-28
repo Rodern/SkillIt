@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<SkillItModels.DatabaseModels.skillit_dbContext>(options =>
+builder.Services.AddDbContext<SkillItModels.DatabaseModels.skill_it_dbContext>(options =>
 {
 	options.UseMySQL(builder.Configuration.GetConnectionString("Default"));
 });
@@ -24,6 +24,7 @@ builder.Services.AddScoped<IUserSkillService, UserSkillService>();
 builder.Services.AddScoped<IUserSocialService, UserSocialService>();
 builder.Services.AddScoped<IAuthenticationManager, AuthenticationManager>();
 builder.Services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+builder.Services.AddScoped<IOTPService, OTPService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

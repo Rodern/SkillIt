@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Interfaces
 {
-    public interface IUserService
+    public interface IOTPService
     {
-		ObservableCollection<User> GetAllUsers();
-		ResponseModel CheckEmailExistence(string email);
-		ResponseModel AddUser(UserModel user);
-		User GetUser(long id);
-		ResponseModel UpdateUser(long userId, UserModel user);
-	}
+        ObservableCollection<Otp> GetOTPs();
+        ResponseModel DeleteOTP(long id);
+        Otp GetOTP(long id, long userId);
+        ResponseModel AddOTP(Otp otp);
+        ResponseModel UpdateOTP(Otp otp);
+    }
 }

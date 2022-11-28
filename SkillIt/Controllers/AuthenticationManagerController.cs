@@ -28,24 +28,24 @@ namespace SkillItAPI.Controllers
 
 		[AllowAnonymous]
 		[HttpPost]
-		[Route("GenerateCode")]
-		public IActionResult GenerateCode(string email)
+		[Route("CreateOTP/{email}")]
+		public IActionResult GenerateCode([FromRoute] string email, long otpId)
 		{
-			return Ok(authenticationManager.GenerateCode(email));
+			return Ok(authenticationManager.GenerateCode(email, otpId));
 		}
 
 		[AllowAnonymous]
 		[HttpPost]
 		[Route("Reset")]
-		public IActionResult Reset(UserCredential userCredential)
+		public IActionResult Reset(ResetModel resetModel)
 		{
-			return Ok(authenticationManager.Reset(userCredential));
+			return Ok(authenticationManager.Reset(resetModel));
 		}
 
 		[AllowAnonymous]
 		[HttpPost]
 		[Route("CheckTokenValidity")]
-		public IActionResult _isEmptyOrInvalid(string token)
+		public IActionResult IsEmptyOrInvalid(string token)
 		{
 			return Ok(authenticationManager._isEmptyOrInvalid(token));
 		}

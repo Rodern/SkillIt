@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -17,51 +18,33 @@ namespace BusinessLogic
 {
 	public class AuthenticationManager: IAuthenticationManager
 	{
-		private readonly SkillItModels.DatabaseModels.skillit_dbContext DatabaseContext;
-		public AuthenticationManager(SkillItModels.DatabaseModels.skillit_dbContext skill_It_DbContext)
+		private readonly SkillItModels.DatabaseModels.skill_it_dbContext DatabaseContext;
+		public AuthenticationManager(SkillItModels.DatabaseModels.skill_it_dbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}
-		public ResponseModel GenerateCode(string email)
+		public ResponseModel GenerateCode(string email, long otpId)
 		{
 			User user = DatabaseContext.Users.Where(u => u.Email == email).FirstOrDefault();
 			if (user == null) return new(false, "UserNotFound");
-			string code = Convert.ToString(Guid.NewGuid());
-			UserService userService = new UserService(DatabaseContext);
-			userService.UpdatePassword(user.UserId, new()
+			OTPService oTPService = new(DatabaseContext);
+			ResetModel resetModel = oTPService.CreateOTP(new()
 			{
-				Gender = user.Gender,
-				Address = user.Address,
-				DateCreated = user.DateCreated,
-				Email = user.Email,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				Password = code,
-				Dob = user.Dob,
-				Phone = user.Phone,
-				Image = user.Image
+				UserId = user.UserId,
+				Code = Authentication.GenerateOTP(),
+				OtpId = otpId,
 			});
-			return new(true, code);
+			
+			return new(true, SiteSettings.BaseUrl_Local_Secured + "/#reset?q={" + $"{resetModel.OtpId},{resetModel.UserId},{resetModel.Otp}" + "}");
 		}
-		public ResponseModel Reset(UserCredential userCredential)
+		public ResponseModel Reset(ResetModel resetModel)
 		{
-			User user = DatabaseContext.Users.Where(u => u.Email == userCredential.Email).FirstOrDefault();
+            int otp = DatabaseContext.Otps.Where(o => o.OtpId == resetModel.OtpId && o.UserId == resetModel.UserId).Select(o => o.Code).FirstOrDefault();
+            if (otp != resetModel.Otp) return new(false, "OTPIncorrect");
+            User user = DatabaseContext.Users.Where(u => u.UserId == resetModel.UserId).FirstOrDefault();
 			if (user == null) return new(false, "UserNotFound");
-			if (user.Password != userCredential.Code) return new(false, "IncorrectCode");
-			UserService userService = new UserService(DatabaseContext);
-			userService.UpdatePassword(user.UserId, new()
-			{
-				Gender = user.Gender,
-				Address = user.Address,
-				DateCreated = user.DateCreated,
-				Email = user.Email,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				Password = Authentication.EncryptPassword(userCredential.Password),
-				Dob = user.Dob,
-				Phone = user.Phone,
-				Image = user.Image,
-			});
+			UserService userService = new(DatabaseContext);
+			userService.UpdatePassword(user.UserId, Authentication.EncryptPassword(resetModel.Password));
 			return new(true, "ResetSuccess");
 		}
 
