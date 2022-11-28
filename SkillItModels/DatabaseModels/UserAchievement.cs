@@ -15,7 +15,7 @@ namespace SkillItModels.DatabaseModels
         public int? UserSkillId { get; set; }
         public int? LanguageId { get; set; }
 
-        public virtual Acheivement Ach { get; set; }
+        public virtual Achievement Ach { get; set; }
         public virtual CatalogOld Catalog { get; set; }
         public virtual User User { get; set; }
         public virtual UserSkill UserSkill { get; set; }

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace SkillItModels.DatabaseModels
 {
-    public partial class Acheivement
+    public partial class Achievement
     {
-        public Acheivement()
+        public Achievement()
         {
             UserAchievements = new HashSet<UserAchievement>();
         }

@@ -24,6 +24,8 @@ builder.Services.AddScoped<IUserSkillService, UserSkillService>();
 builder.Services.AddScoped<IUserSocialService, UserSocialService>();
 builder.Services.AddScoped<IAuthenticationManager, AuthenticationManager>();
 builder.Services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+builder.Services.AddScoped<IUserAchievementService, UserAchievementService>();
+builder.Services.AddScoped<IUserCertificateService, UserCertificateService>();
 builder.Services.AddScoped<IOTPService, OTPService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

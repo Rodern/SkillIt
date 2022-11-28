@@ -9,6 +9,7 @@ namespace SkillItModels.DatabaseModels
     {
         public int ProjectId { get; set; }
         public string Name { get; set; }
+        public string Owner { get; set; }
         public string SoureLink { get; set; }
         public string Link { get; set; }
         public string SkillSet { get; set; }

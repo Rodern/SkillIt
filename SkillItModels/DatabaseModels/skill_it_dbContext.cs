@@ -18,7 +18,7 @@ namespace SkillItModels.DatabaseModels
         }
 
         public virtual DbSet<AccountDetail> AccountDetails { get; set; }
-        public virtual DbSet<Acheivement> Acheivements { get; set; }
+        public virtual DbSet<Achievement> Achievements { get; set; }
         public virtual DbSet<Catalog> Catalogs { get; set; }
         public virtual DbSet<CatalogOld> CatalogOlds { get; set; }
         public virtual DbSet<Certificate> Certificates { get; set; }
@@ -89,12 +89,12 @@ namespace SkillItModels.DatabaseModels
                     .HasConstraintName("user");
             });
 
-            modelBuilder.Entity<Acheivement>(entity =>
+            modelBuilder.Entity<Achievement>(entity =>
             {
                 entity.HasKey(e => e.AchId)
                     .HasName("PRIMARY");
 
-                entity.ToTable("acheivement");
+                entity.ToTable("achievement");
 
                 entity.Property(e => e.AchId)
                     .HasColumnType("int(11)")
@@ -269,6 +269,11 @@ namespace SkillItModels.DatabaseModels
                     .IsRequired()
                     .HasMaxLength(500)
                     .HasColumnName("name");
+
+                entity.Property(e => e.Owner)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("owner");
 
                 entity.Property(e => e.SkillSet)
                     .IsRequired()
