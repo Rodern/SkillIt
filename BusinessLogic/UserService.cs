@@ -9,9 +9,9 @@ namespace BusinessLogic
 {
 	public class UserService: IUserService
 	{
-		private readonly SkillItModels.DatabaseModels.skillit_dbContext DatabaseContext;
+		private readonly SkillItModels.DatabaseModels.skill_it_dbContext DatabaseContext;
 		public AccountStatus AccountStatus = new AccountStatus();
-		public UserService(SkillItModels.DatabaseModels.skillit_dbContext skill_It_DbContext)
+		public UserService(SkillItModels.DatabaseModels.skill_it_dbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}
@@ -85,14 +85,14 @@ namespace BusinessLogic
 			return new();
 		}
 
-		public ResponseModel UpdatePassword(long userId, UserModel userModel)
+		public ResponseModel UpdatePassword(long userId, string password)
 		{
 			try
 			{
-				var user = DatabaseContext.Users.Where(u => u.UserId == userId).FirstOrDefault();
+				User user = DatabaseContext.Users.Where(_ => _.UserId == userId).FirstOrDefault();
 				if (user != null)
 				{
-					user.Gender = userModel.Gender;
+					/*user.Gender = userModel.Gender;
 					user.Address = userModel.Address;
 					user.DateCreated = userModel.DateCreated;
 					user.Email = userModel.Email;
@@ -101,13 +101,14 @@ namespace BusinessLogic
 					user.Password = userModel.Password;
 					user.Dob = userModel.Dob;
 					user.Phone = userModel.Phone;
-					user.Image = userModel.Image;
+					user.Image = userModel.Image;*/
+					user.Password = password;
 					DatabaseContext.Entry<User>(user).State = EntityState.Detached;
 					DatabaseContext.Users.Update(user);
 					DatabaseContext.SaveChanges();
 					return new(true, "Success");
 				}
-				return new(false, Convert.ToString(userId));
+				return new(false, Convert.ToString(user.UserId));
 			}
 			catch (Exception ex)
 			{

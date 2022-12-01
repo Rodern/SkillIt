@@ -15,5 +15,10 @@ namespace SkillItModels.Models
 		{
 			return Crypto.HashPassword(password);
 		}
+
+		public static int GenerateOTP()
+		{
+			return 344215;
+		}
 	}
 }

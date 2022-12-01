@@ -14,8 +14,8 @@ namespace BusinessLogic
 {
 	public class CatalogService : ICatalogService
 	{
-		private readonly skillit_dbContext DatabaseContext;
-		public CatalogService(skillit_dbContext skill_It_DbContext)
+		private readonly skill_it_dbContext DatabaseContext;
+		public CatalogService(skill_it_dbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}
