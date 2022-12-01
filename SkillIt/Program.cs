@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<SkillItModels.DatabaseModels.skill_it_dbContext>(options =>
 {
-	options.UseMySQL(builder.Configuration.GetConnectionString("DbOnline"));
+	options.UseMySQL(builder.Configuration.GetConnectionString("Default"));
 });
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICatalogService, CatalogService>();
