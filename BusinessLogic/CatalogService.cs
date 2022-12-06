@@ -61,6 +61,11 @@ namespace BusinessLogic
 			return new ObservableCollection<Catalog>(DatabaseContext.Catalogs.ToList());
 		}
 
+		public ObservableCollection<Tuple<int, string>> GetAllCatalogCaptions()
+		{
+			return new ObservableCollection<Tuple<int, string>>(DatabaseContext.Catalogs.Select(c => new Tuple<int, string> ( c.CatalogId,  c.Caption )));
+		}
+
 		public Catalog GetCatalog(int id) => DatabaseContext.Catalogs.Where(cat => cat.CatalogId == id).FirstOrDefault();
 
 		public ResponseModel UpdateCatalog(int id, Catalog catalog)

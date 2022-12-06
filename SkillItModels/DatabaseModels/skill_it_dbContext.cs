@@ -22,6 +22,7 @@ namespace SkillItModels.DatabaseModels
         public virtual DbSet<Catalog> Catalogs { get; set; }
         public virtual DbSet<CatalogOld> CatalogOlds { get; set; }
         public virtual DbSet<Certificate> Certificates { get; set; }
+        public virtual DbSet<Engagement> Engagements { get; set; }
         public virtual DbSet<Otp> Otps { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<Skill> Skills { get; set; }
@@ -36,7 +37,7 @@ namespace SkillItModels.DatabaseModels
         {
             if (!optionsBuilder.IsConfigured)
             {
-/*#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                /*#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseMySQL("server=localhost;port=3306;database=skill_it_db;user=root;password=");*/
             }
         }
@@ -113,18 +114,16 @@ namespace SkillItModels.DatabaseModels
 
             modelBuilder.Entity<Catalog>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("catalog");
+
+                entity.Property(e => e.CatalogId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("catalogID");
 
                 entity.Property(e => e.Caption)
                     .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("caption");
-
-                entity.Property(e => e.CatalogId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("catalogID");
 
                 entity.Property(e => e.CatalogLink)
                     .IsRequired()
@@ -221,6 +220,42 @@ namespace SkillItModels.DatabaseModels
                     .IsRequired()
                     .HasColumnType("enum('Degree','Nano-Degree','Bachelor','Master','HND')")
                     .HasColumnName("type");
+            });
+
+            modelBuilder.Entity<Engagement>(entity =>
+            {
+                entity.ToTable("engagement");
+
+                entity.HasIndex(e => e.CatalogId, "engaged");
+
+                entity.HasIndex(e => e.UserId, "who_enganged");
+
+                entity.Property(e => e.EngagementId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("engagementID");
+
+                entity.Property(e => e.CatalogId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("catalogID");
+
+                entity.Property(e => e.EngagedDate)
+                    .HasColumnType("date")
+                    .HasColumnName("engagedDate")
+                    .HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnType("bigint(20)")
+                    .HasColumnName("userID");
+
+                entity.HasOne(d => d.Catalog)
+                    .WithMany(p => p.Engagements)
+                    .HasForeignKey(d => d.CatalogId)
+                    .HasConstraintName("engaged");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Engagements)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("who_enganged");
             });
 
             modelBuilder.Entity<Otp>(entity =>
@@ -438,7 +473,7 @@ namespace SkillItModels.DatabaseModels
                 entity.HasOne(d => d.Catalog)
                     .WithMany(p => p.UserAchievements)
                     .HasForeignKey(d => d.CatalogId)
-                    .OnDelete(DeleteBehavior.SetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("involve_catalog");
 
                 entity.HasOne(d => d.User)
@@ -449,7 +484,7 @@ namespace SkillItModels.DatabaseModels
                 entity.HasOne(d => d.UserSkill)
                     .WithMany(p => p.UserAchievements)
                     .HasForeignKey(d => d.UserSkillId)
-                    .OnDelete(DeleteBehavior.SetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("involve_sklill");
             });
 
