@@ -10,6 +10,7 @@ namespace SkillItModels.DatabaseModels
         public User()
         {
             AccountDetails = new HashSet<AccountDetail>();
+            Engagements = new HashSet<Engagement>();
             Otps = new HashSet<Otp>();
             UserAchievements = new HashSet<UserAchievement>();
             UserCertificates = new HashSet<UserCertificate>();
@@ -30,6 +31,7 @@ namespace SkillItModels.DatabaseModels
         public byte[] Image { get; set; }
 
         public virtual ICollection<AccountDetail> AccountDetails { get; set; }
+        public virtual ICollection<Engagement> Engagements { get; set; }
         public virtual ICollection<Otp> Otps { get; set; }
         public virtual ICollection<UserAchievement> UserAchievements { get; set; }
         public virtual ICollection<UserCertificate> UserCertificates { get; set; }

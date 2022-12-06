@@ -13,7 +13,8 @@ namespace BusinessLogic.Interfaces
 	public interface ICatalogService
 	{
 		ObservableCollection<Catalog> GetAllCatalogs();
-		ResponseModel AddCatalog(Catalog catalog);
+		ObservableCollection<Tuple<int, string>> GetAllCatalogCaptions();
+        ResponseModel AddCatalog(Catalog catalog);
 		Catalog GetCatalog(int id);
 		ResponseModel UpdateCatalog(int id, Catalog catalog);
 		ResponseModel DeleteCatalog(int id);

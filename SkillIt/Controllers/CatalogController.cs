@@ -34,6 +34,13 @@ namespace SkillItAPI.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet]
+        [Route("captions")]
+        public IActionResult GetAllCatalogCaptions()
+        {
+            return Ok(_catalogService.GetAllCatalogCaptions());
+        }
+
         [HttpPost]
         [Route("GetCatalog")]
         public IActionResult GetCatalog(int id)
@@ -48,7 +55,6 @@ namespace SkillItAPI.Controllers
             return Ok(_catalogService.DeleteCatalog(id));
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [Route("AddCatalog")]
         public IActionResult AddCatalog(string catalogJson, IFormFile image)
