@@ -1,0 +1,177 @@
+﻿@page "/catalogs"
+@inject IJSRuntime JSRuntime;
+
+<PageTitle>SkillIT - Catalogs</PageTitle>
+
+<div class="catalog-page page cursor-default text-white flex flex-col bottom-0 top-0 left-0 right-0">
+
+    <div class="cats-body flex flex-col-reverse md:flex-row text-slate-700 bg-white min-h-[93vh] p-6 md:p-2">
+        <div class="add-catalog-form hidden flex flex-col min-w-[auto] md:min-w-[38vh] justify-center items-center h-auto md:h-full mt-24 md:mt-4 md:mb-auto">
+            <h1 class="font-bold text-2xl mb-10 text-center">Add new catalog</h1>
+            <form action="" method="post" class="cat-form rounded-lg shadow-lg px-4 py-5">
+                <div class="input-group mb-6 flex flex-col">
+                    <h4 class="text-lg font-md ">Caption</h4>
+                    <div class="input-wrapper rounded-md flex flex-row w-full h-10 border hover:shadow overflow-hidden"
+                        style="border-radius: 5px;">
+                        <label for="catCaption">
+                            <img class="h-8 w-8 mx-1" src="assets/icons/cat-name-icon.svg" alt="">
+                        </label>
+                        <input class="w-full px-2 py-1" type="text" name="catalog-caption" id="catCaption"
+                            placeholder="catalog caption" autocapitalize="on" title="Catalog caption" />
+                    </div>
+                </div>
+                <div class="input-group mb-6">
+                    <label class="text-lg font-md " for="catDesc">Description</label>
+                        <div class="input-wrapper rounded-md flex flex-row w-full h-24 border hover:shadow overflow-hidden"
+                            style="border-radius: 5px;">
+                            <textarea class="h-full w-full px-2 py-1" type="text" name="catalog-desc" placeholder="description"
+                                id="catDesc" autocapitalize="on" title="Catalog description"></textarea>
+                        </div>
+                </div>
+                <div class="input-group hidden mb-6">
+                    <h4 class="text-lg font-md ">Image</h4>
+                    <div class="input-wrapper items-center rounded-md flex flex-row w-full h-10 border hover:shadow overflow-hidden">
+                        <input class="w-full px-2 py-1" type="file" name="catalog-img" id="catImg" placeholder="catalog's image"
+                            title="Catalog image" />
+                    </div>
+                </div>
+                <div class="input-group mb-6 flex flex-col">
+                    <h4 class="text-lg font-md ">Link</h4>
+                    <div class="input-wrapper rounded-md flex flex-row w-full h-10 border hover:shadow overflow-hidden"
+                        style="border-radius: 5px;">
+                        <label for="catLink">
+                            <img class="h-8 w-8 mx-1" src="assets/icons/link.svg" alt="">
+                        </label>
+                        <input class="w-full px-2 py-1" type="text" name="catalog-link" id="catLink" placeholder="catalog link"
+                            pattern="https?://.+" title="Must include http:// or https://"/>
+                    </div>
+                </div>
+                <div class="input-group mt-6 flex justify-center">
+                    <button
+                        class="save-cat-btn text-md font-bold text-white bg-blue-600 w-44 md:text-center hover:shadow-lg hover:bg-blue-700 rounded px-2 sm:px-4 py-2 "
+                        role="button">SAVE</button>
+                </div>
+            </form>
+        </div>
+        <div class="catalog-list p-2 w-full overflow-y-auto">
+            <div class="list-header mb-12 w-full">
+                <h1 class="font-bold text-2xl text-center">All catalogs</h1>
+            </div>
+            <div class="cat-list flex flex-row flex-wrap gap-14 justify-center md:justify-between overflow-y-auto h-auto p-3">
+                <div class="empty-list">
+                    Nothing here yet!
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal hidden cw">
+    <div class="cw-header border-b flex flex-row flex-nowrap shadow-lg">
+        <span class="left-section">
+            <h3 class="cw-name">Python for beginners</h3>
+        </span>
+        <span class="right-section">
+            <button class="addToProfileBtn engage-user-btn relative text-md ml-auto font-bold text-white bg-blue-600 w-24 md:text-center hover:shadow-lg hover:bg-blue-700 rounded px-2 sm:px-2">ENGAGE</button>
+            <button class="exit-cw h-7 w-7 flex justify-center items-center text-2xl text-center text-white top-2 right-2">
+                X
+            </button>
+        </span>
+    </div>
+    <div class="cw-body">
+        <div class="cw-video-box">
+            
+        </div>
+        <div class="playlist-wrapper border hidden shadow">
+            <div class="pl-header border-b">
+                <h3>Playlist</h3>
+                <a class="pl-toggle-btn">Hide</a>
+            </div>
+            <ul class="playlist">
+                <li class="list-item hover:shadow">
+                    <img src="" alt="" class="vid-thumb">
+                    <span class="vid-detail">
+                        <h3>Python for beginners EP 1</h3>
+                        <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                    </span>
+                </li>
+                <li class="list-item hover:shadow">
+                    <img src="" alt="" class="vid-thumb">
+                    <span class="vid-detail">
+                        <h3>Python for beginners EP 1</h3>
+                        <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                    </span>
+                </li>
+                <li class="list-item hover:shadow">
+                    <img src="" alt="" class="vid-thumb">
+                    <span class="vid-detail">
+                        <h3>Python for beginners EP 1</h3>
+                        <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                    </span>
+                </li>
+                <li class="list-item hover:shadow">
+                    <img src="" alt="" class="vid-thumb">
+                    <span class="vid-detail">
+                        <h3>Python for beginners EP 1</h3>
+                        <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                    </span>
+                </li>
+                <li class="list-item hover:shadow">
+                    <img src="" alt="" class="vid-thumb">
+                    <span class="vid-detail">
+                        <h3>Python for beginners EP 1</h3>
+                        <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                    </span>
+                </li>
+                <li class="list-item hover:shadow">
+                    <img src="" alt="" class="vid-thumb">
+                    <span class="vid-detail">
+                        <h3>Python for beginners EP 1</h3>
+                        <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                    </span>
+                </li>
+                <li class="list-item hover:shadow">
+                    <img src="" alt="" class="vid-thumb">
+                    <span class="vid-detail">
+                        <h3>Python for beginners EP 1</h3>
+                        <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                    </span>
+                </li>
+                <li class="list-item hover:shadow">
+                    <img src="" alt="" class="vid-thumb">
+                    <span class="vid-detail">
+                        <h3>Python for beginners EP 90</h3>
+                        <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                    </span>
+                </li>
+                <li class="list-item hover:shadow">
+                    <img src="" alt="" class="vid-thumb">
+                    <span class="vid-detail">
+                        <h3>Python for beginners EP 90</h3>
+                        <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                    </span>
+                </li>
+                <li class="list-item hover:shadow">
+                    <img src="" alt="" class="vid-thumb">
+                    <span class="vid-detail">
+                        <h3>Python for beginners EP 90</h3>
+                        <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <div class="cw-detail-box">
+            <h3 class="vid-caption"></h3>
+            <p class="vid-desc">
+
+            </p>
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        JSRuntime.InvokeVoidAsync("initCatalogs");
+    }
+}

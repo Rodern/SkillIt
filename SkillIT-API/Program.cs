@@ -15,7 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<SkillItModels.DatabaseModels.skill_it_dbContext>(options =>
 {
-	options.UseMySQL(builder.Configuration.GetConnectionString("Default"));
+	//options.UseMySQL(builder.Configuration.GetConnectionString("Default"));
+	options.UseMySQL(builder.Configuration.GetConnectionString("SmarterAspDb"));
 });
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICatalogService, CatalogService>();

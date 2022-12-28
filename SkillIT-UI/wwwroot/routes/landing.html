@@ -1,0 +1,226 @@
+<div class="landing-page page flex flex-col text-white cursor-default">
+    <header class="landing-header w-[100vw] flex flex-row shadow items-center px-3 h-12">
+        <a class="org-info flex flex-row items-center gap-2 ml-0 mr-auto">
+            <img src="assets/icons/logo.png" class="h-24" alt="">
+            <h4 class="org-name hidden ml-2 font-bold text-lg hidden">SkillIT</h4>
+        </a>
+        <nav class="header-nav hidden md:flex ml-auto gap-5 flex-row text-slate-200">
+            <a
+                class="nav-links n-usr flex flex-row justify-between hover:bg-blue-700 hover:shadow-md focus:bg-blue-800 rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent ">
+                <span class="nav-un">Dashboard</span>
+                <!-- <img src="assets/icons/user.png" class="w-5 h-5 ml-5" alt=""> -->
+            </a>
+            <a
+                class="nav-links nc-btn flex flex-row justify-between hover:bg-blue-700 hover:shadow-md focus:bg-blue-800 rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent ">
+                Catalogs
+            </a>
+            <a
+                class="nav-links nl-btn hover:bg-rose-500 hover:shadow-md focus:bg-rose-600 rounded px-3 py-1 border border-slate-200 hover:border-transparent">Sign
+                In</a>
+            <a
+                class="nav-links ns-btn hover:bg-blue-500 hover:shadow-md focus:bg-blue-600 rounded px-3 py-1 border border-slate-200 hover:border-transparent ">Sign
+                Up</a>
+            <a href="#about" class="nav-links l_about hover:shadow-md hover:bg-amber-500 focus:bg-amber-600 rounded px-3 py-1 border border-slate-200 hover:border-transparent ">About</a>
+        </nav>
+        <button id="menu_btn"
+            class="flex  flex-row hover:bg-blue-700 hover:shadow-md focus:shadow-lg rounded px-1 py-1 ml-5 gap-1 border border-slate-200 focus:border-1 hover:border-transparent focus:outline-blue-800"
+            id="l-menu-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
+                <path fill="black" stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+            Menu
+        </button>
+    </header>
+    <nav
+        class="menu hidden absolute ml-auto shadow-2xl text-slate-900 text-md p-3 backdrop-blur-sm backdrop-opacity-25 bg-white ">
+        <ul class="menu-items">
+            <li
+                class="menu-items m-usr avt-state flex flex-col 
+                    justify-between items-center pr-2 
+                    hover:border-b border-slate-200 my-1 
+                    mb-10 py-1 pl-2 rounded hover:text-white 
+                    text-lg hover:shadow hover:bg-blue-600 
+                    backdrop-blur-sm shadow"
+                style="border: none;">
+                <img src="../assets/images/user-def.png" class="u-img h-[20vh] w-[20vh] mb-3" alt="">
+                <span class="nav-un">AlainKimbu</span>
+            </li>
+            <li
+                class="menu-items p-avt avt-state flex flex-col 
+                    justify-between items-center pr-2 
+                    hover:border-b border-slate-200 my-1 
+                    mb-10 py-1 pl-2 rounded hover:text-white 
+                    text-lg hover:shadow hover:bg-blue-600 
+                    backdrop-blur-sm shadow"
+                style="border: none;">
+                <img src="../assets/images/user-def.png" class="u-img h-[20vh] w-[20vh] mb-3" alt="">
+                <i class="nav-un " style="font-size:1rem;font-weight: 400;">Not Signed In</i>
+            </li>
+            <li
+                class="menu-items mc-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                Catalogs
+            </li>
+            <li
+                class="menu-items hidden mcb-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                Courses
+            </li>
+            <li
+                class="menu-items ms-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                Sign Up
+            </li>
+            <li
+                class="menu-items ml-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                Sign In
+            </li>
+            <li
+                class="menu-items l_about hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                <a href="#about" style="width: -webkit-fill-available; display: block;">About</a>
+            </li>
+            <li
+                class="menu-items hidden about hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                <a>Feedback</a>
+            </li>
+            <li
+                class="menu-items mlg-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:shadow hover:bg-red-700 backdrop-blur-sm">
+                Logout
+            </li>
+        </ul>
+    </nav>
+    <div class="landing-view flex flex-col items-center md:items-start text-center md:text-left md:justify-center gap-24 w-full ">
+        <div class="intro-body w-9/12 sm:w-5/12 mx-0 md:mx-12 mt-14 md:mt-[unset] ">
+            <h1 class="font-bold text-2xl md:text-3xl ">FROM ZERO TO NERD</h1>
+            <p class="intro-text text-lg">
+                For we are out to empower young cameroonians with skills to fit the demands of the African tech system.
+            </p>
+        </div>
+        <div
+            class="outro-body flex flex-col w-9/12 md:w-5/12 mx-0 mx-12 ml-auto mr-auto md:mr-12 text-center text-center md:text-end">
+            <h1 class="font-bold text-2xl md:text-3xl">WE BUILD SKILLS HERE</h1>
+            <p class="text-lg mb-4 md:mb-8">Great courses here for you in our catalogs <br />So skill-it by checking
+                them out</p>
+            <a href=""
+                class="nav-links bc-btn bg-blue-600 w-44 md:text-center hover:shadow-md hover:bg-blue-700 ml-auto mr-auto md:mr-1 rounded px-2 sm:px-4 py-2 "
+                role="button">View Catalogs</a>
+        </div>
+    </div>
+    <div class="py-5 landing-content flex flex-col justify-center items-center h-[100vh] w-full bg-white text-slate-700">
+        <h1 class="font-bold text-2xl md:text-4xl sm:text-3xl mb-4 md:mb-5">What do we do?</h1>
+        <div class="slide-wrapper py-0 gap-10 rounded-md text-center items-center">
+            <div
+                class="slide-card w-64 min-h-[320px] shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
+                <img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
+                <h5 class="font-bold my-auto">We train</h5>
+                <p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
+                    for the tech world</p>
+            </div>
+            <div
+                class="slide-card w-64 min-h-[320px] shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
+                <img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
+                <h5 class="font-bold my-auto">We coach</h5>
+                <p class="mb-auto">Coaching is a great way where some people have achieved goals and we are here for that, coaching young tech enthusiat in Cameroon</p>
+            </div>
+            <div
+                class="slide-card w-64 min-h-[320px] shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
+                <img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
+                <h5 class="font-bold my-auto">We build up</h5>
+                <p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
+                    for the tech world</p>
+            </div>
+            <div
+                class="slide-card w-64 min-h-[320px] shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
+                <img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
+                <h5 class="font-bold my-auto">We develop</h5>
+                <p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
+                    for the tech world</p>
+            </div>
+            <div
+                class="slide-card w-64 min-h-[320px] shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
+                <img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
+                <h5 class="font-bold my-auto">We orientate</h5>
+                <p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
+                    for the tech world</p>
+            </div>
+            <div
+                class="slide-card w-64 min-h-[320px] shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
+                <img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
+                <h5 class="font-bold my-auto">We guide</h5>
+                <p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
+                    for the tech world</p>
+            </div>
+        </div>
+        <div class="flex for-o flex-col text-center mt-5">
+            <h1 class="font-bold text-2xl md:text-4xl sm:text-3xl">Get started and be part</h1>
+            <p class="m-5 text-lg md:text-md">Login for there is more for you or join us here by signig up and start skilling the IT world
+            </p>
+            <div class="flex flex-wrap gap-5 justify-center">
+                <a
+                    class="nav-links bl-btn bg-blue-600 w-40 hover:shadow-md hover:bg-blue-700 text-white rounded px-4 sm:px-8 py-2">Sign
+                    In</a>
+                <a
+                    class="nav-links bs-btn bg-blue-600 w-40 hover:shadow-md hover:bg-blue-700 text-white rounded px-4 sm:px-8 py-2">Sign
+                    Up</a>
+            </div>
+        </div>
+        <div class="flex for-l flex-col text-center">
+            <h1 class="font-bold text-4xl md:text-5xl sm:text-4xl mt-10">Continue where you left</h1>
+            <p class="m-5 text-lg md:text-md">There is more for you. Jump back right in and continue skilling the IT world
+            </p>
+            <div class="flex flex-wrap gap-5 justify-center">
+                <a
+                    class="nav-links ds-btn bg-blue-600 w-40 hover:shadow-md hover:bg-blue-700 text-white rounded px-4 sm:px-8 py-2">Dashboard</a>
+            </div>
+        </div>
+    </div>
+    <div class="landing-about flex flex-col justify-center items-center" id="about">
+        <div
+            class="about-card flex flex-wrap gap-10 w-auto mx-0 sm:mx-auto sm:w-full p-6 space-between justify-center md:justify-between my-auto">
+            <div class="landing-info w-80 md:w-96 h-9/12 rounded shadow-lg items-start p-4">
+                <h1 class="font-bold text-2xl text-sky-400 mb-2">About Us</h1>
+                <p>
+                    Skill-IT is an educational platformn found in Cameroon based on tech and IT out for young people in
+                    IT and technology in general
+                </p>
+            </div>
+            <div class="landing-info w-80 md:w-96 h-9/12 rounded shadow-lg items-start p-4">
+                <h1 class="font-bold text-2xl text-amber-500 mb-2">Our Purpose</h1>
+                <p>
+                    We are out to empower young cameroonians with skills to fit into the demands of the African tech
+                    system.
+                </p>
+            </div>
+            <div class="landing-info _contact w-80 md:w-96 h-9/12 rounded shadow-lg items-start p-4">
+                <h1 class="font-bold text-xl text-sky-400 mb-2">Contact Us</h1>
+                <a class="ml-5 flex flex-row gap-2 w-full" href="mailto:it.skill4all@gmail.com" target="_blank" rel="noopener">
+                    <img class="w-5 h-5" src="assets/icons/gmail.png" alt="">
+                    &nbsp;
+                    it.skill4all@gmail.com
+                </a>
+                <a class="ml-5 flex flex-row gap-2 w-full" href="https://twitter.com/skill_IT4All" target="_blank" rel="noopener">
+                    <img class="w-5 h-5" src="assets/icons/twitter.png" alt="">
+                    &nbsp;
+                    @skill_IT4All
+                </a>
+                <a class="ml-5 flex flex-row gap-2 w-full" href="tel:+237673576291" target="_blank" rel="noopener">
+                    <img class="w-5 h-5" src="assets/icons/phone.png" alt="">
+                    &nbsp;
+                    + 237 673 576 291
+                </a>
+            </div>
+        </div>
+        <div class="landing-footer flex flex-row text-end justify-center items-center h-24 w-full mb-0 text-slate-400">
+            <span class="w-10/12">Copyright &COPY; 2022</span>
+            <span class="w-1 h-full bg-slate-400 rounded h-4 mx-4 my-6"></span>
+            <span class="w-10/12 text-start">Skill-IT4All</span>
+        </div>
+    </div>
+</div>
+<script>
+        stickyHeader()
+        setEventHandlers()
+    if (_Detail.userId === undefined || _user.userId === undefined) initiateUser()
+    setTimeout(() => {
+        chAuth()
+        loader.addClass('hidden')
+    }, 2000);
+</script>

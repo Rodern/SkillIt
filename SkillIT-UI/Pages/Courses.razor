@@ -1,0 +1,14 @@
+﻿@page "/courses"
+@inject IJSRuntime JSRuntime;
+
+<PageTitle>SkillIT - Courses</PageTitle>
+
+<h3>Course</h3>
+
+@code {
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        JSRuntime.InvokeVoidAsync("initCourses");
+    }
+}

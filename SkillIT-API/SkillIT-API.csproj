@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
-    <ProjectReference Include="..\SkillItModels\SkillItModels.csproj" />
+    <ProjectReference Include="..\SkillIT-Models\SkillIT-Models.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,335 @@
+<div class="dashboard-page cursor-default w-full ">
+    <header class="dashboard-header text-white flex flex-row shadow items-center px-3 h-12">
+        <a class="org-info flex flex-row items-center gap-2 ml-0 mr-auto">
+            <img src="assets/icons/logo.png" class="h-24" alt="">
+            <h4 class="org-name hidden ml-2 font-bold text-lg">SkillIT</h4>
+        </a>
+        <nav class="header-nav hidden md:flex ml-auto gap-5 flex-row text-slate-200">
+            <!-- <a
+                class="nav-links n-usr flex flex-row justify-between hover:bg-blue-700 hover:shadow-md focus:bg-blue-800 rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent ">
+                <span class="nav-un">AlainKimbu</span>
+                <img src="assets/icons/user.png" class="w-5 h-5 ml-5" alt="">
+            </a> -->
+            <a
+                class="nav-links nc-btn flex flex-row justify-between hover:bg-blue-700 hover:shadow-md focus:bg-blue-800 rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent ">
+                Catalogs
+            </a>
+            <a
+                class="nav-links nl-btn hover:bg-rose-500 hover:shadow-md focus:bg-rose-600 rounded px-3 py-1 border border-slate-200 hover:border-transparent">Sign
+                In</a>
+            <a
+                class="nav-links ns-btn hover:bg-blue-500 hover:shadow-md focus:bg-blue-600 rounded px-3 py-1 border border-slate-200 hover:border-transparent ">Sign
+                Up</a>
+            <a
+                class="nav-links nlg-btn flex flex-row justify-between hover:bg-red-700 hover:shadow-md focus:bg-red-800 rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent ">
+                Logout
+            </a>
+        </nav>
+        <button id="menu_btn"
+            class="flex  flex-row hover:bg-blue-700 hover:shadow-md focus:shadow-lg rounded px-1 py-1 ml-5 gap-1 border border-slate-200 focus:border-1 hover:border-transparent  focus:outline-blue-800"
+            id="l-menu-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
+                <path fill="black" stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+            Menu
+        </button>
+        </header>
+        <nav
+            class="menu hidden absolute ml-auto shadow-2xl text-slate-900 text-md p-3 backdrop-blur-sm backdrop-opacity-25 bg-white ">
+            <ul class="menu-items">
+                <!-- <li class="menu-items hidden m-usr avt-state flex flex-col 
+                            justify-between items-center pr-2 
+                            hover:border-b border-slate-200 my-1 
+                            mb-10 py-1 pl-2 rounded hover:text-white 
+                            text-lg hover:shadow hover:bg-blue-600 
+                            backdrop-blur-sm shadow" style="border: none;">
+                    <img src="../assets/images/user-def.png" class="u-img h-[20vh] w-[20vh] mb-3" alt="">
+                    <span class="nav-un">AlainKimbu</span>
+                </li>
+                <li class="menu-items p-avt avt-state flex flex-col 
+                            justify-between items-center pr-2 
+                            hover:border-b border-slate-200 my-1 
+                            mb-10 py-1 pl-2 rounded hover:text-white 
+                            text-lg hover:shadow hover:bg-blue-600 
+                            backdrop-blur-sm shadow" style="border: none;">
+                    <img src="../assets/images/user-def.png" class="u-img h-[20vh] w-[20vh] mb-3" alt="">
+                    <i class="nav-un " style="font-size:1rem;font-weight: 400;">Not Signed In</i>
+                </li> -->
+                <li
+                    class="menu-items home-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                    Home
+                </li>
+                <li
+                    class="menu-items mc-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                    Catalogs
+                </li>
+                <li
+                    class="menu-items hidden mcb-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                    Courses
+                </li>
+                <li
+                    class="menu-items ms-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                    Sign Up
+                </li>
+                <li
+                    class="menu-items ml-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                    Sign In
+                </li>
+                <li
+                    class="menu-items about hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                    <a>About</a>
+                </li>
+                <li
+                    class="menu-items hidden about hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                    <a>Feedback</a>
+                </li>
+                <li
+                    class="menu-items mlg-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:shadow hover:bg-red-700 backdrop-blur-sm">
+                    Logout
+                </li>
+            </ul>
+        </nav>
+    <div class="dash-body flex flex-row text-slate-300 ">
+        <div class="user-section hidden md:flex p-3 absolute md:relative w-full md:w-[45vw] h-auto flex-col">
+            <button class="exit-cp absolute h-7 w-7 flex md:hidden justify-center items-center text-2xl text-center text-white top-2 right-2">
+                X
+            </button>
+            <div class="avt w-40 h-40 mb-10 mx-auto">
+                <img class="u-img w-40 h-40 rounded-[85px]" src="assets/images/user-def.png" alt="">
+                <button id="edit-avt" title="Change image" class="edit-avt bg-amber-500 h-10 w-10 p-2 flex justify-center items-center hover:shadow-md">
+                    <img class=" h-9 w-9 m-5 " src="assets/icons/edit.svg" alt="">
+                </button>
+            </div>
+            <div class="personal flex flex-col w-full h-auto">
+                <div class="info mt-1 w-full text-center">
+                    <span class="c font-bold text-center text-3xl u-name">Full Name</span>
+                </div>
+                <div class="info mt-1 text-center">
+                    <span class="c text-center text-xl u-email">Email</span>
+                </div>
+                <div class="info mt-1 text-center flex flex-row w-full px-[30%] md:px-[15%]">
+                    <a class="c text-start text-xl u-phone"  aria-label="call">Phone</a>
+                    <button id="d_phone" title="Edit phone" class="edit-info hover:bg-red-600  h-8 w-8 bg-slate-200 p-[0.1rem] ml-auto rounded-md flex justify-center items-center">
+                        <img class=" h-8 w-8 m-5 " src="assets/icons/edit.svg" alt="">
+                    </button>
+                </div>
+                <div class="info mt-1 flex flex-row w-full px-[30%] md:px-[15%]">
+                    <span class="c text-start text-lg u-dob w-full">DoB</span>
+                    <button id="u_dob" title="Change Date of Birth"
+                        class="edit-info hover:bg-red-600  h-8 w-8 bg-slate-200 p-[0.1rem] ml-auto rounded-md flex justify-center items-center">
+                        <img class=" h-8 w-8 m-5 " src="assets/icons/edit.svg" alt="">
+                    </button>
+                </div>
+                <div class="info mt-1 flex flex-row w-full px-[30%] md:px-[15%]">
+                    <span class="c text-start text-lg u-g w-full">Gender</span>
+                    <button id="u_g" title="Change gender"
+                        class="edit-info hover:bg-red-600  h-8 w-8 bg-slate-200 p-[0.1rem] ml-auto rounded-md flex justify-center items-center">
+                        <img class=" h-8 w-8 m-5 " src="assets/icons/edit.svg" alt="">
+                    </button>
+                </div>
+                <div class="info mt-1 flex flex-row w-full px-[30%] md:px-[15%]">
+                    <span class="c text-start text-lg u-address w-full">Address</span>
+                    <button id="u_address" title="Edit address"
+                        class="edit-info hover:bg-red-600  h-8 w-8 bg-slate-200 p-[0.1rem] ml-auto rounded-md flex justify-center items-center">
+                        <img class=" h-8 w-8 m-5 " src="assets/icons/edit.svg" alt="">
+                    </button>
+                </div>
+            </div>
+            <div class="skills-wrapper flex flex-col mt-6 p-2 rounded-lg shadow-lg">
+                <h1 class="font-bold text-xl text-start mr-auto">My Skills</h1>
+                <div class="skills flex flex-col w-full rounded-lg">
+
+                </div>
+                <div class="skill-form w-full mt-2 flex flex-col">
+                    <h1 class="font-bold">Add skill</h1>
+                    <div class="skill-wrapper flex flex-row gap-2">
+                        <div class="input-wrapper rounded-md flex flex-row w-6/12 h-9 border overflow-hidden" style="border-radius: 5px;">
+                            <input class="w-full side-in px-2 py-1" type="text" name="name" id="nskn" placeholder="Name" />
+                        </div>
+                        <div class="input-wrapper rounded-md flex flex-row w-full h-9 border overflow-hidden" style="border-radius: 5px;">
+                            <input class="w-full side-in px-2 py-1" type="url" name="link" id="nskp" placeholder="Level" list="level_list">
+                            <datalist id="level_list">
+                                <option value="Beginner">
+                                <option value="Amateur">
+                                <option value="Intermediate">
+                                <option value="Professional">
+                                <option value="GodLevel">
+                            </datalist>
+                        </div>
+                    </div>
+                    <button title="Save skill"
+                        class="save-skill-btn text-md ml-auto font-bold text-white bg-blue-600 w-24 md:text-center hover:shadow-lg hover:bg-blue-700 rounded px-2 sm:px-4 py-1 mt-2 "
+                        role="button">Add</button>
+                </div>
+            </div>
+            <div class="socials-wrapper flex flex-col mt-4 p-2 rounded-lg shadow-lg">
+                <h1 class="font-bold text-xl text-start mr-auto">Socials</h1>
+                <div class="socials flex flex-col w-full rounded-lg">
+
+                </div>
+                <div class="social-form w-full mt-2 flex flex-col">
+                    <h1 class="font-bold">Add Social</h1>
+                    <div class="social-wrapper flex flex-row gap-2">
+                        <div class="input-wrapper rounded-md flex flex-row w-6/12 h-9 border" style="border-radius: 5px;">
+                            <input class="w-full side-in px-2 py-1" type="text" name="name" id="nscn" placeholder="Name" />
+                        </div>
+                        <div class="input-wrapper rounded-md flex flex-row w-full h-9 border " style="border-radius: 5px;">
+                            <input class="w-full side-in px-2 py-1" type="url" name="link" id="nscp" placeholder="Link" />
+                        </div>
+                    </div>
+                    <button id="this" title="Save social" class="save-social-btn relative text-md ml-auto font-bold text-white bg-blue-600 w-24 md:text-center hover:shadow-lg hover:bg-blue-700 rounded px-2 sm:px-4 py-1 mt-2 " role="button">Add</button>
+                </div>
+            </div>
+        </div>
+        <div class="main-view pb-1 text-center text-slate-900 bg-white text-xl w-[100%] h-full flex flex-col justify-center items-center">
+            <div class="dash-header">
+                <span class="left-section">
+                    <h3 class="dash-greetings hidden">Welcome back</h3>
+                </span>
+                <span class="right-section">
+                    <a class="p-detail-btn flex md:hidden">Profile</a>
+                </span>
+            </div>
+            <div class="dash-element shadow border">
+                <div class="de-header">Courses In-progress</div>
+                <ul class="list in-progess-list">
+                    <div class="empty-list">
+                        Nothing here yet!
+                    </div>
+                </ul>
+            </div>
+            <div class="dash-element shadow border">
+                <div class="de-header">Certificates</div>
+                <ul class="list">
+                    <div class="empty-list">
+                        Nothing here yet!
+                    </div>
+                </ul>
+            </div>
+            <div class="dash-element shadow border">
+                <div class="de-header">Achievements</div>
+                <ul class="list">
+                    <div class="empty-list">
+                        Nothing here yet!
+                    </div>
+                </ul>
+            </div>
+            <div class="dash-element shadow border">
+                <div class="de-header">Skills</div>
+                <div class="skills flex flex-col w-full rounded-lg">
+                <div class="empty-list">
+                    Nothing here yet!
+                </div>
+                </div>
+            </div>
+            <div class="dash-element shadow border">
+                <div class="de-header">Socials</div>
+                <div class="socials flex flex-col w-full rounded-lg">
+                <div class="empty-list">
+                    Nothing here yet!
+                </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<script>
+    function disengageUser(engagement) {
+        makeGrid()
+        /* engagement.engagedDate = new Date(engagement.engagedDate)
+        console.log(engagement) */
+        disengageRequest(engagement, Token, (response) => {
+            //disableEngageBtn()
+            popUpBox('done', response.message)
+            loader.addClass('hidden')
+        })
+    }
+    $(document).click((e)=>{
+        if(e.target.closest('.e-view-box') != null || e.target.closest('.list-item')) return
+        remove_engagement_view_box()
+    })
+    $(document).scroll((e)=>{
+        remove_engagement_view_box()
+    })
+    setTimeout(() => {
+        loadDash()
+        chAuth()
+        setEventHandlers()
+        stickyHeader()
+        loader.addClass('hidden')
+        $('.save-social-btn').click((e) => {
+            social = new Social(0, $('#nscn').val(), $('#nscp').val())
+            if (social.name == '' || social.link == '') {
+                popUpBox('info', 'There are empty field(s), please check again!', 'catAlert')
+                return
+            }
+            userSocial = new UserSocial(0, 0, UserId, social)
+            addUserSocial(userSocial, Token)
+            $('input').val('')
+        })
+
+        $('.p-detail-btn').click((e)=>{
+            /* $('.user-section').fadeIn(100, (e)=>{
+                $('.user-section').css('background-color', 'rgba(0, 0, 0, 0.863)')
+            }) */
+            $('.user-section').css('background-color', 'rgba(0, 0, 0, 0.863)')
+            $('.user-section').removeClass('hidden')
+        })
+
+        $('.exit-cp').click((e) => {
+            /* $('.user-section').fadeOut(100, (e) => {
+                $('.user-section').show() */
+                $('.user-section').addClass('hidden')
+                $('.user-section').css('background-color', 'rgba(0, 0, 0, 0.507)')
+            //})
+        })
+
+        $('.save-skill-btn').click((e) => {
+            skill = new Skill(0, $('#nskn').val(), $('#nskp').val())
+            if (skill.name == '' || skill.level == '') {
+                popUpBox('info', 'There are empty field(s), please check again!', 'catAlert')
+                return
+            }
+            let us = new UserSkill(0, 0, UserId, skill)
+            let skills = new Array()
+            skills.push(us)
+            console.log(skills)
+            addUserSkills(skills, Token)
+            $('input').val('')
+        })
+
+        $('#edit-avt').click((e)=>{
+            info_img_template('image', '.jpg, .png, .raw')
+        })
+
+        $('#d_phone').click((e) => {
+            function cb(val) {
+                _user.phone = val
+            }
+            info_edit_template('phone', 'tel', 9, 'Enter phone number', cb)
+        })
+
+        $('#u_dob').click((e) => {
+            function cb(val) {
+                _user.dob = val
+            }
+            info_edit_template('dob', 'date', 100, 'Date', cb)
+        })
+
+        $('#u_g').click((e) => {
+            function cb(val) {
+                _user.gender = val
+            }
+            info_edit_template('g', 'text', 1, 'M or F', cb)
+        })
+
+        $('#u_address').click((e) => {
+            function cb(val) {
+                _user.address = val
+            }
+            info_edit_template('add', 'text', 100, 'Address', cb)
+        })
+    }, 2000);
+</script>
