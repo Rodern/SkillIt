@@ -1,5 +1,5 @@
-﻿using SkillItModels.DatabaseModels;
-using SkillItModels.Models;
+﻿using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

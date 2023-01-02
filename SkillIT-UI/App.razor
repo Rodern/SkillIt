@@ -1,12 +1,25 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@inject IJSRuntime JSRuntime;
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
     <NotFound>
-        <PageTitle>Not found</PageTitle>
+        <PageTitle>404: Not found</PageTitle>
         <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
+            <div class="pad404 text-slate-800">
+                <h1>404</h1>
+                <h4>Not Found</h4>
+                <p role="alert">Sorry, this route is not valid or under development, please route home.</p>
+                <NavLink href="/"
+                        class="nav -links ds- btn bg-blue-600 w-40 hover:shadow-md hover:bg-blue-700 text-white rounded px-4 sm:px-8 py-2">
+                        Home
+                    </NavLink>
+            </div>
         </LayoutView>
     </NotFound>
 </Router>
+
+@code {
+    
+}

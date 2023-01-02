@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace SkillItModels.DatabaseModels
+namespace SkillIT_Models.DatabaseModels
 {
     public partial class Achievement
     {
@@ -12,7 +12,7 @@ namespace SkillItModels.DatabaseModels
             UserAchievements = new HashSet<UserAchievement>();
         }
 
-        public int AchId { get; set; }
+        public int AchievementId { get; set; }
         public string Type { get; set; }
         public string Name { get; set; }
 

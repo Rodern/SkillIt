@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace SkillItModels.DatabaseModels
+namespace SkillIT_Models.DatabaseModels
 {
     public partial class Certificate
     {
@@ -12,7 +12,7 @@ namespace SkillItModels.DatabaseModels
             UserCertificates = new HashSet<UserCertificate>();
         }
 
-        public int CertId { get; set; }
+        public int CertificateId { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
         public DateTime StartDate { get; set; }

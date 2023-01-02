@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SkillItModels.Models
+namespace SkillIT_Models.Models
 {
 	public class CatalogModel
 	{

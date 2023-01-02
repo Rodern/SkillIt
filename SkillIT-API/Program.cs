@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
-using SkillItModels.DatabaseModels;
-using SkillItModels.Models;
+using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<SkillItModels.DatabaseModels.skill_it_dbContext>(options =>
+builder.Services.AddDbContext<skill_it_dbContext>(options =>
 {
 	//options.UseMySQL(builder.Configuration.GetConnectionString("Default"));
 	options.UseMySQL(builder.Configuration.GetConnectionString("SmarterAspDb"));

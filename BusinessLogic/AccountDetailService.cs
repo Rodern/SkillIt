@@ -1,7 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using Newtonsoft.Json;
-using SkillItModels.DatabaseModels;
-using SkillItModels.Models;
+using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,8 +13,8 @@ namespace BusinessLogic
 {
 	public class AccountDetailService : IAccountDetailService
 	{
-		private readonly SkillItModels.DatabaseModels.skill_it_dbContext DatabaseContext;
-		public AccountDetailService(SkillItModels.DatabaseModels.skill_it_dbContext databaseContext)
+		private readonly skill_it_dbContext DatabaseContext;
+		public AccountDetailService(skill_it_dbContext databaseContext)
 		{
 			this.DatabaseContext = databaseContext;
 		}
@@ -23,7 +23,7 @@ namespace BusinessLogic
 		{
 			try
 			{
-				var details = DatabaseContext.AccountDetails.Where(d => d.AcId == accountDetail.AcId && d.UserId == accountDetail.UserId).ToList();
+				var details = DatabaseContext.AccountDetails.Where(d => d.AccountId == accountDetail.AccountId && d.UserId == accountDetail.UserId).ToList();
 				if (details.Count > 0) return new(false, "Failed");
 				DatabaseContext.AccountDetails.Add(accountDetail);
 				DatabaseContext.SaveChanges();
@@ -45,9 +45,9 @@ namespace BusinessLogic
 			return new ObservableCollection<AccountDetail>(DatabaseContext.AccountDetails.ToList());
 		}
 
-		public ResponseModel UpdateAccountDetail(int id, long id2, AccountDetail accountDetail)
+		public ResponseModel UpdateAccountDetail(long id, long id2, AccountDetail accountDetail)
 		{
-			var detail = DatabaseContext.AccountDetails.Where(ac => ac.AcId == id && ac.UserId == id2).FirstOrDefault();
+			var detail = DatabaseContext.AccountDetails.Where(ac => ac.AccountId == id && ac.UserId == id2).FirstOrDefault();
 			try
 			{
 				if (detail != null && accountDetail != null)

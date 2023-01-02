@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace SkillItModels.DatabaseModels
+namespace SkillIT_Models.DatabaseModels
 {
     public partial class Catalog
     {

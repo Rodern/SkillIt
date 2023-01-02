@@ -1,8 +1,8 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using SkillItModels.DatabaseModels;
-using SkillItModels.Models;
+using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,8 +18,8 @@ namespace BusinessLogic
 {
 	public class AuthenticationManager: IAuthenticationManager
 	{
-		private readonly SkillItModels.DatabaseModels.skill_it_dbContext DatabaseContext;
-		public AuthenticationManager(SkillItModels.DatabaseModels.skill_it_dbContext skill_It_DbContext)
+		private readonly skill_it_dbContext DatabaseContext;
+		public AuthenticationManager(skill_it_dbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}

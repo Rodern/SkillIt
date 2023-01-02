@@ -1,7 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using SkillItModels.DatabaseModels;
-using SkillItModels.Models;
+using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,8 +23,8 @@ namespace BusinessLogic
             int j = userAchievements.Count;
             for (int i = 0; i < j; i++)
             {
-                userAchievements[i].Ach = new Achievement();
-                userAchievements[i].Ach = DatabaseContext.Achievements.Where(s => s.AchId == userAchievements[i].AchId).FirstOrDefault();
+                userAchievements[i].Achievement = new Achievement();
+                userAchievements[i].Achievement = DatabaseContext.Achievements.Where(s => s.AchievementId == userAchievements[i].AchievementId).FirstOrDefault();
             }
             return userAchievements;
         }
@@ -50,12 +50,12 @@ namespace BusinessLogic
 
         public ResponseModel RemoveUserAchievement(int achId, long userId)
         {
-            UserAchievement achievement = DatabaseContext.UserAchievements.Where(_ => _.AchId == achId && _.UserId == userId).FirstOrDefault();
+            UserAchievement achievement = DatabaseContext.UserAchievements.Where(_ => _.AchievementId == achId && _.UserId == userId).FirstOrDefault();
             if (achievement == null) return new(false, "AchievementIsNull");
             try
             {
                 DatabaseContext.Entry<UserAchievement>(achievement).State = EntityState.Deleted;
-                DatabaseContext.Entry<Achievement>(DatabaseContext.Find<Achievement>(achievement.AchId)).State = EntityState.Deleted;
+                DatabaseContext.Entry<Achievement>(DatabaseContext.Find<Achievement>(achievement.AchievementId)).State = EntityState.Deleted;
                 //DatabaseContext.UserAchievements.Update(achievement);
                 DatabaseContext.SaveChanges();
                 return new(true, "Success");
@@ -72,9 +72,7 @@ namespace BusinessLogic
             try
             {
                 DatabaseContext.Entry<UserAchievement>(achievement).State = EntityState.Detached;
-                DatabaseContext.Entry<Achievement>(achievement.Ach).State = EntityState.Detached;
                 DatabaseContext.UserAchievements.Update(achievement);
-                DatabaseContext.Achievements.Update(achievement.Ach);
                 DatabaseContext.SaveChanges();
                 return new(true, "Success");
             }

@@ -1,5 +1,5 @@
-﻿using SkillItModels.DatabaseModels;
-using SkillItModels.Models;
+﻿using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,6 +14,6 @@ namespace BusinessLogic.Interfaces
 		ObservableCollection<AccountDetail> GetAllAccountDetails();
 		ResponseModel AddAccountDetail(AccountDetail accountDetail);
 		AccountDetail GetAccountDetail(long userId);
-		ResponseModel UpdateAccountDetail(int id, long id2, AccountDetail accountDetail);
+		ResponseModel UpdateAccountDetail(long id, long id2, AccountDetail accountDetail);
 	}
 }

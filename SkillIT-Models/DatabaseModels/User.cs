@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace SkillItModels.DatabaseModels
+namespace SkillIT_Models.DatabaseModels
 {
     public partial class User
     {
@@ -11,6 +11,7 @@ namespace SkillItModels.DatabaseModels
         {
             AccountDetails = new HashSet<AccountDetail>();
             Engagements = new HashSet<Engagement>();
+            Enrollments = new HashSet<Enrollment>();
             Otps = new HashSet<Otp>();
             UserAchievements = new HashSet<UserAchievement>();
             UserCertificates = new HashSet<UserCertificate>();
@@ -32,6 +33,7 @@ namespace SkillItModels.DatabaseModels
 
         public virtual ICollection<AccountDetail> AccountDetails { get; set; }
         public virtual ICollection<Engagement> Engagements { get; set; }
+        public virtual ICollection<Enrollment> Enrollments { get; set; }
         public virtual ICollection<Otp> Otps { get; set; }
         public virtual ICollection<UserAchievement> UserAchievements { get; set; }
         public virtual ICollection<UserCertificate> UserCertificates { get; set; }

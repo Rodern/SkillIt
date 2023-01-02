@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Helpers;
 
-namespace SkillItModels.Models
+namespace SkillIT_Models.Models
 {
 	public class Authentication
 	{

@@ -2,16 +2,16 @@
 using BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using SkillItModels.DatabaseModels;
-using SkillItModels.Models;
+using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Models;
 
 namespace BusinessLogic
 {
 	public class UserService: IUserService
 	{
-		private readonly SkillItModels.DatabaseModels.skill_it_dbContext DatabaseContext;
-		public AccountStatus AccountStatus = new AccountStatus();
-		public UserService(SkillItModels.DatabaseModels.skill_it_dbContext skill_It_DbContext)
+		private readonly skill_it_dbContext DatabaseContext;
+		public AccountStatus AccountStatus = new();
+		public UserService(skill_it_dbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}

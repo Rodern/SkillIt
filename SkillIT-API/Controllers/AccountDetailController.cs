@@ -1,7 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SkillItModels.DatabaseModels;
+using SkillIT_Models.DatabaseModels;
 
 namespace SkillItAPI.Controllers
 {
@@ -40,7 +40,7 @@ namespace SkillItAPI.Controllers
 
 		[HttpPost]
 		[Route("UpdateAccountDetail")]
-		public IActionResult UpdateAccountDetail(int id, long id2, AccountDetail accountDetail)
+		public IActionResult UpdateAccountDetail(long id, long id2, AccountDetail accountDetail)
 		{
 			return Ok(AccountDetailService.UpdateAccountDetail(id, id2, accountDetail));
 		}

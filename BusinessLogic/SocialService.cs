@@ -1,6 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
-using SkillItModels.DatabaseModels;
-using SkillItModels.Models;
+using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,8 +12,8 @@ namespace BusinessLogic
 {
 	public class SocialService : ISocialService
 	{
-		private readonly SkillItModels.DatabaseModels.skill_it_dbContext DatabaseContext;
-		public SocialService(SkillItModels.DatabaseModels.skill_it_dbContext skill_It_DbContext)
+		private readonly skill_it_dbContext DatabaseContext;
+		public SocialService(skill_it_dbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}

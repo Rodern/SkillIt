@@ -1,8 +1,10 @@
 //const BaseURL = 'http://localhost:5000/'
-const BaseURL = 'https://localhost:5001/'
+//const BaseURL = 'https://localhost:5001/'
 //const BaseURL = 'https://localhost:7165/'
 //const BaseURL = 'http://aprilman-001-site1.atempurl.com/'
 //const BaseURL = 'https://skillitapi.herokuapp.com/'
+const BaseURL = `${location.origin}/`
+
 const skillitUserIPKey = 'skillit_userIP'
 const tokenKey = 'skillit_user-token'
 const userIdKey = 'skillit_userId'
