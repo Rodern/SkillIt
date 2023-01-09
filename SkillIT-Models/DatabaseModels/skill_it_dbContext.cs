@@ -26,6 +26,7 @@ namespace SkillIT_Models.DatabaseModels
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<CourseChapter> CourseChapters { get; set; }
         public virtual DbSet<CourseContent> CourseContents { get; set; }
+        public virtual DbSet<CourseDatum> CourseData { get; set; }
         public virtual DbSet<CourseLesson> CourseLessons { get; set; }
         public virtual DbSet<Creator> Creators { get; set; }
         public virtual DbSet<Engagement> Engagements { get; set; }
@@ -383,7 +384,7 @@ namespace SkillIT_Models.DatabaseModels
 
             modelBuilder.Entity<CourseContent>(entity =>
             {
-                entity.HasKey(e => e.CententId)
+                entity.HasKey(e => e.ContentId)
                     .HasName("PRIMARY");
 
                 entity.ToTable("course_content");
@@ -392,9 +393,9 @@ namespace SkillIT_Models.DatabaseModels
 
                 entity.HasIndex(e => e.LessonId, "lessonID");
 
-                entity.Property(e => e.CententId)
+                entity.Property(e => e.ContentId)
                     .HasColumnType("int(11)")
-                    .HasColumnName("cententID");
+                    .HasColumnName("contentID");
 
                 entity.Property(e => e.AuthorId)
                     .HasColumnType("bigint(20)")
@@ -440,6 +441,39 @@ namespace SkillIT_Models.DatabaseModels
                     .WithMany(p => p.CourseContents)
                     .HasForeignKey(d => d.LessonId)
                     .HasConstraintName("course_content_ibfk_2");
+            });
+
+            modelBuilder.Entity<CourseDatum>(entity =>
+            {
+                entity.HasKey(e => e.DataId)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("course_data");
+
+                entity.HasIndex(e => e.EnrollmentId, "enrollmentID");
+
+                entity.Property(e => e.DataId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("dataID");
+
+                entity.Property(e => e.EnrollmentId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("enrollmentID");
+
+                entity.Property(e => e.LastModified).HasColumnName("last_modified");
+
+                entity.Property(e => e.StartDate).HasColumnName("start_date");
+
+                entity.Property(e => e.StudyRecord)
+                    .IsRequired()
+                    .HasColumnType("longtext")
+                    .HasColumnName("study_record");
+
+                entity.HasOne(d => d.Enrollment)
+                    .WithMany(p => p.CourseData)
+                    .HasForeignKey(d => d.EnrollmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("course_data_ibfk_1");
             });
 
             modelBuilder.Entity<CourseLesson>(entity =>
@@ -545,6 +579,8 @@ namespace SkillIT_Models.DatabaseModels
                     .HasColumnType("int(11)")
                     .HasColumnName("catalogID");
 
+                entity.Property(e => e.Completed).HasColumnName("completed");
+
                 entity.Property(e => e.EngagedDate)
                     .HasColumnType("date")
                     .HasColumnName("engagedDate");
@@ -583,6 +619,8 @@ namespace SkillIT_Models.DatabaseModels
                 entity.Property(e => e.DateCompleted).HasColumnName("date_completed");
 
                 entity.Property(e => e.DateEnrolled).HasColumnName("date_enrolled");
+
+                entity.Property(e => e.IsCompleted).HasColumnName("is_completed");
 
                 entity.Property(e => e.UserId)
                     .HasColumnType("bigint(20)")
@@ -819,6 +857,9 @@ namespace SkillIT_Models.DatabaseModels
             modelBuilder.Entity<Quiz>(entity =>
             {
                 entity.ToTable("quiz");
+
+                entity.HasIndex(e => e.QuizCode, "quiz_code")
+                    .IsUnique();
 
                 entity.Property(e => e.QuizId)
                     .HasColumnType("int(11)")

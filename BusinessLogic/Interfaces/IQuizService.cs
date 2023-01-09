@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Helpers;
 
-namespace SkillIT_Models.Models
+namespace BusinessLogic.Interfaces
 {
-	public class Authentication
-	{
-	}
+    public interface IQuizService
+    {
+    }
 }

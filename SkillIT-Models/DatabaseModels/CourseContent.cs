@@ -7,7 +7,7 @@ namespace SkillIT_Models.DatabaseModels
 {
     public partial class CourseContent
     {
-        public int CententId { get; set; }
+        public int ContentId { get; set; }
         public int LessonId { get; set; }
         public long AuthorId { get; set; }
         public int ContentNumber { get; set; }

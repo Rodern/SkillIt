@@ -31,7 +31,7 @@ namespace BusinessLogic
 			ResetModel resetModel = oTPService.CreateOTP(new()
 			{
 				UserId = user.UserId,
-				Code = Authentication.GenerateOTP(),
+				Code = AuthenticationHelpers.GenerateOTP(),
 				OtpId = otpId,
 			});
 			
@@ -44,7 +44,7 @@ namespace BusinessLogic
             User user = DatabaseContext.Users.Where(u => u.UserId == resetModel.UserId).FirstOrDefault();
 			if (user == null) return new(false, "UserNotFound");
 			UserService userService = new(DatabaseContext);
-			userService.UpdatePassword(user.UserId, Authentication.EncryptPassword(resetModel.Password));
+			userService.UpdatePassword(user.UserId, AuthenticationHelpers.EncryptPassword(resetModel.Password));
 			return new(true, "ResetSuccess");
 		}
 
@@ -98,7 +98,7 @@ namespace BusinessLogic
 				if (user == null) return new(false, "UserNotFound");
 				if (Crypto.VerifyHashedPassword(user.Password, userCredential.Password) != true) return new(false, "Incorrect");
 				JwtSecurityTokenHandler tokenHandler = new();
-				byte[] tokenKey = Encoding.ASCII.GetBytes(Authentication.AuthenticationKey);
+				byte[] tokenKey = Encoding.ASCII.GetBytes(AuthenticationHelpers.AuthenticationKey);
 				if (userCredential.RememberMe == true) days = 365;
 				SecurityTokenDescriptor tokenDescriptor = new()
 				{

@@ -11,6 +11,7 @@ namespace SkillIT_Models.DatabaseModels
         public long UserId { get; set; }
         public int CatalogId { get; set; }
         public DateTime EngagedDate { get; set; }
+        public bool Completed { get; set; }
 
         public virtual Catalog Catalog { get; set; }
         public virtual User User { get; set; }

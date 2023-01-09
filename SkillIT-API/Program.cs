@@ -44,7 +44,7 @@ builder.Services.AddAuthentication(x =>
 	x.TokenValidationParameters = new()
 	{
 		ValidateIssuerSigningKey = true,
-		IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Authentication.AuthenticationKey)),
+		IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthenticationHelpers.AuthenticationKey)),
 		ValidateIssuer = false,
 		ValidateAudience = false
 	};

@@ -44,7 +44,7 @@ namespace BusinessLogic
 						Email = userModel.Email,
 						FirstName = userModel.FirstName,
 						LastName = userModel.LastName,
-						Password = Authentication.EncryptPassword(userModel.Password),
+						Password = AuthenticationHelpers.EncryptPassword(userModel.Password),
 						Dob = userModel.Dob,
 						Phone = userModel.Phone,
 						Gender = userModel.Gender,
@@ -129,7 +129,7 @@ namespace BusinessLogic
 					user.Email = userModel.Email;
 					user.FirstName = userModel.FirstName;
 					user.LastName = userModel.LastName;
-					user.Password = Authentication.EncryptPassword(userModel.Password);
+					user.Password = AuthenticationHelpers.EncryptPassword(userModel.Password);
 					user.Dob = userModel.Dob;
 					user.Phone = userModel.Phone;
 					user.Image = userModel.Image;
