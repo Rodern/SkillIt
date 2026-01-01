@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System.Text;
@@ -12,23 +13,27 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+
+
 builder.Services.AddControllers();
 builder.Services.AddDbContext<skill_it_dbContext>(options =>
 {
-	//options.UseMySQL(builder.Configuration.GetConnectionString("Default"));
-	options.UseMySQL(builder.Configuration.GetConnectionString("SmarterAspDb"));
+	options.UseMySQL(builder.Configuration.GetConnectionString("Default"));
+	//options.UseMySQL(builder.Configuration.GetConnectionString("SmarterAspDb"));
 });
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICatalogService, CatalogService>();
-builder.Services.AddScoped<IAccountDetailService, AccountDetailService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IUserSkillService, UserSkillService>();
 builder.Services.AddScoped<IUserSocialService, UserSocialService>();
-builder.Services.AddScoped<IAuthenticationManager, AuthenticationManager>();
-builder.Services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IUserAchievementService, UserAchievementService>();
 builder.Services.AddScoped<IUserCertificateService, UserCertificateService>();
 builder.Services.AddScoped<IOTPService, OTPService>();
 builder.Services.AddScoped<IEngagementService, EngagementService>();
+
+builder.Services.AddScoped<ICourseService, CourseService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -44,7 +49,7 @@ builder.Services.AddAuthentication(x =>
 	x.TokenValidationParameters = new()
 	{
 		ValidateIssuerSigningKey = true,
-		IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthenticationHelpers.AuthenticationKey)),
+		IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthenticationHelper.AuthenticationKey)),
 		ValidateIssuer = false,
 		ValidateAudience = false
 	};

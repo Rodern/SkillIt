@@ -1,14 +1,221 @@
 ﻿@page "/courses"
-@inject IJSRuntime JSRuntime;
 
 <PageTitle>SkillIT - Courses</PageTitle>
 
-<h3>Course</h3>
+
+<div class="courses-page page cursor-default flex flex-col bottom-0 top-0 left-0 right-0">
+	<div class="courses-page-header">
+		<div class="left-section">
+			<h3 class="section-title">Courses</h3>
+		</div>
+		<div class="search-box-wrapper  ml-auto mr-0">
+			<input class="search-input" @bind="searchValue" @onkeyup="()=>{SearchCollection(searchValue);}" placeholder="Search courses..." type="search" inputmode="text" autofocus />
+			<button class="search-btn" title="" type="button" @onclick="()=>{SearchCollection(searchValue);}">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+				</svg>
+			</button>
+		</div>
+		<div class="sort-wrapper hidden">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+				 class="w-6 h-6 hidden">
+				<path stroke-linecap="round" stroke-linejoin="round"
+					  d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
+			</svg>
+			<select name="sortCourses" id="sortCourses" @bind="@SortValue" title="Sort courses">
+				<option value="descending" selected>Descending</option>
+				<option value="ascending">Ascending</option>
+			</select>
+		</div>
+		<div class="filter-wrapper">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+				 class="w-6 h-6 hidden">
+				<path stroke-linecap="round" stroke-linejoin="round"
+					  d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
+			</svg>
+			<select name="filterCourses" id="filterCourses" @bind="@FilterValue" title="Filter courses">
+				<option value="all">All</option>
+				<option value="popular" selected>Popular</option>
+				<option value="new">New</option>
+				<option value="old">Old</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="container my-24 px-6 mx-auto">
+
+		<!-- Section: Design Block -->
+		<section class="mb-32 text-gray-800 text-center">
+
+			<div class="grid lg:grid-cols-3 gap-6 xl:gap-x-12">
+		
+				@foreach (var course in CoursesList)
+				{
+					<CourseCard course="@course"></CourseCard>
+				}
+			</div>
+
+		</section>
+		<!-- Section: Design Block -->
+
+	</div>
+	@*<div class="courses-wrapper">
+		@foreach (var course in CoursesList)
+		{
+			<a class="course-card" href="/course/@course.Guid">
+				<img src="../assets/images/ignite-100859919-large.jpg" alt="" class="course-img">
+				<div class="course-info">
+					<h3>@course.Name</h3>
+					<span>
+						<p>@course.Author.Account.User.FirstName @course.Author.Account.User.LastName</p>
+						<i>@course.DatePublish</i>
+					</span>
+				</div>
+			</a>
+		}
+	</div>*@
+</div>
+
+<div class="catalog-page page cursor-default text-white flex flex-col bottom-0 top-0 left-0 right-0">
+	@foreach (var course in CoursesList)
+	{
+		<h1>@course.Name</h1>
+	}
+</div>
 
 @code {
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-        JSRuntime.InvokeVoidAsync("initCourses");
-    }
+	string searchValue = "";
+
+	public void SearchCollection(string value)
+	{
+		ObservableCollection<Course> courses = new(AllCourses.Where(c => c.Name.ToLower().Contains(value) == true || c.Name.ToLower().StartsWith(value) == true || c.Name.ToLower().EndsWith(value) == true).ToList());
+		if (courses.Count == 0) courses = new(AllCourses.Where(c => c.Description.ToLower().Contains(value) == true || c.Description.ToLower().StartsWith(value) == true || c.Description.ToLower().EndsWith(value) == true).ToList());
+		CoursesList = courses;
+		if (string.IsNullOrEmpty(value)) CoursesList = AllCourses;
+
+		this.StateHasChanged();
+	}
+
+	protected override Task OnInitializedAsync()
+	{
+		AllCourses = CourseStaticHelper.GetCourses();
+		CoursesList = AllCourses;
+
+		FilterValue = "new";
+
+		return base.OnInitializedAsync();
+	}
+
+	public ObservableCollection<Course> AllCourses { get; set; } = new();
+	private ObservableCollection<Course> CoursesList { get; set; } = new();
+
+	private string _sortValue = "descending";
+	private string _filterValue = "popular";
+
+	public string SortValue { 
+		get => _sortValue; 
+		set
+		{
+			_sortValue = value;
+			switch (_filterValue)
+			{
+				case "ascending":
+					CoursesList = AllCourses;
+					break;
+				case "descending":
+					CoursesList = AllCourses;
+					break;
+			}
+		}
+	}
+
+	private string FilterValue
+	{
+		get => _filterValue;
+		set
+		{
+			_filterValue = value;
+			switch (_filterValue)
+			{
+				case "all":
+					CoursesList = AllCourses;
+					break;
+				case "popular":
+					var enrollments = EnrollmentService.GetEnrollments();
+					var enrs = enrollments.GroupBy(e => e.CourseId)
+									.OrderByDescending(gp => gp.Count())
+									.Select(g => g.Key).ToList();
+					CoursesList = new();
+					JSRuntime.InvokeVoidAsync("console.log", enrs);
+					foreach (var e in enrs)
+					{
+						CoursesList.Add(AllCourses.Where(c => c.CourseId == e).FirstOrDefault());
+					}
+					break;
+				case "old":
+					CoursesList = new(AllCourses.OrderBy(c => c.DatePublish).ToList());
+					break;
+				case "new":
+					CoursesList = new(AllCourses.OrderByDescending(c => c.DatePublish).ToList());
+					break;
+			}
+			//JSRuntime.InvokeVoidAsync("console.log", FilterValue);
+		}
+	}
+
+	async void SortSelectionChanged()
+	{
+		await JSRuntime.InvokeVoidAsync("alert", SortValue);
+	}
+
+	async void checkAuth(string guid, int courseId)
+	{
+		bool isLoggedIn = await JSRuntime.InvokeAsync<bool>("isLoggedIn");
+		if (isLoggedIn)
+		{
+			long userId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
+
+			if (userId != 0)
+			{
+				var enrollments = EnrollmentService.GetEnrollments(userId);
+				if (enrollments.Where(e => e.CourseId == courseId).ToList().Count > 0)
+				{
+					//NavigationManager.NavigateTo($"/course/{guid}");
+					NavigationManager.NavigateTo($"/course_detail/{guid}");
+					return;
+				}
+			}
+			NavigationManager.NavigateTo($"/course_detail/{guid}");
+			return;
+		}
+		await JSRuntime.InvokeVoidAsync("requireLogin");
+	}
+
+	protected override async  void OnAfterRender(bool firstRender)
+	{
+		base.OnAfterRender(firstRender);
+		if (firstRender)
+		{
+			await JSRuntime.InvokeVoidAsync("showLoader");
+
+			//JSRuntime.InvokeVoidAsync("initCourses");
+			await JSRuntime.InvokeVoidAsync("LoadScripts", "initCourses");
+
+			long userId = 0;
+
+			try
+			{
+				userId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
+			}
+			catch (Exception)
+			{
+				JSRuntime.InvokeVoidAsync("console.info", "Error on acquiring UserId");
+			}
+
+			if (userId != 0)
+			{
+
+			}
+		}
+	}
 }

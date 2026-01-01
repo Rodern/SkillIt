@@ -1,0 +1,15 @@
+﻿.k-toolbar.k-toolbar-resizable{
+    flex-wrap: wrap;
+}
+
+.k-filemanager-listview .k-file-preview {
+    overflow: hidden;
+    height: auto;
+    width: auto;
+    max-height: 100%;
+}
+
+.k-filemanager-listview .k-file-preview img {
+    width: unset;
+    width: auto;
+}

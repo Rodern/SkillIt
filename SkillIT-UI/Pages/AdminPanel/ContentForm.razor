@@ -1,0 +1,175 @@
+﻿@page "/admin/content-form/{contentGuid}"
+
+@attribute [Authorize(Policy = "admin")]
+<AuthorizeView Policy="admin" Context="ContentFormContext">
+	<Authorized>
+		<div class="landing -page page flex flex-col text-slate-800 cursor-default">
+			<div class="notification -page-header navbar navbar-expand-lg shadow-md py-2 px-1 bg-white relative flex items-center w-full justify-between">
+				<span class="left-section">
+					<h3 class="section-title">Course Contents</h3>
+				</span>
+				<span class="right-section">
+					@*<button id="refresh_notifications" @onclick="()=>{DoNeedFull();}" class="menu-btn ">
+						@*<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
+						<path fill="black" stroke-linecap="round" stroke-linejoin="round"
+						d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+						</svg>
+						Refresh
+					</button>
+					<button id="mark_all_as_read" @onclick="()=>{MarkAllAsRead();}" class="menu-btn ">
+						@*<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
+						<path fill="black" stroke-linecap="round" stroke-linejoin="round"
+						d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+						</svg>
+						Mark All As Read
+					</button>*@
+					
+                    <!-- Toggler -->
+                    <button class=" inline-block rounded bg-primary px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
+                            data-te-sidenav-toggle-ref
+                            data-te-target="#sidenav-1"
+                            aria-controls="#sidenav-1"
+                            aria-haspopup="true">
+                        <span class="block [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 24 24"
+                                 fill="currentColor"
+                                 class="h-5 w-5">
+                                <path fill-rule="evenodd"
+                                      d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z"
+                                      clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                    </button>
+                    <!-- Toggler -->
+				</span>
+			</div>
+			<div class="page-body">
+				<div class="pb-left-section">
+                    <!-- Sidenav -->
+                    <nav id="sidenav-1"
+                         class=" left-0 top-0 z-[1035] h-full w-60 -translate-x-full overflow-hidden bg-white shadow-[0_4px_12px_0_rgba(0,0,0,0.07),_0_2px_4px_rgba(0,0,0,0.05)] data-[te-sidenav-hidden='false']:translate-x-0 dark:bg-zinc-800"
+                         data-te-sidenav-init
+                         data-te-sidenav-hidden="false"
+                         data-te-sidenav-position="absolute">
+						<div class="w-96">
+							<a href="#!"
+							   aria-current="true"
+							   class="block w-full cursor-pointer rounded-lg bg-primary-100 p-4 text-primary-600">
+								The current link item
+							</a>
+							<a href="#!"
+							   class="block w-full cursor-pointer rounded-lg p-4 transition duration-500 hover:bg-neutral-100 hover:text-neutral-500 focus:bg-neutral-100 focus:text-neutral-500 focus:ring-0 dark:hover:bg-neutral-600 dark:hover:text-neutral-200 dark:focus:bg-neutral-600 dark:focus:text-neutral-200">
+								A second link item
+							</a>
+							<a href="#!"
+							   class="block w-full cursor-pointer rounded-lg p-4 transition duration-500 hover:bg-neutral-100 hover:text-neutral-500 focus:bg-neutral-100 focus:text-neutral-500 focus:ring-0 dark:hover:bg-neutral-600 dark:hover:text-neutral-200 dark:focus:bg-neutral-600 dark:focus:text-neutral-200">
+								A third link item
+							</a>
+							<a href="#!"
+							   class="block w-full cursor-pointer rounded-lg p-4 transition duration-500 hover:bg-neutral-100 hover:text-neutral-500 focus:bg-neutral-100 focus:text-neutral-500 focus:ring-0 dark:hover:bg-neutral-600 dark:hover:text-neutral-200 dark:focus:bg-neutral-600 dark:focus:text-neutral-200">
+								A fourth link item
+							</a>
+							<a href="#!"
+							   class="block w-full cursor-default p-4 text-neutral-500 focus:outline-none focus:ring-0">
+								A disabled link item
+							</a>
+						</div>
+                    </nav>
+                    <!-- Sidenav -->
+				</div>
+				<div class="pb-right-section">
+					<EditForm class="lesson-content-form" Model="@Content">
+						<div class="input-group mb-6 flex flex-col">
+							<h4 class="text-lg font-md ">Title</h4>
+							<div class="input-wrapper rounded-md flex flex-row w-full h-10 border hover:shadow overflow-hidden"
+								 style="border-radius: 5px;">
+								<label for="contentTitle">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+									</svg>
+								</label>
+								<input title="Content Title" @bind="Content.Title" class="w-full px-2 py-1" type="text"
+									   name="catalog-caption" id="contentTitle"
+									   placeholder="title" autocapitalize="on" />
+							</div>
+						</div>
+						<div class="input-group mb-6 flex flex-col">
+							<h4 class="text-lg font-md ">Video link</h4>
+							<div class="input-wrapper rounded-md flex flex-row w-full h-10 border hover:shadow overflow-hidden"
+								 style="border-radius: 5px;">
+								<label for="contentVideoLink">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+										 class="">
+										<path stroke-linecap="round" stroke-linejoin="round"
+											  d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+									</svg>
+								</label>
+								<input @bind="Content.VideoLink" class="w-full px-2 py-1"
+									   type="url" name="content-video-link" id="contentVideoLink"
+									   placeholder="video link" pattern="https?://.+" title="Must include http:// or https://" />
+							</div>
+						</div>
+						<div class="input-group mb-6 flex flex-col">
+							<label class="text-lg font-md " for="contentContent">Content Editor</label>
+							<div class="input-wrapper rounded-md flex flex-row w-full h-auto border hover:shadow overflow-hidden"
+								 style="border-radius: 5px;">
+								<div class="kendo-editor-section k-content wide">
+								</div>
+							</div>
+						</div>
+						<div class="input-group mb-6 flex flex-col">
+							<label class="text-lg font-md " for="contentNote">Note</label>
+							<div class="input-wrapper rounded-md flex flex-row w-full h-32 border hover:shadow overflow-hidden"
+								 style="border-radius: 5px;">
+								<textarea @bind="Content.Note" class="h-full w-full px-2 py-1" type="text" name="content-note" id="contentNote"
+										  placeholder="note" autocapitalize="on" title="Note" />
+							</div>
+						</div>
+					</EditForm>
+				</div>
+			</div>
+		</div>
+
+	@code {
+		[Parameter]
+		public string contentGuid { get; set; } = string.Empty;
+
+		public CourseContent Content { get; set; } = new();
+		public CourseLesson Lesson { get; set; } = new();
+		public CourseChapter Chapter { get; set; } = new();
+		public Course Course { get; set; } = new();
+
+		private MarkupString preview;
+
+		
+
+        protected override void OnParametersSet()
+        {
+			base.OnParametersSet();
+			Content = CourseService.GetCourseContentByGuid(contentGuid);
+			Lesson = CourseService.GetCourseLesson(Content.LessonId);
+			Chapter = CourseService.GetCourseChapter(Lesson.ChapterId);
+			Course = CourseService.GetCourse(Chapter.CourseId);
+        }
+
+        protected override void OnAfterRender(bool firstRender)
+		{
+			if (firstRender)
+			{
+				JSRuntime.InvokeVoidAsync("initAdminPanel");
+				JSRuntime.InvokeVoidAsync("setContent", Content.Content);
+				JSRuntime.InvokeVoidAsync("loadKendoUI");
+			}
+			base.OnAfterRender(firstRender);
+		}
+	}
+	</Authorized>
+	<NotAuthorized>
+		User Not Authorized
+		@{
+			JSRuntime.InvokeVoidAsync("initAdminPanel");
+		}
+	</NotAuthorized>
+</AuthorizeView>
+

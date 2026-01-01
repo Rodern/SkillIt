@@ -1,0 +1,80 @@
+﻿@page "/confirm_email/{userId}"
+
+<PageTitle>Confirm email</PageTitle>
+
+<div class="completed-course-page page flex justify-center items-center w-full h-full  page cursor-default flex flex-col bottom-0 top-0 left-0 right-0">
+    <div class="completed-box hidden1" style="display:none;">
+        <h3 class="font-bold text-2xl">Email Confirmed</h3>
+        <img class="w-44" src="assets/images/party-popper.png" />
+        <p class="">
+            Your email has been successfully comfirmed.
+        </p>
+        <a class="next-content btn-type btn-large" href="/dashboard">
+            Dashboard
+        </a>
+    </div>
+
+    <div class="completed-box hidden2" style="display:none;">
+        <h3 class="font-bold text-2xl">Link Error!</h3>
+        <img class="w-44" src="assets/images/party-popper.png" />
+        <p class="">
+            This link is either broken or it is no longer exists.
+        </p>
+        <a class=" btn-type btn-large" href="/">
+            Home
+        </a>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string userId { get; set; } = string.Empty;
+    [Parameter]
+    public string guid { get; set; } = string.Empty;
+
+    long UserId = 0;
+
+    protected override void OnParametersSet()
+    {
+
+    }
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        if (!string.IsNullOrEmpty(userId))
+        {
+            UserId = long.Parse(userId);
+
+            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri); //you can use IURIHelper for older versions
+            if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("guid", out var result1))
+            {
+                string guid = result1.First();
+                this.guid = guid;
+            }
+
+            if (!string.IsNullOrEmpty(guid))
+            {
+                var otp = OtpService.GetUserOTP(UserId);
+
+                if (otp.Guid == guid)
+                {
+                    JSRuntime.InvokeVoidAsync("showDOM", "hidden1");
+
+                    var account = AccountService.GetUserAccount(UserId);
+
+                    account.AccountStatus = "verified";
+
+                    AccountService.UpdateAccount(account.AccountId, account.UserId, account);
+
+                    EntityService.DeleteEntity<Otp>(otp.OtpId);
+                    JSRuntime.InvokeVoidAsync("initCourseCompletedPage");
+                    return;
+                }
+            }
+        }
+        JSRuntime.InvokeVoidAsync("showDOM", "hidden2");
+        //JSRuntime.InvokeVoidAsync("initCourseCompletedPage");
+        await JSRuntime.InvokeVoidAsync("LoadScripts", "initCourseCompletedPage");
+    }
+}

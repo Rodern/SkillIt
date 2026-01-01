@@ -1,0 +1,20 @@
+﻿@inherits MainLayout
+
+
+@Body
+
+@{
+    //JSRuntime.InvokeVoidAsync("loadKendoUI");
+}
+
+@code {
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //JSRuntime.InvokeVoidAsync("loadKendoUI");
+            
+        }
+        base.OnAfterRender(firstRender);
+    }
+}

@@ -15,13 +15,17 @@ namespace SkillIT_Models.DatabaseModels
         }
 
         public int CourseId { get; set; }
+        public string Guid { get; set; }
         public string Name { get; set; }
-        public int DateCreated { get; set; }
-        public int DatePublish { get; set; }
+        public string Description { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime LastModified { get; set; }
+        public DateTime DatePublish { get; set; }
         public bool IsPublished { get; set; }
         public bool? IsOpen { get; set; }
-        public long AuthorId { get; set; }
+        public long? AuthorId { get; set; }
         public string Level { get; set; }
+        public string CoverImage { get; set; }
 
         public virtual Creator Author { get; set; }
         public virtual ICollection<CourseChapter> CourseChapters { get; set; }

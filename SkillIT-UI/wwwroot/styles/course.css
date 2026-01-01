@@ -1,0 +1,370 @@
+.courses-page {
+    width: 100%;
+    background-color: white;
+    height: auto;
+    position: relative;
+    bottom: 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.courses-page .courses-page-header {
+    width: 100%;
+    min-height: 45px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.541);
+    padding-inline: 15px;
+}
+
+.courses-page-header .left-section h3.section-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.courses-page-header .filter-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 4px;
+    margin-inline: 0px;
+}
+
+.courses-page-header .sort-wrapper {
+    justify-content: center;
+    align-items: center;
+    padding-inline: 4px;
+    margin-inline: 0px;
+}
+
+.sort-wrapper:hover svg, .filter-wrapper:hover svg {
+    transition: all .15s ease-in;
+    stroke: rgb(78, 78, 78);
+}
+
+.sort-wrapper svg, .filter-wrapper svg {
+    stroke: rgb(58, 58, 58);
+}
+
+.courses-page .courses-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    width: 100%;
+    height: 100%;
+    bottom: 0px;
+    margin-bottom: 0px;
+    padding-inline: 1vw;
+}
+
+.courses-wrapper .course-card {
+    width: -webkit-fill-available;
+    height: max-content;
+    min-width: 250px;
+    max-width: 300px;
+    border: 1px solid rgba(128, 128, 128, 0.541);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-inline: 2vw;
+    margin-block: 3vh;
+}
+
+.courses-wrapper .course-card:hover {
+    transition: all .15s ease-in;
+    box-shadow: 0px 5px 15px rgba(36, 36, 36, 0.21);
+}
+
+.course-card .course-info {
+    padding: 1vw;
+}
+
+.course-info span {
+    display: flex;
+    justify-content: space-between;
+}
+
+.course-info span i {
+    color: rgb(70, 70, 70);
+}
+
+.course-info h3 {
+    font-weight: 600;
+}
+
+
+
+
+/**** Course Pages *****/
+.view-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    min-height: calc(100vh - 48px*2);
+    max-height: calc(100vh - 48px*2);
+    position: relative;
+}
+
+
+.view-wrapper .side-c-view {
+    width: 38vw;
+}
+
+
+
+/**** Course Details *****/
+
+.course-detail-page {
+    width: 100%;
+    background-color: white;
+    height: auto;
+    position: relative;
+    bottom: 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+    .course-detail-page .course-detail-page-header {
+        width: 100%;
+        min-height: 45px;
+        height: auto;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.541);
+        padding-inline: 15px;
+    }
+
+.course-detail-page-header .left-section h3.section-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.course-detail-page-header .right-section {
+    margin-inline: auto 0px;
+}
+
+
+.course-view, .course-view > div, .course-view > h2 {
+    width: 100%;
+}
+
+.course-view {
+    padding: 1rem;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.breadcrumb {
+    background: none;
+    font-size: .75rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.breadcrumb .breadcrumb-item {
+
+}
+
+.breadcrumb svg {
+    height: .75rem;
+}
+
+.breadcrumb .breadcrumb-item:hover {
+    color: slategray;
+}
+
+.course-progress {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    font-size: .8rem;
+}
+
+.course-view button {
+    margin-inline: auto 0px;
+}
+
+.course-progress .chapter-number {
+
+}
+
+.course-progress .number-of-chapters {
+
+}
+
+.course-view-title {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.course-breakdown {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+}
+
+.course-breakdown .cb-header {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: .9rem;
+}
+
+.course-breakdown .cb-header .right-section {
+    font-size: .7rem;
+    display: flex;
+    column-gap: 15px;
+}
+
+.sum-of-lessons, .progress-info {
+    color: dimgray;
+}
+
+.progress-info {
+    font-size: .7rem;
+    display: flex;
+    flex-direction: column;
+    column-gap: 15px;
+}
+
+.chapter-lesson-list, .chapter-lesson {
+    width: 100%;
+}
+
+.chapter-lesson-list .chapter-lesson {
+
+}
+
+.side-panel .offcanvas-body {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.side-panel-btn {
+    width: 100px;
+    height: fit-content;
+    padding-inline: 0px 5px;
+    font-size: 1rem;
+
+}
+
+.course-content-list .chapter-lessons {
+    padding-inline: 20px 0px;
+}
+
+.course-content-list > li {
+    display: flex;
+    column-gap: 10px;
+    margin-block: 5px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #D7D7D7;
+    font-weight: 600;
+}
+
+.chapter-lessons li {
+    display: flex;
+    column-gap: 10px;
+    margin-block: 5px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.chapter-lessons li span, .course-content-list li span {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
+.chapter-lessons li .li-left {
+
+}
+
+.chapter-lessons li .li-right {
+    margin-inline: auto 0px;
+    gap: 8px;
+    justify-content: space-evenly;
+}
+
+.chapter-lessons li:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.chapter-lessons li:hover, .course-content-list li:hover {
+    background-color: #ddd;
+}
+
+.bottom-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.bottom-nav a.prev-content {
+    background-color: unset;
+    display: flex;
+    color: black;
+    gap: 10px;
+    text-align: left;
+    justify-content: left;
+}
+
+.bottom-nav a.prev-content:hover svg {
+}
+
+.bottom-nav a {
+    height: 30px;
+    width: 120px;
+}
+
+.course-view .content {
+
+}
+
+.course-view .content h5 {
+    font-size: 1.1rem;
+}
+
+.course-view .content p {
+    font-size: .9rem;
+}
+
+
+
+/**** Course Completed *****/
+.completed-course-page {
+    height: calc(100vh - 48px);
+}
+
+.completed-box {
+    width: 70%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.completed-box p {
+    text-align: center;
+}
+
+.completed-box a {
+    margin-top: 15px;
+}
+
+
+.li-disabled, li[disabled], li:disabled {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+}

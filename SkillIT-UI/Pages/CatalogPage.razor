@@ -1,0 +1,142 @@
+﻿@page "/catalog/{catalogId:int}"
+
+<PageTitle>Catalogs - @Catalog.Caption</PageTitle>
+
+<div class="catalog-page page cursor-default flex flex-col bottom-0 top-0 left-0 right-0">
+    <div class="cw">
+        <div class="cw-header border-b flex flex-row flex-nowrap shadow-lg">
+            <span class="left-section">
+                <h3 class="cw-name truncate">Catalog view</h3>
+            </span>
+            <span class="right-section">
+                <button class="addToProfileBtn engage-user-btn relative text-md ml-auto font -bold text-white bg-blue-600 w-24 md:text-center hover:shadow-lg hover:bg-blue-700 rounded px-2 sm:px-2">ENGAGE</button>
+                <button class="exit-cw hidden h-7 w-7 flex justify-center items-center text-2xl text-center text-white top-2 right-2">
+                    X
+                </button>
+            </span>
+        </div>
+        <div class="cw-body">
+            <div class="cw-video-box">
+                @((MarkupString)html)
+            </div>
+            <div class="playlist-wrapper border hidden shadow">
+                <div class="pl-header border-b">
+                    <h3>Playlist</h3>
+                    <a class="pl-toggle-btn">Hide</a>
+                </div>
+                <ul class="playlist">
+                    <li class="list-item hover:shadow">
+                        <img src="" alt="" class="vid-thumb">
+                        <span class="vid-detail">
+                            <h3>Python for beginners EP 1</h3>
+                            <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                        </span>
+                    </li>
+                    <li class="list-item hover:shadow">
+                        <img src="" alt="" class="vid-thumb">
+                        <span class="vid-detail">
+                            <h3>Python for beginners EP 1</h3>
+                            <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                        </span>
+                    </li>
+                    <li class="list-item hover:shadow">
+                        <img src="" alt="" class="vid-thumb">
+                        <span class="vid-detail">
+                            <h3>Python for beginners EP 1</h3>
+                            <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                        </span>
+                    </li>
+                    <li class="list-item hover:shadow">
+                        <img src="" alt="" class="vid-thumb">
+                        <span class="vid-detail">
+                            <h3>Python for beginners EP 1</h3>
+                            <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                        </span>
+                    </li>
+                    <li class="list-item hover:shadow">
+                        <img src="" alt="" class="vid-thumb">
+                        <span class="vid-detail">
+                            <h3>Python for beginners EP 1</h3>
+                            <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                        </span>
+                    </li>
+                    <li class="list-item hover:shadow">
+                        <img src="" alt="" class="vid-thumb">
+                        <span class="vid-detail">
+                            <h3>Python for beginners EP 1</h3>
+                            <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                        </span>
+                    </li>
+                    <li class="list-item hover:shadow">
+                        <img src="" alt="" class="vid-thumb">
+                        <span class="vid-detail">
+                            <h3>Python for beginners EP 1</h3>
+                            <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                        </span>
+                    </li>
+                    <li class="list-item hover:shadow">
+                        <img src="" alt="" class="vid-thumb">
+                        <span class="vid-detail">
+                            <h3>Python for beginners EP 90</h3>
+                            <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                        </span>
+                    </li>
+                    <li class="list-item hover:shadow">
+                        <img src="" alt="" class="vid-thumb">
+                        <span class="vid-detail">
+                            <h3>Python for beginners EP 90</h3>
+                            <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                        </span>
+                    </li>
+                    <li class="list-item hover:shadow">
+                        <img src="" alt="" class="vid-thumb">
+                        <span class="vid-detail">
+                            <h3>Python for beginners EP 90</h3>
+                            <p class="truncate">In this course we will learn about strings, string methods and builders.</p>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="cw-detail-box">
+                <h3 class="vid-caption">@title</h3>
+                <p class="vid-desc">
+                    @Catalog.Description
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int catalogId { get; set; } = 0;
+    public Catalog Catalog { get; set; } = new();
+
+    string title = string.Empty;
+    string html = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        //title = await JSRuntime.InvokeAsync<string>("geVideoTitle", Catalog.Data);
+        Catalog = CatalogService.GetCatalog(catalogId);
+        base.OnParametersSet();
+    }
+
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        title = await JSRuntime.InvokeAsync<string>("geVideoTitle", Catalog.Data);
+        html = await JSRuntime.InvokeAsync<string>("geVideoHtml", Catalog.Data);
+
+        //this.StateHasChanged()
+        if (firstRender)
+        {
+            this.StateHasChanged();
+
+            long userId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
+            //JSRuntime.InvokeVoidAsync("initCatalogPage", catalogId, userId);
+            await JSRuntime.InvokeVoidAsync("LoadScripts", "initCatalogPage", catalogId, userId);
+        }
+        base.OnAfterRender(firstRender);
+    }
+}

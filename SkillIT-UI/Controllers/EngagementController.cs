@@ -29,6 +29,18 @@ namespace SkillItAPI.Controllers
         {
             return Ok(engagementService.EngagementUserIdList(userId));
         }
+        [HttpGet]
+        [Route("getCatalogIdList")]
+        public IActionResult GetCatalogIdList(int catalogId)
+        {
+            return Ok(engagementService.EngagementCatalogIdList(catalogId));
+        }
+        [HttpGet]
+        [Route("getUserCatalogIdList")]
+        public IActionResult EngagementUserCatalogIdList(int catalogId, long userId)
+		{
+            return Ok(engagementService.EngagementUserCatalogIdList(catalogId, userId));
+        }
         [HttpPost]
         [Route("add")]
         public IActionResult Add(Engagement engagement)

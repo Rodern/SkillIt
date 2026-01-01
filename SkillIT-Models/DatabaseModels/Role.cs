@@ -9,7 +9,7 @@ namespace SkillIT_Models.DatabaseModels
     {
         public Role()
         {
-            AccountDetails = new HashSet<AccountDetail>();
+            Accounts = new HashSet<Account>();
             Creators = new HashSet<Creator>();
         }
 
@@ -17,7 +17,7 @@ namespace SkillIT_Models.DatabaseModels
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public virtual ICollection<AccountDetail> AccountDetails { get; set; }
+        public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Creator> Creators { get; set; }
     }
 }

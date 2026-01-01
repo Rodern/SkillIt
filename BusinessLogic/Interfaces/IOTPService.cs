@@ -16,5 +16,10 @@ namespace BusinessLogic.Interfaces
         Otp GetOTP(long id, long userId);
         ResponseModel AddOTP(Otp otp);
         ResponseModel UpdateOTP(Otp otp);
+		ResponseModel AddEmailOTP(Otp otp);
+        Otp GetOTP(long id);
+        Otp GetUserOTP(long userId);
+        ResponseModel CreateOTP(Otp otp);
+        Otp GetOTP(long userId, string guid);
     }
 }

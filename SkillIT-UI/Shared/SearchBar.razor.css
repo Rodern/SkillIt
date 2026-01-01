@@ -1,0 +1,17 @@
+﻿
+!!deep div.search-box-wrapper {
+    display: flex;
+    background-color: black;
+}
+
+input.search-input:not(browser-default) {
+    outline: none;
+}
+
+input.search-input:not(browser-default):focus-visible {
+    outline: none;
+}
+
+input.search-input:not(browser-default):focus {
+    outline: none;
+}

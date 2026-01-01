@@ -41,26 +41,37 @@ namespace SkillItAPI.Controllers
 		public IActionResult CheckEmailExistence(string email)
 		{
 			return Ok(userService.CheckEmailExistence(email));
-		}
+        }
 
-		[AllowAnonymous]
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("UpdateProfilePicture")]
+        public IActionResult UpdateProfilePicture([FromQuery] long userId, IFormFile image)
+        {
+            //if (userJson.Length <= 0 || image == null) return BadRequest();
+            //         UserModel userModel = JsonConvert.DeserializeObject<UserModel>(userJson);
+            //         userModel.ProfileImage = ImageUpload.GetBytes(image);
+            return Ok(userService.UpdateProfilePicture(userId, image));
+        }
+
+        [AllowAnonymous]
 		[HttpPost]
 		[Route("AddUser")]
-		public IActionResult AddUser(string userJson, IFormFile image)
-		{
-			if (userJson.Length <= 0 || image == null) return BadRequest();
-            UserModel userModel = JsonConvert.DeserializeObject<UserModel>(userJson);
-            userModel.Image = ImageUpload.GetBytes(image);
+		public IActionResult AddUser(UserModel userModel) //(string userJson, IFormFile image)
+        {
+			//if (userJson.Length <= 0 || image == null) return BadRequest();
+   //         UserModel userModel = JsonConvert.DeserializeObject<UserModel>(userJson);
+   //         userModel.ProfileImage = ImageUpload.GetBytes(image);
             return Ok(userService.AddUser(userModel));
 		}
 
 		[HttpPut]
 		[Route("UpdateUser")]
-		public IActionResult UpdateUser(string userJson, IFormFile image)
+		public IActionResult UpdateUser(UserModel userModel) //(string userJson, IFormFile image)
         {
-            if (userJson.Length <= 0 || image == null) return BadRequest();
-            UserModel userModel = JsonConvert.DeserializeObject<UserModel>(userJson);
-			userModel.Image = ImageUpload.GetBytes(image);
+   //         if (userJson.Length <= 0 || image == null) return BadRequest();
+   //         UserModel userModel = JsonConvert.DeserializeObject<UserModel>(userJson);
+			//userModel.ProfileImage = ImageUpload.GetBytes(image);
 			return Ok(userService.UpdateUser(userModel.UserId, userModel));
 		}
 	}

@@ -11,8 +11,8 @@ namespace SkillItAPI.Controllers
 	[ApiController]
 	public class AuthenticationManagerController : ControllerBase
 	{
-		private readonly IAuthenticationManager authenticationManager;
-		public AuthenticationManagerController(IAuthenticationManager authenticationManager)
+		private readonly IAuthenticationService authenticationManager;
+		public AuthenticationManagerController(IAuthenticationService authenticationManager)
 		{
 			this.authenticationManager = authenticationManager;
 		}
@@ -25,17 +25,17 @@ namespace SkillItAPI.Controllers
 			var token = authenticationManager.Authenticate(userCredential);
 			if (token == null) return Unauthorized();
 			return Ok(token);
-		}
+        }
 
-		[AllowAnonymous]
-		[HttpPost]
-		[Route("CreateOTP/{email}")]
-		public IActionResult GenerateCode([FromRoute] string email, long otpId)
-		{
-			return Ok(authenticationManager.GenerateCode(email, otpId));
-		}
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("CreateOTP/{email}")]
+        public IActionResult GenerateCode([FromRoute] string email)
+        {
+            return Ok(authenticationManager.GenerateCode(email));
+        }
 
-		[AllowAnonymous]
+        [AllowAnonymous]
 		[HttpPost]
 		[Route("Reset")]
 		public IActionResult Reset(ResetModel resetModel)

@@ -1,0 +1,146 @@
+﻿@page "/course/completed/{guid}"
+
+<PageTitle>Completed! - @Course.Name</PageTitle>
+
+<div class="completed-course-page page flex justify-center items-center w-full h-full  page cursor-default flex flex-col bottom-0 top-0 left-0 right-0">
+    <div class="completed-box">
+		<h3 class="font-bold text-2xl">Congratulations</h3>
+		<img class="w-44" src="assets/images/party-popper.png" /> 
+		<p class="">
+			You successfully completed <b>@Course.Name</b> this day <b>@Enrollment.DateCompleted.Date.ToString("M"), @Enrollment.DateCompleted.Date.ToString("yyy")</b> at <i>@Enrollment.DateCompleted.TimeOfDay</i>.
+			Hoping you have learnt a lot from this course for we are so glad you took the course with us.
+		</p>
+		<a class="next-content btn-type btn-large" href="/courses">
+			More Courses
+		</a>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public string guid { get; set; } = string.Empty;
+	[Parameter]
+	public int cryptId { get; set; } = 0;
+
+	public Course Course { get; set; } = new();
+	public Enrollment Enrollment { get; set; } = new();
+
+
+	Course GetCourseByGuid(string guid)
+	{
+		return CourseStaticHelper.GetCourseByGuid(guid);
+	}
+
+	public async Task<bool> SendCourseCompletedEmail(string email, long userId, DateTime completionDate)
+	{
+		string link = $"{SiteSettings.BaseUrl}/course_detail/{Course.Guid}";//$"{SiteSettings.BaseUrl}/confirm_email/{userId}?guid={guid}";
+		string emailTemplate = SiteSettings.GetCourseCompletedEmail(Course.Name, completionDate.ToString("D"), link, SiteSettings.SupportEmail, $"{SiteSettings.BaseUrl}/feedback", SiteSettings.BaseUrl);
+
+		Sentmail sentmail = new()
+			{
+				UserId = userId,
+				EmailBody = emailTemplate,
+				DateSent = DateTime.UtcNow,
+				EmailType = Account_Status.CourseCompletedEmail,
+			};
+
+		var res = AccountService.CreateSentMail(sentmail);
+		var user = UserService.GetUser(userId);
+
+		var actions = new ObservableCollection<NotificationAction>()
+		{
+			new()
+			{
+				Name = "More courses",
+				Command = $"/courses"
+			}
+		};
+
+		var account = AccountService.GetUserAccount(userId);
+		Notification notification = new()
+			{
+				AccountId = account.AccountId,
+				NotificationGuid = AuthenticationHelper.GenerateGuid(),
+				Caption = $"Course completed {user.FirstName}!",
+				Details = $"Hoping you have learnt a lot from this course, for we are so glad you took the course and keep learning more with us.",
+				DateCreated = DateTime.UtcNow,
+				Actions = JsonConvert.SerializeObject(actions),
+				Icon = "notify.png",
+			};
+
+		var response1 = EntityService.AddEntity<Notification>(notification);
+
+		var response = MailingService.SendMailUsingSendGridAsync(email, $"{user.FirstName} {user.LastName}", "Course Completed", emailTemplate, SiteSettings.InfoEmail, SiteSettings.InfoEmailName);
+
+
+		//JSRuntime.InvokeVoidAsync("console.log", response, sentmail, res);
+		return true;
+	}
+
+	protected override async void OnParametersSet()
+	{
+		if (guid != "")
+		{
+			Course = GetCourseByGuid(guid);
+
+			if (Course == null)
+			{
+				await JSRuntime.InvokeVoidAsync("history.back");
+				return;
+			}
+
+			try
+			{
+				var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri); //you can use IURIHelper for older versions
+
+				if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("cryptId", out var result6))
+				{
+					int cryptId = int.Parse(result6.First());
+					this.cryptId = cryptId;
+
+					long userId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
+
+					Enrollment = EnrollmentService.GetEnrollment(cryptId);
+
+					if (Enrollment == null || userId == 0 || Enrollment.UserId != userId || Enrollment.CourseId != Course.CourseId || !Enrollment.IsCompleted)
+					{
+						await JSRuntime.InvokeVoidAsync("history.back");
+						return;
+					}
+					this.StateHasChanged();
+
+					var user = UserService.GetUser(userId);
+					var sentMail = AccountService.GetSentMail(userId, Account_Status.CourseCompletedEmail);
+					if (sentMail == null)
+					{
+						SendCourseCompletedEmail(user.Email, user.UserId, Enrollment.DateCompleted);
+					}
+				}
+			}
+			catch (Exception)
+			{
+
+			}
+		}
+		base.OnParametersSet();
+	}
+
+	protected override async void OnAfterRender(bool firstRender)
+	{
+		base.OnAfterRender(firstRender);
+
+
+		if (!firstRender)
+		{
+			//Loader();
+			//this.StateHasChanged();
+		}
+
+		if (string.IsNullOrEmpty(Course.Guid) == true)
+		{
+			NavigationManager.NavigateTo("/courses");
+		}
+		//JSRuntime.InvokeVoidAsync("initCourseCompletedPage");
+		await JSRuntime.InvokeVoidAsync("LoadScripts", "initCourseCompletedPage");
+	}
+}

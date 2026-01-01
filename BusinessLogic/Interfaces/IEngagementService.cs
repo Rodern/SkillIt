@@ -15,5 +15,7 @@ namespace BusinessLogic.Interfaces
         ResponseModel Disengage(Engagement engagement);
         ObservableCollection<Engagement> Engagements(long userId);
         ObservableCollection<long> EngagementUserIdList(long userId);
+        ObservableCollection<int> EngagementCatalogIdList(int catalogId);
+        ObservableCollection<int> EngagementUserCatalogIdList(int catalogId, long userId);
     }
 }

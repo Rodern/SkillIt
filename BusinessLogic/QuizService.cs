@@ -124,10 +124,27 @@ namespace BusinessLogic
             return Crud.Read<ChapterQuiz>(chapterQuizId, DatabaseContext);
         }
 
+        public ObservableCollection<ChapterQuiz> GetAllChapterQuizzes()
+        {
+            return new(DatabaseContext.ChapterQuizzes.ToList());
+        }
+
         public ObservableCollection<ChapterQuiz> GetChapterQuizzes()
         {
             return new(DatabaseContext.ChapterQuizzes.ToList());
         }
+
+        public ObservableCollection<ChapterQuiz> GetChapterQuizzes(int chapterId)
+        {
+            return new(DatabaseContext.ChapterQuizzes.Where(cq => cq.ChapterId == chapterId).ToList());
+        }
+
+        public ObservableCollection<ChapterQuiz> GetChapterQuizzesByQuizId(int quizId)
+		{
+            return new(DatabaseContext.ChapterQuizzes.Where(cq => cq.QuizId == quizId).ToList());
+        }
+
+
         #endregion
 
         #region QuizQuestion

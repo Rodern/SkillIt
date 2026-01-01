@@ -1,0 +1,159 @@
+﻿@page "/user/notifications"
+@page "/notifications"
+
+
+<PageTitle> @TitleString - Notifications</PageTitle>
+
+<div class="notification-page relative page cursor-default flex flex-col bottom-0 top-0 left-0 right-0">
+    <div class="notification-page-header navbar navbar-expand-lg shadow-md py-2 bg-white relative flex items-center w-full justify-between">
+        <span class="left-section">
+            <h3 class="section-title">Notifications</h3>
+        </span>
+        <span class="right-section">
+            <button id="refresh_notifications" @onclick="()=>{DoNeedFull();}" class="menu-btn ">
+                @*<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
+                <path fill="black" stroke-linecap="round" stroke-linejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>*@
+                Refresh
+            </button>
+            <button id="mark_all_as_read" @onclick="()=>{MarkAllAsRead();}" class="menu-btn ">
+                @*<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
+                <path fill="black" stroke-linecap="round" stroke-linejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>*@
+                Mark All As Read
+            </button>
+        </span>
+    </div>
+    <div class="notification-list text-slate-800">
+        @foreach (var group in Notifications.GroupBy(x => x.DateCreated))
+        {
+            <div class="nl-group">
+                <span class="nl-group-header" >
+                    <h4 class="nl-g-title">@group.FirstOrDefault().DateCreated</h4>
+                </span>
+                <ul class="nl-group-list">
+                    @foreach (var notification in group)
+                    {
+                        <NotificationItem Notification="@notification" Account="@Account" Type="page"></NotificationItem>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+
+    @*@((MarkupString)CourseStaticHelper.PageNotificationDetailMarkup)*@
+
+</div>
+
+@code {
+    [Parameter]
+    public long UserId { get; set; } = 0;
+    [Parameter]
+    public long AccountId { get; set; } = 0;
+    [Parameter]
+    public long NotificationId { get; set; } = 0;
+    [Parameter]
+    public string NotificationGuid { get; set; } = string.Empty;
+    [Parameter]
+    public string Section { get; set; } = string.Empty;
+    public string TitleString { get; set; } = "";
+
+    public Account Account { get; set; } = new();
+    public User User { get; set; } = new();
+
+    public ObservableCollection<Notification> Notifications { get; set; } = new();
+    public Notification notification { get; set; } = new();
+
+    async void MarkAllAsRead()
+    {
+        var response = NotificationService.MarkAccountNotificationAsRead(AccountId);
+        int count = Notifications.Where(n => n.MarkedAsRead == false).Count();
+        if (count > 0)
+        {
+            if (count > 99) count = 99;
+            JSRuntime.InvokeVoidAsync("showNotificationBadgeBig", count);
+            JSRuntime.InvokeVoidAsync("showNotificationBadgeSmall", true);
+        }
+        if (response.Success)
+        {
+            await JSRuntime.InvokeVoidAsync("removeAllClasses");
+        }
+    }
+
+    private System.Timers.Timer NP_Timer = new();
+
+    void NP_Envent(object source, System.Timers.ElapsedEventArgs e)
+    {
+        var nots = new NotificationService(new()).GetAccountNotifications(AccountId);
+
+
+        Notifications = new();
+
+        Notifications = nots;
+
+        this.StateHasChanged();
+
+        int count = nots.Where(n => n.MarkedAsRead == false).Count();
+        if (count > 0)
+        {
+            if (count > 99) count = 99;
+            JSRuntime.InvokeVoidAsync("showNotificationBadgeBig", count);
+        }
+    }
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        //JSRuntime.InvokeVoidAsync("initCourseDetail");
+        await JSRuntime.InvokeVoidAsync("LoadScripts", "initCourseDetail");
+        //AccountId = long.Parse(await JSRuntime.InvokeAsync<string>("getAccountId"));
+
+
+        base.OnAfterRender(firstRender);
+        if (firstRender)
+        {
+
+            UserId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
+
+            Account = AccountService.GetUserAccount(UserId);
+            AccountId = Account.AccountId;
+
+            User = UserService.GetUser(UserId);
+
+            NP_Timer.Interval = 10000;
+
+            NP_Timer.Elapsed += NP_Envent;
+
+            NP_Timer.AutoReset = true;
+
+            NP_Timer.Enabled = true;
+
+            //JSRuntime.InvokeVoidAsync("showLoader");
+
+            TitleString = $"{User.FirstName} {User.LastName}";
+
+            //this.StateHasChanged();
+            DoNeedFull();
+        }
+
+    }
+
+    void DoNeedFull()
+    {
+        var nots = NotificationService.GetAccountNotifications(AccountId);
+
+        Notifications = new();
+
+        Notifications = nots;
+
+        int count = nots.Where(n => n.MarkedAsRead == false).Count();
+        if (count > 0)
+        {
+            if (count > 99) count = 99;
+            JSRuntime.InvokeVoidAsync("showNotificationBadgeBig", count);
+        }
+
+        this.StateHasChanged();
+    }
+}

@@ -15,6 +15,7 @@ namespace SkillIT_Models.DatabaseModels
             CourseLessons = new HashSet<CourseLesson>();
             Courses = new HashSet<Course>();
             Questions = new HashSet<Question>();
+            Quizzes = new HashSet<Quiz>();
         }
 
         public long AuthorId { get; set; }
@@ -22,7 +23,7 @@ namespace SkillIT_Models.DatabaseModels
         public int RoleId { get; set; }
         public string Status { get; set; }
 
-        public virtual AccountDetail Account { get; set; }
+        public virtual Account Account { get; set; }
         public virtual Role Role { get; set; }
         public virtual ICollection<ChapterQuiz> ChapterQuizzes { get; set; }
         public virtual ICollection<CourseChapter> CourseChapters { get; set; }
@@ -30,5 +31,6 @@ namespace SkillIT_Models.DatabaseModels
         public virtual ICollection<CourseLesson> CourseLessons { get; set; }
         public virtual ICollection<Course> Courses { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
+        public virtual ICollection<Quiz> Quizzes { get; set; }
     }
 }

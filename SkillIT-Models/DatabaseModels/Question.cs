@@ -15,8 +15,8 @@ namespace SkillIT_Models.DatabaseModels
         }
 
         public int QuestionId { get; set; }
-        public long AuthorId { get; set; }
-        public string Question1 { get; set; }
+        public long? AuthorId { get; set; }
+        public string Text { get; set; }
 
         public virtual Creator Author { get; set; }
         public virtual ICollection<QuestionAnswerResponse> QuestionAnswerResponses { get; set; }

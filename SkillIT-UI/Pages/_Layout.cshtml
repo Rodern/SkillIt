@@ -19,18 +19,55 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
     <!-- <link rel="stylesheet" href="assets/vendors/tailwind/font.awesome.css">
-    <link rel="stylesheet" href="assets/vendors/tailwind/tailwind.elements.min.css">
-    <link rel="stylesheet" href="assets/vendors/tailwind/tailwindcss.css"> -->
+    <link rel="stylesheet" href="assets/vendors/tailwind/tailwind.elements.min.css">-->
+
+    
+    @*<link href="assets/vendors/kendo-ui/examples-offline.css" rel="stylesheet">
+    <link href="assets/vendors/kendo-ui/kendo.common.min.css" rel="stylesheet">*@
+    @*<link href="assets/vendors/kendo-ui/kendo.rtl.min.css" rel="stylesheet">
+    <link href="assets/vendors/kendo-ui/kendo.default.mobile.min.css" rel="stylesheet">
+    <link href="assets/vendors/kendo-ui/kendo.default-v2.min.css" rel="stylesheet">*@
+
+    <link rel="stylesheet" href="styles/styles.css">
+    @*<link href="te-starter/css/tw-elements.min.css" rel="stylesheet" />*@
+
     <link rel="stylesheet" href="styles/popups-modal.css">
     <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/course.css">
+    <link rel="stylesheet" href="styles/notifications.css">
+    <link rel="stylesheet" href="styles/admin-styles.css">
     <!-- <link rel="stylesheet" href="styles/index.css">
     <link rel="stylesheet" href="styles/index.css">
     <link rel="stylesheet" href="styles/index.css"> -->
+    <link href="SkillIT-UI.styles.css" rel="stylesheet" />
 
     <script src="assets/vendors/jquery-3.6.0.min.js"></script>
-    <script src="assets/vendors/tailwind/tailwindcss.js" deffer></script>
-    <!--script src="assets/vendors/tailwind/tailwind.elements.min.js" deffer></script-->
+    <script>
+        function decodeTextThis(text) {
+            let decoder = new TextDecoder();
+            return decoder.decode(Uint8Array.from(text.split(",")));
+        }
+
+        function showDOM(classname) {
+            $(`.${classname}`).css('display', 'flex')
+        }
+    </script>
+
+    @*<script src="te-starter/tailwindcss.js" deffer></script>
+    <script defer>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+            },
+            corePlugins: {
+                preflight: false,
+            },
+        };
+    </script>
+    <script src="tw-elements/dist/js/tw-elements.umd.min.js" deffer></script>
+    <script src="scripts/module.imports.js" type="module"></script>*@
     <script src="scripts/route.module.js"></script>
+
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
 </head>
 <body>
@@ -79,12 +116,54 @@
     <div class="floating-content-2 flc"></div>
     <div class="floating-content-3 flc"></div>
 
-    <script src="_framework/blazor.server.js"></script>
-	<script src="scripts/functions.js"></script>
-	<script src="scripts/index.js"></script>
-	<script src="scripts/init.js"></script>
     <script>
+        App = {};
 
+        App.LoadScript = (function (Url, CallBack, Instance) {
+            var head = document.head;
+            var IsExist = false;
+            var Scripts = head.getElementsByTagName('script');
+            for (var i = Scripts.length; i--;) {
+                var Src = Scripts[i];
+                if (Src.src == Url || Src.src.replace(Src.baseURI, '') == Url) {
+                    IsExist = true;
+                    break;
+                }
+            }
+            if (!IsExist) {
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = Url;
+                if (CallBack && Instance) {
+                    script.onload = setTimeout(() => { App.CsharpInvoker(Instance, CallBack); }, 3000);
+                }
+                else if (CallBack)
+                    script.onload = setTimeout(() => { CallBack(); }, 1000);
+
+                head.appendChild(script);
+            }
+            else if (CallBack && Instance)
+                setTimeout(() => { App.CsharpInvoker(Instance, CallBack); }, 1000);
+            else if (CallBack)
+                setTimeout(() => { CallBack(); }, 1000);
+        });
+
+        App.CsharpInvoker = (function CSharpCallBackInvoker(Instance, MethodName, Parameter) {
+            Instance.invokeMethodAsync(MethodName, Parameter);
+        });
     </script>
+    <script src="scripts/classes.js"></script>
+    <script src="scripts/functions.js"></script>
+    <script src="scripts/HTML_Templates.js"></script>
+    <script src="scripts/index.js"></script>
+    <script src="scripts/init.js"></script>
+    <script src="scripts/PageHelperFunctions.js"></script>
+
+    <script src="_framework/blazor.server.js"></script>
+    @*<script src="te-starter/tailwindcss.js"></script>
+
+    <script src="tw-elements/dist/js/tw-elements.umd.min.js" deffer></script>*@
+    <script type="text/javascript"
+            src="./node_modules/tw-elements/dist/js/tw-elements.umd.min.js"></script>
 </body>
 </html>

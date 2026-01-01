@@ -1,0 +1,31 @@
+﻿@page "/skillit-admin"
+@page "/skillit-admin-dashboard"
+@page "/skillit-admin-panel"
+@page "/admin-panel"
+@page "/admin"
+@attribute [Authorize(Policy = "admin")]
+
+@inherits AdminPanelLayout
+
+<AuthorizeView Policy="admin">
+    <Authorized>
+        hello world!!1
+        @code {
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                JSRuntime.InvokeVoidAsync("initAdminPanel");
+            }
+            base.OnAfterRender(firstRender);
+        }
+        }
+    </Authorized>
+    <NotAuthorized>
+        User Not Authorized
+        @{
+            JSRuntime.InvokeVoidAsync("initAdminPanel");
+        }
+    </NotAuthorized>
+</AuthorizeView>
+

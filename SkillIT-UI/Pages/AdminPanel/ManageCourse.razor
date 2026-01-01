@@ -1,0 +1,30 @@
+﻿@page "/skillit-admin/course-manager/manage/{courseGuid}"
+@page "/skillit-admin-dashboard/course-manager/manage/{courseGuid}"
+@page "/skillit-admin-panel/course-manager/manage/{courseGuid}"
+@page "/admin-panel/course-manager/manage/{courseGuid}"
+@page "/admin/course-manager/manage/{courseGuid}"
+@attribute [Authorize(Policy = "admin")]
+<AuthorizeView Policy="admin">
+    <Authorized>
+        hello world!!1
+        @code {
+            [Parameter]
+            public string courseGuid { get; set; } = string.Empty;
+            protected override void OnAfterRender(bool firstRender)
+            {
+                if (firstRender)
+                {
+                    JSRuntime.InvokeVoidAsync("initAdminPanel");
+                }
+                base.OnAfterRender(firstRender);
+            }
+        }
+    </Authorized>
+    <NotAuthorized>
+        User Not Authorized
+        @{
+            JSRuntime.InvokeVoidAsync("initAdminPanel");
+        }
+    </NotAuthorized>
+</AuthorizeView>
+

@@ -1,0 +1,190 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h3, strong {
+    @apply font-[900];
+}
+
+.landing-info, .landing-footer {
+    @apply text-slate-700;
+}
+
+div.side-panel {
+    @apply invisible fixed bottom-0 left-0 top-0 z-[1045] flex w-96 max-w-full -translate-x-full flex-col border-none bg-white bg-clip-padding text-neutral-700 shadow-sm outline-none transition duration-300 ease-in-out dark:bg-neutral-800 dark:text-neutral-200 [&[data-te-offcanvas-show]]:transform-none;
+}
+
+btn {
+}
+
+.btn-large {
+    height: 40px;
+    @apply text-white w-44 bg-blue-600 hover:bg-blue-700 text-center hover:shadow-lg rounded px-2 sm:px-4;
+}
+
+.search-btn {
+    @apply hover:bg-blue-600 text-center hover:shadow-lg rounded px-1 sm:px-2;
+}
+
+.search-btn:hover {
+    @apply text-white;
+}
+
+.header-btn {
+    height: fit-content;
+    @apply w-auto py-1;
+}
+
+button, a.btn-type {
+    text-align: center;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    @apply flex;
+}
+
+.grid:hover .info {
+    @apply hover:shadow-lg;
+}
+
+.input-group button {
+    @apply w-44;
+}
+
+.menu-btn {
+    background: none;
+    @apply flex flex-row relative hover:bg-blue-700 hover:shadow-md focus:shadow-lg rounded px-1 py-1 ml-5 gap-1 border border-slate-200 hover:border-transparent focus:outline-blue-800;
+}
+
+@media screen and (max-width: 400px) {
+    #refresh_notifications {
+        @apply hidden;
+    }
+
+}
+
+#side_panel_toggler {
+    @apply ml-auto mr-2;
+    border: none;
+}
+
+button.exit {
+    @apply absolute h-7 w-7 flex justify-center items-center text-2xl text-center text-white top-2 right-2;
+}
+
+.detail-table tbody tr {
+    @apply bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100;
+}
+
+.detail-table tbody tr > th {
+    @apply text-sm font-bold text-gray-900 px-6 py-4 text-left;
+}
+
+.detail-table tbody tr > td {
+    @apply text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap;
+}
+
+.course-view-title {
+    @apply my-6;
+}
+
+.disengage-user-btn {
+    @apply text-slate-800 relative w-auto md:text-center hover:border hover:text-[red] rounded px-2 sm:px-2;
+}
+
+.side-panel-btn {
+}
+
+.bottom-nav button {
+    @apply w-auto h-auto;
+}
+
+
+.bottom-nav a.prev-content:hover {
+    @apply text-blue-800;
+
+}
+
+.bottom-nav a.prev-content:hover svg {
+    @apply stroke-blue-800;
+}
+
+
+li.chapter-locked {
+    @apply text-gray-400;
+}
+
+li.lesson-locked {
+    @apply text-gray-400;
+}
+
+li.content-locked {
+    @apply text-gray-400;
+}
+
+
+.li-icons {
+    @apply w-5 h-5;
+}
+
+.li-locks {
+    @apply fill-slate-800;
+}
+
+.li-svg-fill {
+    @apply fill-slate-800 fill-slate-800;
+}
+
+.cci-tick {
+    @apply fill-white;
+}
+
+.li-lock-svg, .li-circle-svg {
+    
+}
+
+.li-svg-fill-blue, .cci-stroke-fill {
+    @apply fill-blue-600;
+}
+
+
+.view-wrapper .side-c-view {
+    @apply hidden sm:block;
+}
+
+.chapter-lessons li .li-left {
+    @apply truncate;
+}
+
+div.in input::placeholder {
+    @apply text-slate-500;
+}
+
+div.in input {
+    @apply text-slate-700;
+}
+
+input:not(browser-default)::placeholder, textarea:not(browser-default)::placeholder {
+    @apply text-slate-500;
+}
+
+div.input-wrapper label svg {
+    @apply w-6 h-6 stroke-slate-600;
+}
+
+button.edit-info {
+    @apply hidden hover:bg-blue-600 h-8 w-8 bg-blue-500 p-[0.1rem] ml-auto rounded-md flex justify-center items-center;
+}
+
+button.save-info {
+    @apply flex hover:bg-blue-600 h-8 w-8 bg-blue-500 p-[0.1rem] ml-auto rounded-md flex justify-center items-center;
+}
+
+button.save-info > svg {
+    @apply stroke-slate-300;
+}
+
+div.info:hover > button.edit-info {
+    @apply flex;
+}
+

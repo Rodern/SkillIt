@@ -11,6 +11,7 @@ namespace SkillIT_Models.DatabaseModels
         public int Code { get; set; }
         public DateTime ExpiryDate { get; set; }
         public long UserId { get; set; }
+        public string Guid { get; set; }
 
         public virtual User User { get; set; }
     }

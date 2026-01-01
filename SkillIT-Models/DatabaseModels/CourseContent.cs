@@ -9,12 +9,14 @@ namespace SkillIT_Models.DatabaseModels
     {
         public int ContentId { get; set; }
         public int LessonId { get; set; }
-        public long AuthorId { get; set; }
+        public string Guid { get; set; }
+        public long? AuthorId { get; set; }
         public int ContentNumber { get; set; }
         public string Title { get; set; }
         public string VideoLink { get; set; }
         public string Content { get; set; }
         public DateTime DateCreated { get; set; }
+        public DateTime LastModified { get; set; }
         public string Note { get; set; }
 
         public virtual Creator Author { get; set; }

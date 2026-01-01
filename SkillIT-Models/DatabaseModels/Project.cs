@@ -15,5 +15,7 @@ namespace SkillIT_Models.DatabaseModels
         public string Link { get; set; }
         public string SkillSet { get; set; }
         public long UserId { get; set; }
+
+        public virtual User User { get; set; }
     }
 }

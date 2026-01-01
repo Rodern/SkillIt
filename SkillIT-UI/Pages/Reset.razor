@@ -1,7 +1,81 @@
 ﻿@page "/reset"
 
-<h3>Reset</h3>
+<PageTitle>Reset Password</PageTitle>
+
+<div class="completed-course-page page flex justify-center items-center w-full h-full  page cursor-default flex flex-col bottom-0 top-0 left-0 right-0">
+    <div class="completed-box">
+        <h3 class="font-bold text-2xl">Reset Link Sent!</h3>
+        <img class="w-44" src="assets/images/icons8_mail_96px.png" />
+        <p class="">
+            A password reset link has been sent your email. Please do well to check your spam mails if you don't find it in your direct inbox.
+            <br />
+            In case you don't receive an email after a day, request an new one.
+        </p>
+        <a class=" hidden btn-type btn-large" href="/">
+            Home
+        </a>
+    </div>
+</div>
 
 @code {
 
+    [Parameter]
+    public string email { get; set; } = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri); //you can use IURIHelper for older versions
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("email", out var result1))
+        {
+            string email = result1.First();
+            this.email = email;
+
+            if (string.IsNullOrEmpty(email))
+            {
+                NavigationManager.NavigateTo("/link_error");
+                return;
+            }
+
+            var user = UserService.GetUser(email);
+            if (user == null)
+            {
+                NavigationManager.NavigateTo("/link_error");
+                return;
+            }
+            var otp = OtpService.GetOTP(user.UserId);
+            if(otp == null)
+            {
+                NavigationManager.NavigateTo("/link_error");
+                return;
+            }
+
+            SendResetEmail(email, user.UserId, otp.Guid);
+        }
+
+        base.OnParametersSet();
+    }
+
+    public async Task<bool> SendResetEmail(string email, long userId, string guid)
+    {
+        string link = $"{SiteSettings.BaseUrl}/reset_password/{userId}?guid={guid}";//$"{SiteSettings.BaseUrl}/confirm_email/{userId}?guid={guid}";
+        string emailTemplate = SiteSettings.GetResetEmailTemplate(link, SiteSettings.BaseUrl);
+
+        Sentmail sentmail = new()
+            {
+                UserId = userId,
+                EmailBody = emailTemplate,
+                DateSent = DateTime.UtcNow,
+                EmailType = Account_Status.ResetPasswordEmail,
+            };
+
+        var res = AccountService.CreateSentMail(sentmail);
+        var user = UserService.GetUser(userId);
+
+        var response = MailingService.SendMailUsingSendGridAsync(email, $"{user.FirstName} {user.LastName}", "Password reset", emailTemplate, SiteSettings.AccountHelperEmail, SiteSettings.AccountHelperEmailName);
+
+        JSRuntime.InvokeVoidAsync("hideLoader");
+        //JSRuntime.InvokeVoidAsync("console.log", response, sentmail, res);
+        return true;
+    }
 }

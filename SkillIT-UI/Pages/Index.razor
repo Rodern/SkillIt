@@ -1,156 +1,470 @@
 ﻿@page "/"
-@inject IJSRuntime JSRuntime;
+@page "/index"
+@page "/home"
+
 <PageTitle>SkillIT - Home</PageTitle>
 
-<div class="pg-section">
-    <div class="landing-page page flex flex-col text-white cursor-default">
-    
-        <div class="landing-view flex flex-col items-center md:items-start text-center md:text-left md:justify-center gap-24 w-full ">
-            <div class="intro-body w-9/12 sm:w-5/12 mx-0 md:mx-12 mt-14 md:mt-[unset] ">
-                <h1 class="font-bold text-2xl md:text-3xl ">FROM ZERO TO NERD</h1>
-                <p class="intro-text text-lg">
-                    For we are out to empower young cameroonians with skills to fit the demands of the African tech system.
-                </p>
-            </div>
-            <div
-                class="outro-body flex flex-col w-9/12 md:w-5/12 mx-0 mx-12 ml-auto mr-auto md:mr-12 text-center text-center md:text-end">
-                <h1 class="font-bold text-2xl md:text-3xl">WE BUILD SKILLS HERE</h1>
-                <p class="text-lg mb-4 md:mb-8">Great courses here for you in our catalogs <br />So skill-it by checking
-                    them out</p>
-                <NavLink href="/catalogs"
-                    class="nav-links bc-btn bg-blue-600 w-44 md:text-center hover:shadow-md hover:bg-blue-700 ml-auto mr-auto md:mr-1 rounded px-2 sm:px-4 py-2 "
-                    role="link">View Catalogs</NavLink>
-            </div>
-        </div>
-        <div class="py-5 landing-content flex flex-col justify-center items-center h-[100vh] w-full bg-white text-slate-700">
-            <h1 class="font-bold text-2xl md:text-4xl sm:text-3xl mb-4 md:mb-5">What do we do?</h1>
-            <div class="slide-wrapper py-0 gap-10 rounded-md text-center items-center">
-                <div
-                    class="slide-card w-64 shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
-                    <img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
-                    <h5 class="font-bold my-auto">We train</h5>
-                    <p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
-                        for the tech world</p>
-                </div>
-                <div
-                    class="slide-card w-64 shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
-                    <img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
-                    <h5 class="font-bold my-auto">We coach</h5>
-                    <p class="mb-auto">Coaching is a great way where some people have achieved goals and we are here for that, coaching young tech enthusiat in Cameroon</p>
-                </div>
-                <div
-                    class="slide-card w-64 shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
-                    <img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
-                    <h5 class="font-bold my-auto">We build up</h5>
-                    <p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
-                        for the tech world</p>
-                </div>
-                <div
-                    class="slide-card w-64 shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
-                    <img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
-                    <h5 class="font-bold my-auto">We develop</h5>
-                    <p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
-                        for the tech world</p>
-                </div>
-                <div
-                    class="slide-card w-64 shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
-                    <img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
-                    <h5 class="font-bold my-auto">We orientate</h5>
-                    <p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
-                        for the tech world</p>
-                </div>
-                <div
-                    class="slide-card w-64 shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
-                    <img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
-                    <h5 class="font-bold my-auto">We guide</h5>
-                    <p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
-                        for the tech world</p>
-                </div>
-            </div>
-            <div class="flex for-o flex-col text-center mt-2">
-                <h1 class="font-bold text-2xl md:text-4xl sm:text-3xl">Get started and be part</h1>
-                <p class="m-5 text-lg md:text-md">Login for there is more for you or join us here by signig up and start skilling the IT world
-                </p>
-                <div class="flex flex-wrap gap-5 justify-center">
-                    <a
-                        class="nav-links bl-btn bg-blue-600 w-40 hover:shadow-md hover:bg-blue-700 text-white rounded px-4 sm:px-8 py-2">Sign
-                        In</a>
-                    <a
-                        class="nav-links bs-btn bg-blue-600 w-40 hover:shadow-md hover:bg-blue-700 text-white rounded px-4 sm:px-8 py-2">Sign
-                        Up</a>
-                </div>
-            </div>
-            <div class="flex for-l flex-col text-center">
-                <h1 class="font-bold text-4xl md:text-5xl sm:text-4xl mt-5">Continue where you left</h1>
-                <p class="m-5 mt-2 text-lg md:text-md">There is more for you. Jump back right in and continue skilling the IT world
-                </p>
-                <div class="flex flex-wrap gap-5 justify-center">
-                    <NavLink href="/dashboard"
-                        class="nav-links ds-btn bg-blue-600 w-40 hover:shadow-md hover:bg-blue-700 text-white rounded px-4 sm:px-8 py-2">Dashboard</NavLink>
-                </div>
-            </div>
-        </div>
-        <div class="landing-about flex flex-col justify-center items-center" id="about">
-            <div
-                class="about-card flex flex-wrap gap-10 w-auto mx-0 sm:mx-auto sm:w-full p-6 space-between justify-center md:justify-between my-auto">
-                <div class="landing-info w-80 md:w-96 h-9/12 rounded shadow-lg items-start p-4">
-                    <h1 class="font-bold text-2xl text-sky-400 mb-2">About Us</h1>
-                    <p>
-                        Skill-IT is an educational platformn found in Cameroon based on tech and IT out for young people in
-                        IT and technology in general
-                    </p>
-                </div>
-                <div class="landing-info w-80 md:w-96 h-9/12 rounded shadow-lg items-start p-4">
-                    <h1 class="font-bold text-2xl text-amber-500 mb-2">Our Purpose</h1>
-                    <p>
-                        We are out to empower young cameroonians with skills to fit into the demands of the African tech
-                        system.
-                    </p>
-                </div>
-                <div class="landing-info _contact w-80 md:w-96 h-9/12 rounded shadow-lg items-start p-4">
-                    <h1 class="font-bold text-xl text-sky-400 mb-2">Contact Us</h1>
-                    <a class="ml-5 flex flex-row gap-2 w-full" href="mailto:it.skill4all@gmail.com" target="_blank" rel="noopener">
-                        <img class="w-5 h-5" src="assets/icons/gmail.png" alt="">
-                        &nbsp;
-                        it.skill4all@gmail.com
-                    </a>
-                    <a class="ml-5 flex flex-row gap-2 w-full" href="https://twitter.com/skill_IT4All" target="_blank" rel="noopener">
-                        <img class="w-5 h-5" src="assets/icons/twitter.png" alt="">
-                        &nbsp;
-                        @twitterHandle
-                    </a>
-                    <a class="ml-5 flex flex-row gap-2 w-full" href="tel:+237673576291" target="_blank" rel="noopener">
-                        <img class="w-5 h-5" src="assets/icons/phone.png" alt="">
-                        &nbsp;
-                        + 237 673 576 291
-                    </a>
-                </div>
-            </div>
-            <div class="landing-footer flex flex-row text-end justify-center items-center h-24 w-full mb-0 text-slate-400">
-                <span class="w-10/12">Copyright &COPY; 2022</span>
-                <span class="w-1 h-full bg-slate-400 rounded h-4 mx-4 my-6"></span>
-                <span class="w-10/12 text-start">Skill-IT4All</span>
-            </div>
-        </div>
-    </div>
+
+<div class="landing-page page flex flex-col text-white cursor-default">
+
+	<div class="landing-view w-full">
+		<div id="carouselExampleCaptions"
+			 class="relative carousel-height"
+			 data-te-carousel-init
+			 data-te-ride="carousel">
+			<!--Carousel indicators-->
+			<div class="absolute bottom-0 left-0 right-0 z-[2] mx-[15%] mb-4 flex list-none justify-center p-0"
+				 data-te-carousel-indicators>
+				<button type="button"
+						data-te-target="#carouselExampleCaptions"
+						data-te-slide-to="0"
+						data-te-carousel-active
+						class="mx-[3px] box-content h-[3px] w-[30px] flex-initial cursor-pointer border-0 border-y-[10px] border-solid border-transparent bg-white bg-clip-padding p-0 -indent-[999px] opacity-50 transition-opacity duration-[600ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] motion-reduce:transition-none"
+						aria-current="true"
+						aria-label="Slide 1"></button>
+				<button type="button"
+						data-te-target="#carouselExampleCaptions"
+						data-te-slide-to="1"
+						class="mx-[3px] box-content h-[3px] w-[30px] flex-initial cursor-pointer border-0 border-y-[10px] border-solid border-transparent bg-white bg-clip-padding p-0 -indent-[999px] opacity-50 transition-opacity duration-[600ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] motion-reduce:transition-none"
+						aria-label="Slide 2"></button>
+				<button type="button"
+						data-te-target="#carouselExampleCaptions"
+						data-te-slide-to="2"
+						class="mx-[3px] box-content h-[3px] w-[30px] flex-initial cursor-pointer border-0 border-y-[10px] border-solid border-transparent bg-white bg-clip-padding p-0 -indent-[999px] opacity-50 transition-opacity duration-[600ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] motion-reduce:transition-none"
+						aria-label="Slide 3"></button>
+			</div>
+
+			<!--Carousel items-->
+			<div class="carousel-height relative w-full overflow-hidden after:clear-both after:block after:content-['']">
+				<!--First item-->
+				<div class="carousel-height relative float-left -mr-[100%] w-full transition-transform duration-[600ms] ease-in-out motion-reduce:transition-none"
+					 data-te-carousel-active
+					 data-te-carousel-item
+					 style="backface-visibility: hidden">
+					<div style="background-image:url('new/images/R.jpg')"
+                         class="carousel-height carousel-img block w-full">
+						 </div>
+					<div class="absolute inset-x-[15%] bottom-5 py-5 text-center text-white carousel-text">
+						<div class="carousel-main">
+							<h1 class="font-bold">Skill IT</h1>
+							<p class="text-md ">Educate</p>
+						</div>
+						<h1 class="font-bold text-2xl md:text-3xl ">FROM ZERO TO NERD</h1>
+						<p class="intro-text text-lg">
+							For we are out to empower young cameroonians with skills to fit the demands of the African tech system.
+						</p>
+					</div>
+				</div>
+				<!--Second item-->
+				<div class="carousel-height relative float-left -mr-[100%] hidden w-full transition-transform duration-[600ms] ease-in-out motion-reduce:transition-none"
+					 data-te-carousel-item
+					 style="backface-visibility: hidden">
+					<div style="background-image:url('new/images/53330-technology-blue.jpg')"
+                         class="carousel-height carousel-img block w-full">
+						 </div>
+					<div class="absolute inset-x-[15%] bottom-5 py-5 text-center text-white carousel-text">
+						<div class="carousel-main">
+							<h1 class="font-bold">Skill IT</h1>
+							<p class="text-md ">Educate</p>
+						</div>
+						<h1 class="font-bold text-2xl md:text-3xl">BUILD YOUR SKILLS HERE </h1>
+						<p class="text-lg">
+							Great courses here for you in our platform journeying with you into the world of tech in Africa.
+						</p>
+						<NavLink href="/courses"
+								 class="nav-links btn-type btn-large bc-btn"
+								 role="link">View Courses</NavLink>
+					</div>
+				</div>
+				<!--Third item-->
+				<div class="carousel-height relative float-left -mr-[100%] hidden w-full transition-transform duration-[600ms] ease-in-out motion-reduce:transition-none"
+					 data-te-carousel-item
+					 style="backface-visibility: hidden">
+					<div style="background-image:url('new/images/OIP.jpg')"
+						 class="carousel-height carousel-img block w-full">
+					</div>
+					<div class="absolute inset-x-[15%] bottom-5 py-5 text-center text-white carousel-text">
+						<div class="carousel-main">
+							<h1 class="font-bold">Skill IT</h1>
+							<p class="text-md ">Educate</p>
+						</div>
+						<h1 class="font-bold text-2xl md:text-3xl">WE BRING GOOD STUFF</h1>
+						<p class="text-lg">
+							Great resources here for you in our catalogs, so skill-it by engaging with our content.
+						</p>
+						<NavLink href="/catalogs"
+								 class="nav-links btn-type btn-large bc-btn"
+								 role="link">View Catalogs</NavLink>
+					</div>
+				</div>
+			</div>
+
+			<!--Carousel controls - prev item-->
+			<button class="absolute bottom-0 left-0 top-0 z-[1] flex w-[15%] items-center justify-center border-0 bg-none p-0 text-center text-white opacity-50 transition-opacity duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] hover:text-white hover:no-underline hover:opacity-90 hover:outline-none focus:text-white focus:no-underline focus:opacity-90 focus:outline-none motion-reduce:transition-none"
+					type="button"
+					data-te-target="#carouselExampleCaptions"
+					data-te-slide="prev">
+				<span class="inline-block h-8 w-8">
+					<svg xmlns="http://www.w3.org/2000/svg"
+						 fill="none"
+						 viewBox="0 0 24 24"
+						 stroke-width="1.5"
+						 stroke="currentColor"
+						 class="h-6 w-6">
+						<path stroke-linecap="round"
+							  stroke-linejoin="round"
+							  d="M15.75 19.5L8.25 12l7.5-7.5" />
+					</svg>
+				</span>
+				<span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Previous</span>
+			</button>
+			<!--Carousel controls - next item-->
+			<button class="absolute bottom-0 right-0 top-0 z-[1] flex w-[15%] items-center justify-center border-0 bg-none p-0 text-center text-white opacity-50 transition-opacity duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] hover:text-white hover:no-underline hover:opacity-90 hover:outline-none focus:text-white focus:no-underline focus:opacity-90 focus:outline-none motion-reduce:transition-none"
+					type="button"
+					data-te-target="#carouselExampleCaptions"
+					data-te-slide="next">
+				<span class="inline-block h-8 w-8">
+					<svg xmlns="http://www.w3.org/2000/svg"
+						 fill="none"
+						 viewBox="0 0 24 24"
+						 stroke-width="1.5"
+						 stroke="currentColor"
+						 class="h-6 w-6">
+						<path stroke-linecap="round"
+							  stroke-linejoin="round"
+							  d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+					</svg>
+				</span>
+				<span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Next</span>
+			</button>
+		</div>
+
+		<div id="homepageCarousel" class="hidden carousel w-full slide relative" data-bs-ride="carousel">
+			<div class="carousel-indicators absolute right-0 bottom-0 left-0 flex justify-center p-0 mb-4">
+				<button type="button"
+						data-bs-target="#homepageCarousel"
+						data-bs-slide-to="0"
+						class="active"
+						aria-current="true"
+						aria-label="Slide 1"></button>
+				<button type="button"
+						data-bs-target="#homepageCarousel"
+						data-bs-slide-to="1"
+						aria-label="Slide 2"></button>
+				<button type="button"
+						data-bs-target="#homepageCarousel"
+						data-bs-slide-to="2"
+						aria-label="Slide 3"></button>
+			</div>
+			<div class="carousel-inner relative w-full h-full overflow-hidden">
+				<div class="carousel-item active relative float-left w-full  h-full" style="background-image:url('new/images/R.jpg')">
+						
+					<div class="carousel-caption absolute text-center">
+						<div class="carousel-main">
+							<h1 class="font-bold">Skill IT</h1>
+							<p class="text-md ">Educate</p>
+						</div>
+						<h1 class="font-bold text-2xl md:text-3xl ">FROM ZERO TO NERD</h1>
+						<p class="intro-text text-lg">
+							For we are out to empower young cameroonians with skills to fit the demands of the African tech system.
+						</p>
+					</div>
+				</div>
+				<div class="carousel-item relative float-left w-full  h-full" style="background-image:url('new/images/53330-technology-blue.jpg')">
+						
+					<div class="carousel-caption absolute text-center">
+						<div class="carousel-main">
+							<h1 class="font-bold">Skill IT</h1>
+							<p class="text-md ">Educate</p>
+						</div>
+						<h1 class="font-bold text-2xl md:text-3xl">BUILD YOUR SKILLS HERE </h1>
+						<p class="text-lg">
+							Great courses here for you in our platform journeying with you into the world of tech in Africa
+						</p>
+						<NavLink href="/courses"
+									class="nav-links btn-type btn-large bc-btn"
+									role="link">View Courses</NavLink>
+					</div>
+				</div>
+				<div class="carousel-item relative float-left w-full h-full" style="background-image:url('new/images/OIP.jpg')">
+						
+					<div class="carousel-caption absolute text-center">
+						<div class="carousel-main">
+							<h1 class="font-bold">Skill IT</h1>
+							<p class="text-md ">Educate</p>
+						</div>
+						<h1 class="font-bold text-2xl md:text-3xl">WE BRING GOOD STUFF</h1>
+						<p class="text-lg">
+							Great resources here for you in our catalogs <br />So skill-it by checking
+							them out
+						</p>
+						<NavLink href="/catalogs"
+								 class="nav-links btn-type btn-large bc-btn"
+								 role="link">View Catalogs</NavLink>
+					</div>
+				</div>
+			</div>
+			<button class="carousel-control-prev absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline left-0"
+					type="button"
+					data-bs-target="#homepageCarousel"
+					data-bs-slide="prev">
+				<span class="carousel-control-prev-icon inline-block bg-no-repeat" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline right-0"
+					type="button"
+					data-bs-target="#homepageCarousel"
+					data-bs-slide="next">
+				<span class="carousel-control-next-icon inline-block bg-no-repeat" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+
+		@*<div class="intro-body w-9/12 sm:w-5/12 mx-0 md:mx-12 mt-14 md:mt-[unset] ">
+			<h1 class="font-bold text-2xl md:text-3xl ">FROM ZERO TO NERD</h1>
+			<p class="intro-text text-lg">
+				For we are out to empower young cameroonians with skills to fit the demands of the African tech system.
+			</p>
+		</div>
+		<div
+			class="outro-body flex flex-col w-9/12 md:w-5/12 mx-0 mx-12 ml-auto mr-auto md:mr-12 text-center text-center md:text-end">
+			<h1 class="font-bold text-2xl md:text-3xl">WE BUILD SKILLS HERE</h1>
+			<p class="text-lg mb-4 md:mb-8">Great courses here for you in our catalogs <br />So skill-it by checking
+				them out</p>
+			<NavLink href="/catalogs"
+						class="nav-links btn-type btn-large bc-btn ml-auto mr-auto md:mr-1"
+				role="link">View Catalogs</NavLink>
+		</div>*@
+	</div>
+	<div class="py-5 landing-content flex flex-col justify-center items-center w-full bg-white text-slate-700">
+		<h1 class="font-bold text-2xl md:text-4xl sm:text-3xl mb-4 md:mb-5">What do we do?</h1>
+		<div class="slide-wrapper py-0 gap-10 rounded-md text-center items-center">
+			<div
+				class="slide-card w-64 shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
+				<img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
+				<h5 class="font-bold my-auto">We train</h5>
+				<p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
+					for the tech world</p>
+			</div>
+			<div
+				class="slide-card w-64 shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
+				<img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
+				<h5 class="font-bold my-auto">We coach</h5>
+				<p class="mb-auto">Coaching is a great way where some people have achieved goals and we are here for that, coaching young tech enthusiat in Cameroon</p>
+			</div>
+			<div
+				class="slide-card w-64 shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
+				<img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
+				<h5 class="font-bold my-auto">We build up</h5>
+				<p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
+					for the tech world</p>
+			</div>
+			<div
+				class="slide-card w-64 shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
+				<img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
+				<h5 class="font-bold my-auto">We develop</h5>
+				<p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
+					for the tech world</p>
+			</div>
+			<div
+				class="slide-card w-64 shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
+				<img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
+				<h5 class="font-bold my-auto">We orientate</h5>
+				<p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
+					for the tech world</p>
+			</div>
+			<div
+				class="slide-card w-64 shadow-lg rounded-md flex flex-col text-center justify-center items-center py-4 px-4">
+				<img class=" rounded mb-auto" src="assets/images/ignite-100859919-large.jpg" alt="">
+				<h5 class="font-bold my-auto">We guide</h5>
+				<p class="mb-auto">We train young people by impacting them with enough knowledge and hands-on pratices to get them ready
+					for the tech world</p>
+			</div>
+		</div>
+		<AuthorizeView>
+			<NotAuthorized>
+				<div class="flex for-o flex-col text-center mt-3">
+					<h1 class="font-bold text-2xl md:text-4xl sm:text-3xl">Get started and be part</h1>
+					<p class="m-5 text-lg md:text-md">Login for there is more for you or join us here by signig up and start skilling the IT world
+					</p>
+					<div class="flex flex-wrap gap-5 justify-center">
+						<a class="nav-links btn-type btn-large bl-btn">
+							Sign
+							In</a>
+						<a class="nav-links btn-type btn-large bs-btn">
+							Sign
+							Up</a>
+					</div>
+				</div>
+			</NotAuthorized>
+			<Authorized>
+				<div class="flex for-l flex-col text-center mt-3">
+					<h1 class="font-bold text-4xl md:text-5xl sm:text-4xl mt-5">Continue where you left</h1>
+					<p class="m-5 mt-2 text-lg md:text-md">
+						There is more for you. Jump back right in and continue skilling the IT world
+					</p>
+					<div class="flex flex-wrap gap-5 justify-center">
+						<NavLink href="/dashboard"
+									class="nav-links btn-type btn-large ds-btn">Dashboard</NavLink>
+					</div>
+				</div>
+			</Authorized>
+		</AuthorizeView>
+	</div>
+
+	<div class="landing-courses flex flex-col justify-center items-center">
+
+		<div class="container my-24 px-6 mx-auto">
+
+		  <!-- Section: Design Block -->
+		  <section class="mb-32 text-gray-800 text-center">
+
+			<h2 class="text-3xl font-bold mb-12 pb-4 text-center">Latest courses</h2>
+
+			<div class="grid lg:grid-cols-3 gap-6 xl:gap-x-12">
+				@foreach (var course in CoursesList.Take(3))
+				{
+					<CourseCard course="@course"></CourseCard>
+				}
+			</div>
+
+		  </section>
+		  <!-- Section: Design Block -->
+
+		</div>
+        @*
+		<h1 class="font-bold text-2xl md:text-3xl sm:text-3xl mb-4 md:mb-5 text-slate-700">Popular courses</h1>
+		<div class="course-grid-box">
+			@foreach (var course in CoursesList.Take(4))
+			{
+				<a class="grid" href="/course_detail/@course.Guid" style="background-image: url('site_data/course_cover_images/R (1).jpg')">
+					<div class="info">
+						<h3>@course.Name</h3>
+						<span>Author: @course.Author.Account.User.FirstName @course.Author.Account.User.LastName</span>
+						<span>Publish: @course.DatePublish</span>
+					</div>
+				</a>
+			}
+			<a class="grid" style="background-image: url('site_data/course_cover_images/R (1).jpg')">
+				<div class="info">
+					<h3>Python for Beginners</h3>
+					<span>Author: John Doe</span>
+					<span>Publish: 15 Jan 2022</span>
+				</div>
+			</a>
+			<a class="grid" style="background-image: url('site_data/course_cover_images/hqdefault.jpg')">
+				<div class="info">
+					<h3>Advanced C#</h3>
+					<span>Author: Tim Corey</span>
+					<span>Publish: 12 Jun 2022</span>
+				</div>
+			</a>
+			<a class="grid" style="background-image: url('site_data/course_cover_images/OIP (2).jpg')">
+				<div class="info">
+					<h3>JavaScript: The Foundational</h3>
+					<span>Author: Mark Code</span>
+					<span>Publish: 23 Aug, 2021</span>
+				</div>
+			</a>
+			<a class="grid" style="background-image: url('site_data/course_cover_images/R.png')">
+				<div class="info">
+					<h3>Data Science in depth</h3>
+					<span>Author: Foo Bar</span>
+					<span>Publish: 08 April, 2018</span>
+				</div>
+            </a>
+		</div>
+        *@
+	</div>
+	
+
+	<div class="landing-about flex flex-col justify-center items-center" @ref="aboutSection" id="about">
+		<div
+			class="about-card flex flex-wrap gap-10 w-auto mx-0 sm:mx-auto sm:w-full p-6 space-between justify-center md:justify-between my-auto">
+			<div class="landing-info border w-80 md:w-96 h-9/12 rounded hover:shadow-lg items-start p-4">
+				<h1 class="font-bold text-2xl text-sky-400 mb-2">About Us</h1>
+				<p>
+					Skill-IT is an educational platformn found in Cameroon based on tech and IT out for young people in
+					IT and technology in general
+				</p>
+			</div>
+			<div class="landing-info border w-80 md:w-96 h-9/12 rounded hover:shadow-lg items-start p-4">
+				<h1 class="font-bold text-2xl text-amber-500 mb-2">Our Purpose</h1>
+				<p>
+					We are out to empower young cameroonians with skills to fit into the demands of the African tech
+					system.
+				</p>
+			</div>
+			<div class="landing-info border _contact w-80 md:w-96 h-9/12 rounded hover:shadow-lg items-start p-4">
+				<h1 class="font-bold text-xl text-sky-400 mb-2">Contact Us</h1>
+				<a class="ml-5 flex flex-row gap-2 w-full" href="mailto:it.skill4all@gmail.com" target="_blank" rel="noopener">
+					<img class="w-5 h-5" src="assets/icons/gmail.png" alt="">
+					&nbsp;
+					it.skill4all@gmail.com
+				</a>
+				<a class="ml-5 flex flex-row gap-2 w-full" href="https://twitter.com/skill_IT4All" target="_blank" rel="noopener">
+					<img class="w-5 h-5" src="assets/icons/twitter.png" alt="">
+					&nbsp;
+					@twitterHandle
+				</a>
+				<a class="ml-5 flex flex-row gap-2 w-full" href="tel:+237673576291" target="_blank" rel="noopener">
+					<img class="w-5 h-5" src="assets/icons/phone.png" alt="">
+					&nbsp;
+					+ 237 673 576 291
+				</a>
+			</div>
+		</div>
+		<div class="landing-footer flex flex-row text-end justify-center items-center h-24 w-full mb-0 text-slate-400">
+			<span class="w-10/12">Copyright &COPY; 2022</span>
+			<span class="w-1 bg-slate-400 rounded h-4 mx-4 my-6"></span>
+			<span class="w-10/12 text-start">Skill-IT4All</span>
+		</div>
+	</div>
+
 </div>
 
 <!--script>
-        stickyHeader()
-        setEventHandlers()
-    if (_Detail.userId === undefined || _user.userId === undefined) initiateUser()
-    setTimeout(() => {
-        chAuth()
-        loader.addClass('hidden')
-    }, 2000);
+		stickyHeader()
+		setEventHandlers()
+	if (_Detail.userId === undefined || _user.userId === undefined) initiateUser()
+	setTimeout(() => {
+		chAuth()
+		loader.addClass('hidden')
+	}, 2000);
 </script-->
 
 @code {
-    private string twitterHandle = "@skill_IT4All";
+	[Parameter]
+	public string section { get; set; } = "";
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-        JSRuntime.InvokeVoidAsync("initIndex");
-    }
+	private ElementReference aboutSection;
+
+	private string twitterHandle = "@skill_IT4All";
+
+	private ObservableCollection<Course> CoursesList { get; set; } = new();
+
+	protected override async void OnAfterRender(bool firstRender)
+	{
+		if (firstRender)
+		{
+			var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri); //you can use IURIHelper for older versions
+			if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("section", out var result1))
+			{
+				section = result1.First();
+				if (section == "about")
+				{
+					JSRuntime.InvokeVoidAsync("scrollToAbout");
+					await aboutSection.FocusAsync();
+				}
+			}
+			//JSRuntime.InvokeVoidAsync("initIndex");
+			await JSRuntime.InvokeVoidAsync("LoadScripts", "initIndex");
+		}
+		base.OnAfterRender(firstRender);
+
+		CoursesList = CourseStaticHelper.GetCourses();
+		this.StateHasChanged();
+	}
+
+	
 }

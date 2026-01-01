@@ -1,0 +1,94 @@
+﻿.course-detail-page {
+    width: 100%;
+    height: auto;
+    position: relative;
+    bottom: 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+    .course-detail-page .course-detail-page-header {
+        width: 100%;
+        min-height: 45px;
+        height: auto;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.541);
+        padding-inline: 15px;
+    }
+
+.course-detail-page-header .left-section h3.section-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.course-detail-page-header .filter-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 4px;
+    margin-inline: 0px;
+}
+
+.course-detail-page-header .sort-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 4px;
+    margin-inline: auto 0px;
+}
+
+.sort-wrapper:hover svg, .filter-wrapper:hover svg {
+    transition: all .15s ease-in;
+    stroke: rgb(78, 78, 78);
+}
+
+.sort-wrapper svg, .filter-wrapper svg {
+    stroke: rgb(58, 58, 58);
+}
+
+.course-detail-page .courses-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    width: 100%;
+    height: 100%;
+    bottom: 0px;
+    margin-bottom: 0px;
+    padding-inline: 1vw;
+}
+
+.courses-wrapper .course-card {
+    width: -webkit-fill-available;
+    height: max-content;
+    min-width: 250px;
+    max-width: 300px;
+    border: 1px solid rgba(128, 128, 128, 0.541);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-inline: 2vw;
+    margin-block: 3vh;
+}
+
+    .courses-wrapper .course-card:hover {
+        transition: all .15s ease-in;
+        box-shadow: 0px 5px 15px rgba(36, 36, 36, 0.21);
+    }
+
+.course-card .course-info {
+    padding: 1vw;
+}
+
+.course-info span {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .course-info span i {
+        color: rgb(70, 70, 70);
+    }
+
+.course-info h3 {
+    font-weight: 600;
+}

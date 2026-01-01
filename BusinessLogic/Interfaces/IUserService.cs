@@ -1,4 +1,5 @@
-﻿using SkillIT_Models.DatabaseModels;
+﻿using Microsoft.AspNetCore.Http;
+using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,7 @@ namespace BusinessLogic.Interfaces
 		ResponseModel AddUser(UserModel user);
 		User GetUser(long id);
 		ResponseModel UpdateUser(long userId, UserModel user);
-	}
+        ResponseModel UpdateProfilePicture(long userId, IFormFile formFile);
+        User GetUser(string email);
+    }
 }

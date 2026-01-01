@@ -49,9 +49,19 @@ namespace BusinessLogic
             }
         }
 
+        public ObservableCollection<int> EngagementCatalogIdList(int catalogId)
+        {
+            return new(dbContext.Engagements.Select(e => e.CatalogId));
+        }
+
         public ObservableCollection<Engagement> Engagements(long userId)
         {
             return new(dbContext.Engagements.Where(e => e.UserId == userId));
+        }
+
+        public ObservableCollection<int> EngagementUserCatalogIdList(int catalogId, long userId)
+        {
+            return new(dbContext.Engagements.Where(e => e.UserId == userId).Select(e => e.CatalogId));
         }
 
         public ObservableCollection<long> EngagementUserIdList(long userId)

@@ -15,8 +15,10 @@ namespace SkillIT_Models.DatabaseModels
         public int LessonId { get; set; }
         public string Topic { get; set; }
         public int ChapterId { get; set; }
-        public long AuthorId { get; set; }
+        public string Guid { get; set; }
+        public long? AuthorId { get; set; }
         public DateTime DateCreated { get; set; }
+        public DateTime LastModified { get; set; }
         public int LessonNumber { get; set; }
 
         public virtual Creator Author { get; set; }

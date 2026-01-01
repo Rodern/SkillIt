@@ -12,5 +12,6 @@ namespace SkillIT_Models.Models
         public long OtpId { get; set; }
         public int Otp { get; set; }
         public string Password { get; set; }
+        public string Guid { get; set; }
     }
 }

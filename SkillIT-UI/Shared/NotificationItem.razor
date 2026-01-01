@@ -1,0 +1,106 @@
+﻿
+<li id="@MarkupId" class="notification-item border-b mb-[1px]">
+    <img class="ni-icon" src="assets/icons/@Notification.Icon" />
+    <a class="ni-body">
+        <h4 class="ni-caption">@Notification.Caption</h4>
+        <p class="ni-detail truncate" title="@Notification.Details">@Notification.Details</p>
+    </a>
+    <div class="ni-side-btns">
+        <a class="ni-side-btn" @onclick="()=>{ShowMiniContextMenu(MarkupId, Notification.NotificationId, Notification.NotificationGuid);}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </a>
+        <a class="ni-side-btn" @ref=showDetailBtn @onclick="()=>{ShowDetailCard(MarkupId, Notification.NotificationId, Notification.NotificationGuid, showDetailBtn);}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8.25V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18V8.25m-18 0V6a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 6v2.25m-18 0h18M5.25 6h.008v.008H5.25V6zM7.5 6h.008v.008H7.5V6zm2.25 0h.008v.008H9.75V6z" />
+            </svg>
+        </a>
+    </div>
+    <div class="ni-options-wrapper shadow-lg" id="ni_options_@MarkupId">
+        <a class="ni-o-option" @onclick="()=>{MarkAsRead(MarkupId, Notification.NotificationId, Notification.NotificationGuid);}">Mark As Read</a>
+        <a class="ni-o-option" @onclick="()=>{DeleteNotification(MarkupId, Notification.NotificationId, Notification.NotificationGuid);}">Delete</a>
+    </div>
+</li>
+
+@code {
+    [Parameter]
+    public string Type { get; set; } = string.Empty;
+    [Parameter]
+    public Notification Notification { get; set; } = new();
+    [Parameter]
+    public Account Account { get; set; } = new();
+    [Parameter]
+    public ObservableCollection<NotificationAction> Actions { get; set; } = new();
+
+    private ElementReference showDetailBtn;
+
+    string MarkupId { get; set; } = string.Empty;
+
+    async void ShowMiniContextMenu(string markupId, long id, string guid)
+    {
+        await JSRuntime.InvokeVoidAsync("showMiniContextMenu", markupId);
+    }
+
+    async void DeleteNotification(string markupId, long id, string guid)
+    {
+        var response = EntityService.DeleteEntity<Notification>(id);
+        if (!response.Success)
+        {
+            await JSRuntime.InvokeVoidAsync("popUpBox", "error", response.Message);
+            return;
+        }
+        await JSRuntime.InvokeVoidAsync("removeDOMById", MarkupId);
+    }
+
+    async void MarkAsRead(string markupId, long id, string guid)
+    {
+        Notification.MarkedAsRead = true;
+        Notification.DateRead = DateTime.UtcNow;
+        var response = EntityService.UpdateEntity<Notification>(Notification);
+        if (!response.Success)
+        {
+            //await JSRuntime.InvokeVoidAsync("popUpBox", "Error", response.Message);
+            return;
+        }
+        await JSRuntime.InvokeVoidAsync("removeClassById", markupId);
+        await JSRuntime.InvokeVoidAsync("reRenderNotificationPanel");
+    }
+
+    async void ShowDetailCard(string markupId, long id, string guid, ElementReference elementReference)
+    {
+        if(Type == "page")
+        {
+            CourseStaticHelper.PageNotificationDetailMarkup = SiteSettings.CreatePageNotificationDetailMarkup1(Notification, Account, Actions);
+
+            await JSRuntime.InvokeVoidAsync("showNdpgCard", markupId, CourseStaticHelper.PageNotificationDetailMarkup, elementReference);
+            MarkAsRead(markupId, id, guid);
+
+            return;
+        }
+        CourseStaticHelper.PanelNotificationDetailMarkup = SiteSettings.CreatePanelNotificationDetailMarkup1(Notification, Account, Actions);
+        await JSRuntime.InvokeVoidAsync("showNdpnCard", markupId, CourseStaticHelper.PanelNotificationDetailMarkup, elementReference);
+
+        MarkAsRead(markupId, id, guid);
+    }
+
+    protected override async void OnParametersSet()
+    {
+        MarkupId = $"{Type}_notification_{Notification.NotificationGuid}";
+        Account = AccountService.GetAccount(Notification.AccountId);
+        Actions = JsonConvert.DeserializeObject<ObservableCollection<NotificationAction>>(Notification.Actions);
+
+        base.OnParametersSet();
+    }
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (!Notification.MarkedAsRead)
+        {
+            await JSRuntime.InvokeVoidAsync("addClassById", MarkupId);
+        }
+
+        base.OnAfterRender(firstRender);
+    }
+
+}

@@ -1,0 +1,180 @@
+﻿@page "/course_overview"
+@page "/course_overview/{courseId:int}"
+@page "/course_overview/{guid}"
+
+<PageTitle>Course - @Course.Name</PageTitle>
+
+<div class="course-page page cursor-default flex flex-col bottom-0 top-0 left-0 right-0">
+	<div class="side-panel">
+		<div class="offcanvas-header flex items-center justify-between p-4">
+			<h5 class="offcanvas-title hidden mb-0 leading-normal font-semibold" id="offcanvasExampleLabel">Offcanvas</h5>
+			<button type="button" class="btn-close box-content w-4 h-4 p-2 -my-5 -mr-2 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+			
+		</div>
+		<a href="/courses" class=" btn-small">Courses</a>
+		<h3 class="course-name">@Course.Name</h3>
+		<div class="progress-info">
+			<div class="progress-bar w-full bg-gray-200 h-1">
+				<div class="progress bg-blue-600 h-1" style="width: 0%"></div>
+			</div>
+			<span class="completion-info">5% Complete</span>
+			<span class="sum-of-lessons">2 Lessons</span>
+			<span class="out-of">5/50 Lessons</span>
+		</div>
+
+		<div class="course-breakdown">
+			<ul class="course-content-list" start="1">
+				@foreach (var chapter in CourseChapters.OrderBy(e => e.ChapterNumber))
+				{
+					<li id="course_chapter_@chapter.ChapterId" data-bs-toggle="collapse" data-bs-target="#collapseChapter_@chapter.ChapterId" role="button" aria-expanded="false" aria-controls="collapseChapter_@chapter.ChapterId">@chapter.Title</li>
+					<ul start="1" class="chapter-lessons collapse" id="collapseChapter_@chapter.ChapterId">
+						@foreach (var lesson in chapter.CourseLessons.OrderBy(e => e.LessonNumber))
+						{
+							<li id="course_lesson_@lesson.LessonId">@lesson.Topic</li>
+						}
+					</ul>
+				}
+			</ul>
+		</div>
+	</div>
+	<div class="course-view">
+		<div class="breadcrumb">
+			<a class="breadcrumb-item">@Course.Name</a>>
+			<a class="breadcrumb-item">@Chapter.Title</a>
+		</div>
+		<div class="course-progress">
+			CHAPTER <span class="chapter-number"></span> OF <span class="number-of-chapters"></span> In Progress
+			<button class="course-action-btn btn-large header-btn">ACTION</button>
+		</div>
+		<h2 class="course-view-title">
+			@Chapter.Title
+		</h2>
+		<div class="course-breakdown">
+			<div class="cb-header">
+				<h4 class="">Chapter Lessons</h4>
+				<div class="right-section">
+					<span class="completion-info">5% Complete</span>
+					<span class="sum-of-lessons">2 Lessons</span>
+				</div>
+			</div>
+			<ul class="chapter-lesson-list" start="1">
+				<ul start="1" class="chapter-lesson" id="collapseChapter_@Chapter.ChapterId">
+					@foreach (var lesson in Chapter.CourseLessons.OrderBy(e => e.LessonNumber))
+					{
+						<li id="course_lesson_@lesson.LessonId">@lesson.Topic</li>
+					}
+				</ul>
+			</ul>
+		</div>
+	</div>
+
+</div>
+
+@code {
+	[Parameter]
+	public int courseId { get; set; } = 0;
+	[Parameter]
+	public string guid { get; set; } = string.Empty;
+
+	private Course Course { get; set; } = new();
+
+	int count = 0;
+
+	private CourseChapter Chapter { get; set; } = new();
+	private CourseLesson Lesson { get; set; } = new();
+	private CourseContent Content { get; set; } = new();
+	private ObservableCollection<CourseChapter> CourseChapters { get; set; } = new();
+	private ObservableCollection<CourseContent> Contents { get; set; } = new();
+
+	Course GetCourse(int courseId)
+	{
+		return CourseStaticHelper.GetCourse(courseId);
+	}
+	Course GetCourseByGuid(string guid)
+	{
+		return CourseStaticHelper.GetCourseByGuid(guid);
+	}
+
+	protected override void OnParametersSet()
+	{
+		try
+		{
+			var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri); //you can use IURIHelper for older versions
+			if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("courseId", out var result1))
+			{
+				int courseId = int.Parse(result1.First());
+				this.courseId = courseId;
+			}
+			if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("guid", out var result2))
+			{
+				string guid = result2.First<string>();
+				this.guid = guid;
+			}
+		}
+		catch (Exception)
+		{
+
+		}
+
+		if (courseId == 0)
+		{
+			if (guid == string.Empty || guid == "")
+			{
+				NavigationManager.NavigateTo("/courses");
+			}
+		}
+
+		if (courseId != 0)
+		{
+			Course = GetCourse(courseId);
+			this.StateHasChanged();
+		}
+		if (guid != "" && courseId == 0)
+		{
+			Course = GetCourseByGuid(guid);
+			this.StateHasChanged();
+		}
+		base.OnParametersSet();
+	}
+
+	protected override async void OnAfterRender(bool firstRender)
+	{
+		base.OnAfterRender(firstRender);
+
+		if (string.IsNullOrEmpty(Course.Guid) == true)
+		{
+			NavigationManager.NavigateTo("/courses");
+		}
+
+		//JSRuntime.InvokeVoidAsync("initCourseDetail");
+		await JSRuntime.InvokeVoidAsync("LoadScripts", "initCourseDetail");
+	}
+
+	protected override Task OnAfterRenderAsync(bool firstRender)
+	{
+
+		if (firstRender)
+		{
+			CourseChapters = CourseService.GetCourseChapters(Course.CourseId);
+			for (int i = 0; i < CourseChapters.Count; i++)
+			{
+				CourseChapters[i].CourseLessons = CourseService.GetCourseLessons(CourseChapters[i].ChapterId);
+			}
+			JSRuntime.InvokeVoidAsync("console.log", CourseChapters);
+
+			if (CourseChapters.Count > 0)
+			{
+				Chapter = CourseChapters[0];
+				if (Chapter.CourseLessons.Count > 0)
+				{
+
+					Lesson = Chapter.CourseLessons.FirstOrDefault(e => e.LessonId == 1);
+					Content = CourseService.GetCourseContents(Lesson.LessonId)[0];
+				}
+			}
+
+			this.StateHasChanged();
+		}
+		return base.OnAfterRenderAsync(firstRender);
+	}
+}

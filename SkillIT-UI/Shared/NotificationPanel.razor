@@ -1,0 +1,112 @@
+﻿
+<nav class="notification-panel hidden absolute ml-auto rounded-lg border border-slate-200 shadow-2xl text-slate-900 text-md p-3 backdrop-blur-sm backdrop-opacity-25 bg-white">
+    <div class="notification-page-header navbar navbar-expand-lg py-1 pb-2 bg-white relative flex items-center w-full justify-between">
+        <span class="left-section">
+            <h3 class="section-title">Notifications</h3>
+        </span>
+        <span class="right-section w-[110px]">
+            <a href="/notifications" @onclick="ShowLoading" class="p-detail-btn np-see-all flex">See all</a>
+        </span>
+    </div>
+    <div class="list-wrapper">
+        <ul class="nl-group-list">
+            @foreach (var notification in Notifications.Take(10))
+            {
+                <NotificationItem Notification="@notification" Account="@Account" Type="panel"></NotificationItem>
+            }
+        </ul>
+    </div>
+
+    @*@((MarkupString)CourseStaticHelper.PanelNotificationDetailMarkup)*@
+
+</nav>
+
+@code {
+    [Parameter]
+    public ObservableCollection<Notification> Notifications { get; set; } = new();
+    [Parameter]
+    public Account Account { get; set; } = new();
+    [Parameter]
+    public ObservableCollection<NotificationAction> Actions { get; set; } = new();
+    [Parameter]
+    public long AccountId { get; set; } = 0;
+
+
+    protected override async void OnInitialized()
+    {
+
+        long UserId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
+        //AccountId = long.Parse(await JSRuntime.InvokeAsync<string>("getAccountId"));
+
+        Account = new AccountService(new()).GetUserAccount(UserId);
+        AccountId = Account.AccountId;
+
+        //Notifications = new(NotificationService.GetAccountNotifications(AccountId).Take(10));
+        //JSRuntime.InvokeVoidAsync("console.log", Notifications.Select(x => x.Caption));
+
+
+        //NP_Timer.Interval = 10000;
+
+        //NP_Timer.Elapsed += NP_Envent;
+
+        //NP_Timer.AutoReset = true;
+
+        //NP_Timer.Enabled = true;
+
+        base.OnInitialized();
+    }
+
+    private System.Timers.Timer NP_Timer = new();
+
+    void NP_Envent(object source, System.Timers.ElapsedEventArgs e)
+    {
+        var nots = new NotificationService(new()).GetAccountNotifications(AccountId);
+
+
+        Notifications = new();
+
+        Notifications = new (nots.Take(10));
+
+        this.StateHasChanged();
+
+        int count = nots.Where(n => n.MarkedAsRead == false).Count();
+        if (count > 0)
+        {
+            if (count > 99) count = 99;
+            JSRuntime.InvokeVoidAsync("showNotificationBadgeSmall");
+        }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        //Notifications = new(new NotificationService(new()).GetAccountNotifications(AccountId).Take(10));
+
+
+        if (firstRender)
+        {
+            
+            int count1 = Notifications.Where(n => n.MarkedAsRead == false).Count();
+            int count2 = Notifications.Take(10).Where(n => n.MarkedAsRead == false).Count();
+
+            JSRuntime.InvokeVoidAsync("showNotificationBadgeSmall", count2);
+
+            if (count1 > 99) count1 = 99;
+            JSRuntime.InvokeVoidAsync("showNotificationBadgeBig", count1);
+
+            this.StateHasChanged();
+        }
+
+        JSRuntime.InvokeVoidAsync("setEventHandlers");
+        base.OnAfterRender(firstRender);
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    void ShowLoading()
+    {
+        JSRuntime.InvokeVoidAsync("showLoader");
+    }
+}

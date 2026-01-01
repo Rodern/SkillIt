@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link rel="manifest" href="manifest.json">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <!-- <link rel="stylesheet" href="assets/vendors/tailwind/font.awesome.css">
+    <link rel="stylesheet" href="assets/vendors/tailwind/tailwind.elements.min.css">
+    <link rel="stylesheet" href="assets/vendors/tailwind/tailwindcss.css"> -->
+    <link rel="stylesheet" href="styles/popups-modal.css">
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/course.css">
+    <!-- <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/index.css"> -->
+
+    <script src="assets/vendors/jquery-3.6.0.min.js"></script>
+    <script src="assets/vendors/tailwind/tailwindcss.js" deffer></script>
+    <!--script src="assets/vendors/tailwind/tailwind.elements.min.js" deffer></script-->
+    <script src="scripts/route.module.js"></script>
+    <!--Blazor:{"sequence":1,"type":"server","prerenderId":"c5417bd979244cfa89741f81c0362d1d","descriptor":"CfDJ8F6ISoR9FeNJsn/i1jPISJWet1KMsVgLl3P6ghQG4c14PIzB73zFHpQcL5FHb/\u002BBkm8bT\u002BezVgxtWuSIgSSpXIvtv634xaTaj78WkRjF4oR\u002BDi9HaHXce6jsPxjfLOZjTpNb8qixplOL\u002B1sfUIYbFK4TGA0x5DOJvJqchJFGLYIx0/XaGh\u002BJ4vXPQlKlbpGhFRdDKtxDE6AyxgbGgTWJLMWqeLQoeVbcki/U7YxsR8cyDSr6azvqF4rDOsRfxjNKcncl\u002BR7sU9rKTodvuYRlUDnFWiEEGKNs/wkfshbSU6XcpPjJFpRvLP9v4\u002B0ZOzL9PjaZXhef\u002Bdhg3GXuZctRkRIj5sdFwj4fmUoasuCtNKEQtkJJ26KjKIbX00jTbl16dQ8LE\u002BirHisrE8tRB5JJtSfr3MaFBRkW2qlV858\u002BKIh3"}-->
+    <title>SkillIT - Courses</title><!--Blazor:{"prerenderId":"c5417bd979244cfa89741f81c0362d1d"}-->
+</head>
+
+<body>
+
+    <div class="loading-frame hidden absolute flex flex-col justify-center items-center text-center">
+        <div class="loadframe flex flex-col items-center ">
+            <svg id="spinner" class=" h-10 w-10 mb-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+            </svg>
+            <p class="text-lg text-white">Loading</p>
+        </div>
+    </div>
+
+    <div class="alertCover">
+        <div class="alertBox w-72 md:w-[30vw]">
+            <div class="infoHead">
+                <img src="" alt="Image" class="typeImg">
+                <h2 class="typeName"></h2>
+            </div>
+            <div class="alertBody">
+            </div>
+            <div class="alertOptions">
+                <button type="submit" class="alertCancel" id="cancelHandler">Cancel</button>
+                <button type="button" class="alertConfirm" id="alertBtnHandler">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!--Blazor:{"sequence":0,"type":"server","prerenderId":"44206229d6054b849a949b1741cd4551","descriptor":"CfDJ8F6ISoR9FeNJsn/i1jPISJXTy9o0BrA6fETSVj1ONo9fy7Ux5BTaNlxLspThU5qTZFin/trMnZXwFF0sQcjn9Y8Ryf9ZilgvAAzoT5TvUXxm8GRvvKz7YO39CGaozlNx5tClipiBDCTy2XvJXbh56HmS6iZqvpaexMJdOxg7I6PItG2f7HUhnlm61rRFscMkR6kjkb6y0AyvZBtiKeVuQOKtzuLQLUdPFPH1WUOR197M5sVdrFe9JgJoD\u002B\u002BTod5mTu5GyGT\u002BkbeKG2S3T3y49jaVsjxymAtShQUtBDokbCsBsO6\u002BpuNBuH2Dc92y0JczM5\u002BdKmBEPAj32PMnZ56/L1hKocrPJzY7\u002BzIEzvy4ekwV"}-->
+    <header class="landing-header w-[100vw] flex flex-row shadow items-center px-3 h-12">
+        <a href="/" class="org-info flex flex-row items-center gap-2 ml-0 mr-auto active">
+            <img src="assets/icons/logo.png" class="h-24" alt>
+            <h4 class="org-name hidden ml-2 font-bold text-lg hidden">SkillIT</h4>
+        </a>
+        <nav class="header-nav hidden md:flex ml-auto gap-5 flex-row text-slate-200">
+            <a href="/dashboard"
+                class="nav-links n-usr flex flex-row justify-between hover:bg-blue-700 hover:shadow-md focus:bg-blue-800 rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent "><span
+                    class="nav-un">Dashboard</span></a>
+            <a href="catalogs"
+                class="nav-links flex flex-row justify-between hover:bg-blue-700 hover:shadow-md focus:bg-blue-800 rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent ">
+                Catalogs
+            </a> <a
+                class="nav-links nl-btn hover:bg-rose-500 hover:shadow-md focus:bg-rose-600 rounded px-3 py-1 border border-slate-200 hover:border-transparent">
+                Sign
+                In
+            </a>
+            <a
+                class="nav-links ns-btn hover:bg-blue-500 hover:shadow-md focus:bg-blue-600 rounded px-3 py-1 border border-slate-200 hover:border-transparent ">
+                Sign
+                Up
+            </a>
+            <a href="/#about"
+                class="nav-links l_about hover:shadow-md hover:bg-amber-500 focus:bg-amber-600 rounded px-3 py-1 border border-slate-200 hover:border-transparent ">
+                About
+            </a>
+        </nav>
+        <button id="menu_btn"
+            class="flex  flex-row hover:bg-blue-700 hover:shadow-md focus:shadow-lg rounded px-1 py-1 ml-5 gap-1 border border-slate-200 focus:border-1 hover:border-transparent focus:outline-blue-800">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
+                <path fill="black" stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+            </svg>
+            Menu
+        </button>
+    </header>
+    <nav
+        class="menu hidden absolute ml-auto shadow-2xl text-slate-900 text-md p-3 backdrop-blur-sm backdrop-opacity-25 bg-white ">
+        <ul class="menu-items">
+            <li class="menu-items m-usr avt-state flex flex-col&#xD;&#xA;                justify-between items-center&#xD;&#xA;                hover:border-b border-slate-200 my-1&#xD;&#xA;                mb-10 py-1 pl-2 rounded hover:text-white&#xD;&#xA;                text-lg hover:shadow hover:bg-blue-600&#xD;&#xA;                backdrop-blur-sm shadow"
+                style="border: none;">
+                <a href="/dashboard"
+                    class="w-full h-full flex flex-col&#xD;&#xA;                justify-between items-center pr-2">
+                    <img src="../assets/images/user-def.png" class="u-img h-[20vh] w-[20vh] mb-3" alt>
+                    <span class="nav-un">AlainKimbu</span>
+                </a>
+            </li>
+            <li class="menu-items p-avt avt-state flex flex-col
+                justify-between items-center pr-2
+                hover:border-b border-slate-200 my-1
+                mb-10 py-1 pl-2 rounded hover:text-white
+                text-lg hover:shadow hover:bg-blue-600
+                backdrop-blur-sm shadow" style="border: none;">
+                <img src="../assets/images/user-def.png" class="u-img h-[20vh] w-[20vh] mb-3" alt>
+                <i class="nav-un " style="font-size:1rem;font-weight: 400;">Not Signed In</i>
+            </li>
+            <a href="/"
+                class="menu-items home-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm active">
+                Home
+            </a>
+            <a href="catalogs"
+                class="menu-items hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                Catalogs
+            </a>
+            <a href="/courses"
+                class="menu-items hidden mcb-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm active">
+                Courses
+            </a>
+            <li
+                class="menu-items ms-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                Sign Up
+            </li>
+            <li
+                class="menu-items ml-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                Sign In
+            </li>
+            <li
+                class="menu-items l_about hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                <a href="/#about" style="width: -webkit-fill-available; display: block;">About</a></li>
+            <li
+                class="menu-items hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                <a>Feedback</a></li>
+            <li
+                class="menu-items mlg-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:shadow hover:bg-red-700 backdrop-blur-sm">
+                Logout
+            </li>
+        </ul>
+    </nav>
+    <main>
+
+        <div class="course-detail-page page cursor-default flex flex-col bottom-0 top-0 left-0 right-0">
+            <!-- <div class="course-page-header">
+                Filter
+                <select name="filterCourses" id="filterCourses">
+                    <option value="Popular">Popular</option>
+                    <option value="New">New</option>
+                    <option value="Old">Old</option>
+                </select>
+            </div>
+            <div class="courses-wrapper">
+                <a class="course-card">
+                    <img src="../assets/images/ignite-100859919-large.jpg" alt="" class="course-img">
+                    <div class="course-info">
+                        <h3>.NET MAUI for beginners</h3>
+                        <span>
+                            <p>John Doe</p>
+                            <i>Jan 14, 2023</i>
+                        </span>
+                    </div>
+                </a>
+                <a class="course-card">
+                    <img src="../assets/images/ignite-100859919-large.jpg" alt="" class="course-img">
+                    <div class="course-info">
+                        <h3>.NET MAUI for beginners</h3>
+                        <span>
+                            <p>John Doe</p>
+                            <i>Jan 14, 2023</i>
+                        </span>
+                    </div>
+                </a>
+                <a class="course-card">
+                    <img src="../assets/images/ignite-100859919-large.jpg" alt="" class="course-img">
+                    <div class="course-info">
+                        <h3>.NET MAUI for beginners</h3>
+                        <span>
+                            <p>John Doe</p>
+                            <i>Jan 14, 2023</i>
+                        </span>
+                    </div>
+                </a>
+                <a class="course-card">
+                    <img src="../assets/images/ignite-100859919-large.jpg" alt="" class="course-img">
+                    <div class="course-info">
+                        <h3>.NET MAUI for beginners</h3>
+                        <span>
+                            <p>John Doe</p>
+                            <i>Jan 14, 2023</i>
+                        </span>
+                    </div>
+                </a>
+                <a class="course-card">
+                    <img src="../assets/images/ignite-100859919-large.jpg" alt="" class="course-img">
+                    <div class="course-info">
+                        <h3>.NET MAUI for beginners</h3>
+                        <span>
+                            <p>John Doe</p>
+                            <i>Jan 14, 2023</i>
+                        </span>
+                    </div>
+                </a>
+                <a class="course-card">
+                    <img src="../assets/images/ignite-100859919-large.jpg" alt="" class="course-img">
+                    <div class="course-info">
+                        <h3>.NET MAUI for beginners</h3>
+                        <span>
+                            <p>John Doe</p>
+                            <i>Jan 14, 2023</i>
+                        </span>
+                    </div>
+                </a>
+                <a class="course-card">
+                    <img src="../assets/images/ignite-100859919-large.jpg" alt="" class="course-img">
+                    <div class="course-info">
+                        <h3>.NET MAUI for beginners</h3>
+                        <span>
+                            <p>John Doe</p>
+                            <i>Jan 14, 2023</i>
+                        </span>
+                    </div>
+                </a>
+                <a class="course-card">
+                    <img src="../assets/images/ignite-100859919-large.jpg" alt="" class="course-img">
+                    <div class="course-info">
+                        <h3>.NET MAUI for beginners</h3>
+                        <span>
+                            <p>John Doe</p>
+                            <i>Jan 14, 2023</i>
+                        </span>
+                    </div>
+                </a>
+                <a class="course-card">
+                    <img src="../assets/images/ignite-100859919-large.jpg" alt="" class="course-img">
+                    <div class="course-info">
+                        <h3>.NET MAUI for beginners</h3>
+                        <span>
+                            <p>John Doe</p>
+
+                            <i>Jan 14, 2023</i>
+                        </span>
+                    </div>
+                </a>
+            </div> -->
+            <div class="detial-body">
+ 
+            </div>
+        </div>
+    </main>
+    <!--Blazor:{"prerenderId":"44206229d6054b849a949b1741cd4551"}-->
+
+
+    <div id="blazor-error-ui">
+
+
+        An unhandled exception has occurred. See browser dev tools for details.
+
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <div class="floating-content-1 flc"></div>
+    <div class="floating-content-2 flc"></div>
+    <div class="floating-content-3 flc"></div>
+
+    <script src="_framework/blazor.server.js"></script>
+    <script src="scripts/classes.js"></script>
+    <script src="scripts/functions.js"></script>
+    <script src="scripts/index.js"></script>
+    <script src="scripts/init.js"></script>
+    <script>
+
+    </script>
+
+    <!-- Visual Studio Browser Link -->
+    <script type="text/javascript" src="/_vs/browserLink" async="async" id="__browserLink_initializationData"
+        data-requestId="a9dcaeae48dd495b988703093132679b" data-requestMappingFromServer="false"
+        data-connectUrl="http://localhost:62099/4141900b821c4dbda61153cb47eb08d7/browserLink"></script>
+    <!-- End Browser Link -->
+
+    <script src="/_framework/aspnetcore-browser-refresh.js"></script>
+</body>
+
+</html>

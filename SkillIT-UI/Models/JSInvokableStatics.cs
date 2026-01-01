@@ -1,6 +1,10 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 using System;
-
+using SkillIT_UI;
+using SkillIT_UI.Authentication;
+using Blazored.LocalStorage;
+using BusinessLogic;
 
 namespace SkillIT_UI.Models
 {
@@ -25,6 +29,13 @@ namespace SkillIT_UI.Models
                 File.WriteAllText(filePath, visitData);
             }
             return File.ReadAllText(filePath);
+        }
+
+        [JSInvokable]
+        public static void MarkAsAuthorized(string userToken)
+        {
+            //CustomAuthenticationStateProvider customAuthenticationStateProvider = new();
+            //customAuthenticationStateProvider.MarkUserAsAuthenticated(userToken, new AuthenticationService(new()));
         }
     }
 }

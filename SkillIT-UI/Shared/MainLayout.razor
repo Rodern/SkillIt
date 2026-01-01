@@ -1,4 +1,15 @@
 ﻿@inherits LayoutComponentBase
 
 <Header></Header>
-<main> @Body </main>
+
+
+
+    <main> @Body </main>
+
+@code{
+    protected override void OnInitialized()
+    {
+        ((CustomAuthenticationStateProvider)AuthenticationStateProvider).Authenticate();
+        base.OnInitialized();
+    }
+}

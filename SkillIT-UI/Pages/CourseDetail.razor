@@ -1,0 +1,349 @@
+﻿@page "/course_detail"
+@page "/course_detail/{courseId:int}"
+@page "/course_detail/{guid}"
+
+<PageTitle>Course detail - @Course.Name</PageTitle>
+
+<div class="course-detail-page page cursor-default flex flex-col bottom-0 top-0 left-0 right-0">
+	<div class="course-detail-page-header">
+		<div class="left-section">
+			<h3 class="section-title">Course Details</h3>
+		</div>
+		<div class="right-section">
+			<AuthorizeView>
+				<Authorized>
+					<button class="enroll-user-btn btn-large header-btn " @onclick="EnrollUser">ENROLL ME</button>
+				</Authorized>
+			</AuthorizeView>
+		</div>
+	</div>
+	<div class="detail-body px-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+		<div class="py-2 flex flex-col gap-6 min-w-full sm:px-6 lg:px-8">
+			<img class="hidden" src="site_data/course_cover_images/@Course.CoverImage" alt="@Course.Name" />
+			<div class="image-overlay hidden">
+				<h2 class="overlay-text">@Course.Name</h2>
+			</div>
+			<table class="detail-table min-w-full">
+				<caption class="text-xl text-left font-bold">Quick details</caption>
+				<tbody>
+					<tr>
+						<th>Course Title: </th>
+						<td>@Course.Name</td>
+					</tr>
+					<tr>
+						<th>Level: </th>
+						<td>@Course.Level</td>
+					</tr>
+					<tr>
+						<th>Date Published: </th>
+						<td>@Course.DatePublish</td>
+					</tr>
+					<tr>
+						<th>Course Title: </th>
+						<td>@Course.Name</td>
+					</tr>
+					<tr>
+						<th>Course Enrollments: </th>
+						<td>@EnrollmentService.CountCourseEnrollments(Course.CourseId) Skillers</td>
+					</tr>
+					<tr>
+						<th>Author: </th>
+						<td>@Course.Author.Account.User.FirstName @Course.Author.Account.User.LastName</td>
+					</tr>
+
+				</tbody>
+			</table>
+			<p>
+				@((MarkupString)Course.Description)
+			</p>
+			<div class="course-breakdown">
+				<caption class="text-xl text-left font-bold">Course overview</caption>
+				<ul class="course-content-list" start="1">
+					@foreach (var chapter in CourseChapters.OrderBy(e => e.ChapterNumber))
+					{
+						<li id="course_chapter_@chapter.ChapterId">@chapter.Title</li>
+						<ul start="1" class="chapter-lessons">
+							@foreach (var lesson in chapter.CourseLessons.OrderBy(e => e.LessonNumber))
+							{
+								<li id="course_lesson_@lesson.LessonId">@lesson.Topic</li>
+							}
+						</ul>
+					}
+				</ul>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int courseId { get; set; } = 0;
+	[Parameter]
+	public string guid { get; set; } = string.Empty;
+
+	private Course Course { get; set; } = new();
+
+	int count = 0;
+
+	private ObservableCollection<CourseChapter> CourseChapters { get; set; } = new();
+
+	Course GetCourse(int courseId)
+	{
+		return CourseStaticHelper.GetCourse(courseId);
+	}
+	Course GetCourseByGuid(string guid)
+	{
+		return CourseStaticHelper.GetCourseByGuid(guid);
+	}
+
+	private bool HasEnrolled { get; set; } = false;
+
+	protected override async void OnParametersSet()
+	{
+		try
+		{
+			var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri); //you can use IURIHelper for older versions
+			if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("courseId", out var result1))
+			{
+				int courseId = int.Parse(result1.First());
+				this.courseId = courseId;
+			}
+			if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("guid", out var result2))
+			{
+				string guid = result2.First<string>();
+				this.guid = guid;
+			}
+		}
+		catch (Exception)
+		{
+
+		}
+
+		if (courseId == 0)
+		{
+			if (guid == string.Empty || guid == "")
+			{
+				NavigationManager.NavigateTo("/courses");
+			}
+		}
+
+		if (courseId != 0)
+		{
+			Course = GetCourse(courseId);
+			this.StateHasChanged();
+		}
+		if (guid != "" && courseId == 0)
+		{
+			Course = GetCourseByGuid(guid);
+			this.StateHasChanged();
+		}
+
+		base.OnParametersSet();
+	}
+
+	async void EnrollUser()
+	{
+		string userToken_encrypted = await LocalStorageService.GetItemAsync<string>(AuthenticationHelper.LocalStorageTokenKey);
+		string userToken = string.Empty;
+		if (userToken_encrypted == null && userToken_encrypted == string.Empty)
+		{
+			await JSRuntime.InvokeVoidAsync("loadSignin");
+			return;
+		}
+		userToken = await JSRuntime.InvokeAsync<string>("decodeTextThis", userToken_encrypted);
+		if (AuthenticationService._isEmptyOrInvalid(userToken).Success == false || userToken == null || userToken == "" || userToken == string.Empty)
+		{
+			await JSRuntime.InvokeVoidAsync("loadSignin");
+			return;
+			//return (new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
+		}
+		string enc_userId = await LocalStorageService.GetItemAsync<string>(AuthenticationHelper.LocalStorageUserIdKey);
+		long userId = long.Parse(await JSRuntime.InvokeAsync<string>("decodeTextThis", enc_userId));
+
+		Enrollment enrollment = new()
+			{
+				EnrollmentId = 0,
+				DateEnrolled = DateTime.Now,
+				IsCompleted = false,
+				DateCompleted = DateTime.Now,
+				UserId = userId,
+				CourseId = Course.CourseId,
+			};
+		var response = EnrollmentService.CreateEnrollment(enrollment);
+		if (!response.Success)
+		{
+			await JSRuntime.InvokeVoidAsync("popUpBox", "alert", "An error occurred");
+			return;
+		}
+
+		var data = CourseService.GetDataIndexByCourseId(Course.CourseId);
+		if (data == null)
+		{
+			data = new()
+			{
+				IndexId = 0,
+				CourseId = Course.CourseId,
+				IndexData = JsonConvert.SerializeObject(CourseStaticHelper.IndexCourse(Course.CourseId)),
+				LastModified = DateTime.UtcNow,
+			};
+
+			EntityService.AddEntity<DataIndex>(data);
+		}
+
+		CourseDatum  courseDatum = new()
+		{
+			DataId = 0,
+			EnrollmentId = EnrollmentService.GetEnrollments(userId).FirstOrDefault(e => e.CourseId == Course.CourseId).EnrollmentId,
+			StartDate = DateTime.UtcNow,
+			LastModified = DateTime.UtcNow,
+			StudyRecord = data.IndexData,
+		};
+		response = CourseService.CreateCourseDatum(courseDatum);
+
+		if (!response.Success)
+		{
+			await JSRuntime.InvokeVoidAsync("popUpBox", "alert", "An error occurred, please try again later.");
+			EnrollmentService.DeleteEnrollment(courseDatum.EnrollmentId);
+			return;
+		}
+
+		ObservableCollection<CourseIndex> courseIndices = new (JsonConvert.DeserializeObject<ObservableCollection<CourseIndex>>(data.IndexData).OrderBy(x => x.CourseIndexId));
+
+		var user = UserService.GetUser(userId);
+
+
+		var actions = new ObservableCollection<NotificationAction>()
+		{
+			new()
+			{
+				Name = "Visit",
+				Command = $"/course/{guid}?cryptId={enrollment.EnrollmentId}&courseIndexId={courseIndices[0].CourseIndexId}"
+			}
+		};
+
+		var account = AccountService.GetUserAccount(userId);
+		Notification notification = new()
+		{
+			AccountId = account.AccountId,
+			NotificationGuid = AuthenticationHelper.GenerateGuid(),
+			Caption = $"Course registered {user.FirstName}!",
+			Details = $"You successfully enrolled to our {Course.Name}. Hoping you will learn a lot from this course, for we are so glad you are taking the course with us.",
+			DateCreated = DateTime.UtcNow,
+			Actions = JsonConvert.SerializeObject(actions),
+			Icon = "notify.png",
+		};
+
+		response = EntityService.AddEntity<Notification>(notification);
+
+		SendCourseRegisteredEmail(user.Email, userId, enrollment.DateEnrolled);
+
+		try
+		{
+			NavigationManager.NavigateTo($"/course/{guid}?cryptId={enrollment.EnrollmentId}&courseIndexId={courseIndices[0].CourseIndexId}", true);
+		}
+		catch (Exception)
+		{
+			await JSRuntime.InvokeVoidAsync("location.reload");
+		}
+	}
+
+	public async Task<bool> SendCourseRegisteredEmail(string email, long userId, DateTime startDate)
+	{
+		string link = $"{SiteSettings.BaseUrl}/course_detail/{Course.Guid}";//$"{SiteSettings.BaseUrl}/confirm_email/{userId}?guid={guid}";
+		string emailTemplate = SiteSettings.GetCourseRegisteredEmail(Course.Name, startDate.ToString("D"), link, SiteSettings.SupportEmail, $"{SiteSettings.BaseUrl}/feedback", SiteSettings.BaseUrl);
+
+		Sentmail sentmail = new()
+			{
+				UserId = userId,
+				EmailBody = emailTemplate,
+				DateSent = DateTime.UtcNow,
+				EmailType = Account_Status.CourseRegisteredEmail,
+			};
+
+		var res = AccountService.CreateSentMail(sentmail);
+		var user = UserService.GetUser(userId);
+
+		var response = MailingService.SendMailUsingSendGridAsync(email, $"{user.FirstName} {user.LastName}", "Course Registered", emailTemplate, SiteSettings.InfoEmail, SiteSettings.InfoEmailName);
+
+		//JSRuntime.InvokeVoidAsync("console.log", response, sentmail, res);
+		return true;
+	}
+
+	protected override async void OnAfterRender(bool firstRender)
+	{
+		base.OnAfterRender(firstRender);
+		if (firstRender)
+		{
+			CourseChapters = CourseService.GetCourseChapters(Course.CourseId);
+			for (int i = 0; i < CourseChapters.Count; i++)
+			{
+				CourseChapters[i].CourseLessons = CourseService.GetCourseLessons(CourseChapters[i].ChapterId);
+			}
+			
+			//JSRuntime.InvokeVoidAsync("console.log", CourseChapters);
+			
+			this.StateHasChanged();
+			//((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvdXN5QGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3Bvc3RhbGNvZGUiOiJNeVBhc3N3b3JkMSIsIm5iZiI6MTY3NTk5OTE1NiwiZXhwIjoxNjc1OTk5NzU2LCJpYXQiOjE2NzU5OTkxNTZ9.pLh7KKzlh18XujxY5MdEk0oNpmGRwXSEOTdMq9Du4t4");
+		}
+
+		if (string.IsNullOrEmpty(Course.Guid) == true)
+		{
+			NavigationManager.NavigateTo("/courses");
+		}
+
+
+
+		long userId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
+
+		if (userId != 0)
+		{
+			var enrollment = EnrollmentService.GetEnrollment(userId, Course.CourseId);
+			if (enrollment != null)
+			{
+				var data = CourseService.GetCourseDatumByEnrollmentId(enrollment.EnrollmentId).StudyRecord;
+				ObservableCollection<CourseIndex> dataIndices = new(JsonConvert.DeserializeObject<ObservableCollection<CourseIndex>>(data).Where(x => x.IsDeleted == false).OrderBy(x => x.CourseIndexId));
+
+				ObservableCollection<CourseIndex> filtered = new (dataIndices.Where(x => x.IsDone == false).OrderBy(x => x.CourseIndexId));
+
+				string link = $"{guid}?cryptId={enrollment.EnrollmentId}&courseIndexId={dataIndices[0].CourseIndexId}";
+
+				if (filtered.Count > 0)
+				{
+					link = $"{guid}?cryptId={enrollment.EnrollmentId}&courseIndexId={filtered[0].CourseIndexId}";
+				}
+				
+				//string link = $"{guid}?chapterId={dataIndices[0].ChapterId}&lessonId={dataIndices[0].LessonId}&contentId={dataIndices[0].ContentId}";
+
+				//if (filtered.Count > 0)
+				//{
+				//    link = $"{guid}?chapterId={filtered[0].ChapterId}&lessonId={filtered[0].LessonId}&contentId={filtered[0].ContentId}";
+				//}
+
+				JSRuntime.InvokeVoidAsync("changeToContinue", link);
+			}
+		}
+
+		//await JSRuntime.InvokeVoidAsync("initCourseDetail");
+		await JSRuntime.InvokeVoidAsync("LoadScripts", "initCourseDetail");
+	}
+
+	//protected override Task OnAfterRenderAsync(bool firstRender)
+	//{
+	//    if (firstRender)
+	//    {
+	//        //JSRuntime.InvokeVoidAsync("showLoader");
+
+	//        CourseChapters = CourseService.GetCourseChapters(Course.CourseId);
+	//        for (int i = 0; i < CourseChapters.Count; i++)
+	//        {
+	//            CourseChapters[i].CourseLessons = CourseService.GetCourseLessons(CourseChapters[i].ChapterId);
+	//        }
+	//        JSRuntime.InvokeVoidAsync("console.log", CourseChapters);
+	//        //this.StateHasChanged();
+	//    }
+
+	//    JSRuntime.InvokeVoidAsync("initCourseDetail");
+	//    return base.OnAfterRenderAsync(firstRender);
+	//}
+}

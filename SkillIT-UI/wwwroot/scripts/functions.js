@@ -1,4 +1,51 @@
 
+
+function showLoader(callback) {
+    loader.removeClass('hidden')
+    if (callback) {
+        callback()
+        return
+    }
+}
+
+function hideLoader(callback) {
+    loader.addClass('hidden')
+    if (callback) {
+        callback()
+        return true
+    }
+}
+
+function LoadScripts(param1, param2, param3) {
+    App.LoadScript('./lib/tailwindcss.js', () => {
+        App.LoadScript('./node_modules/tw-elements/dist/js/tw-elements.umd.min.js', () => {
+            //setEventHandlers();
+
+
+            if (param1) {
+                let callback = window[param1]
+                if (param3) {
+                    if (!callback || callback == undefined || callback == null) return
+                    callback(param2, param3);
+                    console.log('Called on param3')
+                    return
+                }
+                if (param2) {
+                    if (!callback || callback == undefined || callback == null) return
+                    callback(param2);
+                    console.log('Called on param2')
+                    return
+                }
+                callback()
+                console.log('Called on no param')
+            }
+            //hideLoader();
+            console.log('Done loading scripts');
+        })
+    })
+}
+
+
 function popUpBox(boxType, boxMsg, OKCN, cancelCN = "CN_Class", CallBack = function () {
     $(globalAlertConfirm).removeClass(OKCN);
     clearPopUpBox();
@@ -9,7 +56,7 @@ function popUpBox(boxType, boxMsg, OKCN, cancelCN = "CN_Class", CallBack = funct
         $('.alertBody').text(boxMsg);
     } else if (boxType == "alert") {
         $('.typeImg').attr('src', 'assets/icons/alert.png');
-        $('.typeName').text("Alert!");
+        $('.typeName').text("Alert");
         $('.alertBody').text(boxMsg);
         $('.alertCancel').show();
     } else if (boxType == "notify") {
@@ -73,22 +120,22 @@ function clearPopUpBox() {
     });
 }
 
-function menuFactory(pageName, isLoggedIn){
+function menuFactory(pageName, isLoggedIn) {
     switch (pageName) {
         case 'home':
-            
+
             break;
-    
+
         default:
             break;
     }
 }
 
-function entryValidityCheck(){
+function entryValidityCheck() {
     $('input').unbind('keyup')
-    $('input').keyup((e)=>{
+    $('input').keyup((e) => {
         let invalid = $('div.input-wrapper input:not(browser-default):focus:invalid')
-        if(invalid.length == 0) {
+        if (invalid.length == 0) {
             $(e.target.parentElement).css('border-color', '#ddd')
             return
         }
@@ -97,14 +144,22 @@ function entryValidityCheck(){
     })
 }
 
-function padTo2Digits(num){
-    return num.toString().padStart(2,'0')
+function IsInputInvalid() {
+    let invalid = $('div.input-wrapper input:not(browser-default):focus:invalid')
+    if (invalid.length == 0) {
+        return false
+    }
+    return true
+}
+
+function padTo2Digits(num) {
+    return num.toString().padStart(2, '0')
 }
 
 function formatDate(date = new Date()) {
     return [
         padTo2Digits(date.getDate()),
-        padTo2Digits(date.getMonth()+1),
+        padTo2Digits(date.getMonth() + 1),
         date.getFullYear()
     ].join('-')
 }
@@ -132,23 +187,28 @@ const encodeText = (text) => {
     return encoder.encode(text).toString()
 }
 
+
+function setUrl(url) {
+    window.history.pushState(null, null, location.origin + url)
+}
+
 const decodeText = (text) => {
     let decoder = new TextDecoder()
     return decoder.decode(Uint8Array.from(text.split(",")));
 }
 
 function blobToBase64Ansync(blob) {
-  return new Promise((resolve, _) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result);
-    reader.readAsDataURL(blob);
-  });
+    return new Promise((resolve, _) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+    });
 }
 
 function base64ToBlob(base64, mime) {
     mime = mime || '';
     var sliceSize = 1024;
-    var byteChars = window.atob(base64.substring(base64.lastIndexOf(',')+1));
+    var byteChars = window.atob(base64.substring(base64.lastIndexOf(',') + 1));
     var byteArrays = [];
     for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
         var slice = byteChars.slice(offset, offset + sliceSize);
@@ -159,7 +219,7 @@ function base64ToBlob(base64, mime) {
         var byteArray = new Uint8Array(byteNumbers);
         byteArrays.push(byteArray);
     }
-    return new Blob(byteArrays, {type: mime});
+    return new Blob(byteArrays, { type: mime });
 }
 
 function imageToBase64Async(img) {
@@ -176,7 +236,7 @@ function imageToBase64Async(img) {
     })
 }
 
-function blobToStringAsync(blob){
+function blobToStringAsync(blob) {
     return new Promise((resolve, _) => {
         let reader = new FileReader()
         let decoder = new TextDecoder()
@@ -189,14 +249,14 @@ function blobToStringAsync(blob){
 
 function dataURLtoFile(dataurl, filename) {
     var arr = dataurl.split(',')
-        var bstr = atob(arr[0]), 
-        n = bstr.length, 
+    var bstr = atob(arr[0]),
+        n = bstr.length,
         u8arr = new Uint8Array(n);
-        
-    while(n--){
+
+    while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
     }
-    return new File([u8arr], filename, {type:'image/png'});
+    return new File([u8arr], filename, { type: 'image/png' });
 }
 
 const getIP = () => {
@@ -204,7 +264,7 @@ const getIP = () => {
         type: 'get',
         url: 'https://api.ipify.org/?format=json',
         error: (error) => {
-            console.info(error.responseText);
+            //console.info(error.responseText);
         },
         success: (ip) => {
             userIPAddress = ip;
@@ -216,20 +276,21 @@ const getIP = () => {
 const sendResetcode = (email, callback) => {
     $.ajax({
         type: 'post',
-        url: `${BaseURL}api/CreateOTP/${email}?otpId=${newUserId()}`,
+        url: `${BaseURL}api/CreateOTP/${email}`,
         error: (error) => {
             console.error(error.responseText);
         },
         success: (response) => {
             if (response.success == true) {
-                callback(response.message)
+                callback(email)
                 setKeyValue('reset-email', email)
                 setKeyValue('reset-code', response.message)
                 loader.addClass('hidden')
                 //popUpBox('notify', 'Check your mail box for the reset code. Donot close this page yet', 'catAlert')
                 return
             }
-            popUpBox('notify', responseModel.message, 'catAlert')
+            console.log(response)
+            popUpBox('notify', response.message, 'catAlert')
         }
     })
 }
@@ -265,27 +326,69 @@ const resetPassword = (userCredential, callback) => {
         error: (error) => {
             console.error(error.responseText);
         },
-        success: (responseModel) => {
+        success: (response) => {
             loader.addClass('hidden')
-            if (responseModel.success == true) {
-                popUpBox('notify', 'Password reseted. Now login with your new password', 'catAlert', 'caR', callback)
+            if (response.success == true) {
+                popUpBox('notify', 'Password reset was successfully. Now login with your new password', 'catAlert', 'caR', callback)
                 return
             }
             function cb() {
-                exitModal(()=>{
+                exitModal(() => {
                     loadReset()
                 })
                 clearFlc('floating-content-2')
                 clearPopUpBox()
             }
-            popUpBox('notify', 'Failed: Restart the reset process', 'catAlert', '', cb)
+            popUpBox('notify', 'Failed:' + response.message + '<br> Please restart the reset process', 'catAlert', '', cb)
         }
     })
 }
 
-const decryptToken = (token) => {
+function decryptToken(token) {
     let [, infoSection] = token.split('.')
     return JSON.parse(atob(infoSection))
+}
+
+function getEmailFromToken(token) {
+    let [, infoSection] = token.split('.')
+    return JSON.parse(atob(infoSection)).email
+}
+
+function getUserId() {
+    if (KeyExists(userIdKey) == true) {
+        return decodeText(getKeyValue(userIdKey))
+    }
+    return '0'
+}
+
+function getAccountId() {
+    if (KeyExists(userIdKey) == true) {
+        //alert(_Detail.accountId);
+        return `${_Detail.accountId}`
+    }
+    return '0'
+}
+
+function getUserToken() {
+    if (KeyExists(tokenKey) == true) {
+        return decodeText(getKeyValue(tokenKey))
+    }
+    return '0'
+}
+
+function setUser(user) {
+    _user = user
+    _user.dob = new Date(_user.dob)
+    //console.log(user)
+    //getAccount(userId, token)
+}
+
+function getUserPassKey() {
+    return decodeText(getKeyValue(userPassKey))
+}
+
+function setAccount(account) {
+    _Detail = detail
 }
 
 const IsTokenValid = (token, callback = () => { console.info(" ") }) => {
@@ -297,11 +400,15 @@ const IsTokenValid = (token, callback = () => { console.info(" ") }) => {
         success: (responseModel) => {
             if (responseModel.success == true) {
                 callback()
+
+                //DotNet.invokeMethodAsync(skillit_UI_name, "MarkAsAuthorized", Token).then(result => {
+                //    callback(result)
+                //})
                 //console.log(responseModel.success)
             }
             else {
                 var cred = decryptToken(Token)
-                AuthenticateUser(new UserCredential(cred.email, decodeText(getKeyValue(userPassKey)), false, "", ""))
+                AuthenticateUser(new UserCredential(cred.email, decodeText(getKeyValue(userPassKey)), false, ""))
             }
         }
     })
@@ -309,12 +416,12 @@ const IsTokenValid = (token, callback = () => { console.info(" ") }) => {
 }
 
 function getTokenExpiryDate(token, callback = (result) => { console.log(result) }) {
-    DotNet.invokeMethodAsync("SkillIT-UI", "GetDateFromTokenTicks", decryptToken(Token).exp).then(result => {
+    DotNet.invokeMethodAsync(skillit_UI_name, "GetDateFromTokenTicks", decryptToken(Token).exp).then(result => {
         callback(result)
     })
 }
 
-function initiateUser(callback = () => {}, fallback = () => {}) {
+function initiateUser(callback = () => { }, fallback = () => { }) {
     if (KeyExists(tokenKey)) {
         try {
             Token = (decodeText(getKeyValue(tokenKey)))
@@ -332,7 +439,7 @@ function initiateUser(callback = () => {}, fallback = () => {}) {
     fallback()
 }
 
-const checkEmail = (email, callback = () => {}) => {
+const checkEmail = (email, callback = () => { }) => {
     $.ajax({
         type: 'post',
         url: `${BaseURL}api/User/CheckEmailExistence?email=${email}`,
@@ -340,7 +447,7 @@ const checkEmail = (email, callback = () => {}) => {
             console.log(error)
         },
         success: (message) => {
-            if(message.success == true){
+            if (message.success == true) {
                 popUpBox('alert', 'This email exists already!', 'catAlert')
                 return
             }
@@ -350,7 +457,7 @@ const checkEmail = (email, callback = () => {}) => {
     })
 }
 
-const AuthenticateUser = (userCredential, callback = () => {}) => {
+const AuthenticateUser = (userCredential, callback = () => { }) => {
     $.ajax({
         type: 'post',
         url: `${BaseURL}api/Authenticate`,
@@ -362,43 +469,54 @@ const AuthenticateUser = (userCredential, callback = () => {}) => {
 		}`,
         dataType: "json",
         contentType: "application/json",
-        success: (responseModel) => {
-            if (responseModel.success == true) {
-                //console.log(responseModel.message)
-                let data = JSON.parse(responseModel.message)
-                UserId = parseInt(data.userId);
-                Token = data.token;
-                getUser(data.userId, data.token)
+        success: (response) => {
+            //console.log(response)
+            if (response.success == true) {
+                let data = JSON.parse(response.message)
+                UserId = parseInt(data.UserId);
+                Token = data.Token;
+                getUser(data.UserId, data.Token)
+                //console.log(userCredential.password)
                 setKeyValue(userIdKey, encodeText(`${UserId}`))
                 setKeyValue(tokenKey, encodeText(Token))
                 setKeyValue(userPassKey, encodeText(userCredential.password))
                 callback()
                 chAuth()
+                //DotNet.invokeMethodAsync(skillit_UI_name, "MarkAsAuthorized", Token).then(result => {
+                //    callback(result)
+                //})
                 return
             }
             loader.addClass('hidden')
-            popUpBox('alert', 'Please check your credentials' + responseModel.message, 'catAlert')
+            popUpBox('alert', 'Please check your credentials. Response: ' + response.message, 'catAlert')
         }
-    }).done((e)=>{
+    }).done((e) => {
         chAuth()
     })
 }
 
-const addUser = (user, image, callback = () => {}) => {
-    let formData = new FormData()
-    formData.append('image', image)
+const addUser = (user, image, callback = () => { }, fallback = () => { }) => {
+    //let formData = new FormData()
+    //formData.append('image', image)
     $.ajax({
         type: 'post',
-        url: `${BaseURL}api/User/AddUser?userJson=${JSON.stringify(user)}`,
-        data: formData,
-        contentType: false,
-        processData: false,
-        error: function(error) {
+        url: `${BaseURL}api/User/AddUser`,//?userJson=${JSON.stringify(user)}`,
+        data: JSON.stringify(user),
+        dataType: 'json',
+        contentType: 'application/json',
+        error: function (error) {
             console.log(error.responseText)
+            fallback()
             popUpBox('error', `Failed: ${error.responseText}`)
         },
         success: (responseModel) => {
             if (responseModel.success == true) {
+                console.log(responseModel)
+                callback()
+                return
+            }
+            if (responseModel.message.includes("api.sendgrid.com: 443")) {
+
                 console.log(responseModel)
                 callback()
                 return
@@ -408,26 +526,53 @@ const addUser = (user, image, callback = () => {}) => {
     })
 }
 
-const updateUser = (userId, user, image, token) => {
+const updateProfilePicture = (userId, image, token) => {
     let formData = new FormData()
     formData.append('image', image)
-    user.image = ''
     $.ajax({
-        type: 'put',
-        url: `${BaseURL}api/User/UpdateUser?userJson=${JSON.stringify(user)}`,
+        type: 'post',
+        url: `${BaseURL}api/User/UpdateProfilePicture?userId=${userId}`,
         data: formData,
         contentType: false,
         processData: false,
         beforeSend: (xhr) => {
             xhr.setRequestHeader('Authorization', `Bearer ${token}`)
         },
-        error: function(error) {
+        error: function (error) {
             console.log(error.responseText)
             popUpBox('error', `Failed: ${error.responseText}`)
         },
         success: (responseModel) => {
             if (responseModel.success == true) {
-                getUser(UserId, Token, ()=>{
+                getUser(UserId, Token, () => {
+                    loadDash()
+                })
+                loader.addClass('hidden')
+                popUpBox('notify', `Message: Change was successful`, 'catAlert')
+                return
+            }
+            popUpBox('notify', `Failed: ${responseModel.message} `, 'catAlert')
+        }
+    })
+}
+
+const updateUser = (userId, user, token) => {
+    $.ajax({
+        type: 'put',
+        url: `${BaseURL}api/User/UpdateUser`, //?userJson=${JSON.stringify(user)}`,
+        data: JSON.stringify(user),
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: (xhr) => {
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`)
+        },
+        error: function (error) {
+            console.log(error.responseText)
+            popUpBox('error', `Failed: ${error.responseText}`)
+        },
+        success: (responseModel) => {
+            if (responseModel.success == true) {
+                getUser(UserId, Token, () => {
                     loadDash()
                 })
                 loader.addClass('hidden')
@@ -451,7 +596,7 @@ const logout = () => {
     location.href = location.origin
 }
 
-const getUser = (userId, token, callback = () => {}) => {
+const getUser = (userId, token, callback = () => { }) => {
     $.ajax({
         type: 'post',
         url: `${BaseURL}api/User/GetUser?id=${userId}`,
@@ -463,14 +608,106 @@ const getUser = (userId, token, callback = () => {}) => {
             _user = user
             _user.dob = new Date(_user.dob)
             //console.log(user)
-            getAccountDetail(userId, token)
+            getAccount(userId, token)
         }
     }).done(() => {
-        let initCPage = location.href.substring(location.href.lastIndexOf('#') + 1)
-        if(initCPage != 'catalogs')
+        let initCPage = location.pathname
+        if (initCPage.includes('catalogs'))
             loader.addClass('hidden')
         callback()
         //loadDash();
+    })
+}
+
+function clearInnerHtml(classname) {
+    $(`.${classname}`).html('')
+}
+
+function loadCourseList(courses) {
+    courses.forEach(course => {
+        $('.in-progess-list').html('')
+        $('.in-progess-list').append(inprogress_course_template(course))
+
+        makeGrid()
+        $(`#cip_${course.courseId}`).off('click')
+        $(`#cip_${course.courseId}`).click((e) => {
+            $('.e-view-box').remove()
+            $('.dash-body').append(cip_item_template(course))
+            $('.e-view-box').fadeIn(200, () => {
+                //$('.e-view-box').css('display', 'flex')
+                /*$(`#diseng_${element.engagementId}`).off('click')
+                $(`#diseng_${element.engagementId}`).click((event) => {
+                    //loader.removeClass('hidden')
+                    disengageUser(element)
+                    remove_eng_item_template(e.target.closest('.list-item'))
+                    remove_engagement_view_box()
+                })*/
+                $('.e-view-box').get(0).style.top = e.pageY + ($(`#cip_${course.courseId}`).get(0).offsetHeight - (e.pageY - $(`#eng_${course.courseId}`).get(0).offsetTop)) + 'px'
+                if (innerWidth <= parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', '')) * 2) {
+                    $('.e-view-box').get(0).style.left = (innerWidth / 2 - parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', '')) / 2) + 'px'
+                    return
+                }
+                $('.e-view-box').get(0).style.left = (e.pageX - parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', '')) / 2) + 'px'
+            })
+        })
+    });
+}
+
+function addToCourseInProgressList(course, link) {
+    //console.log(course)
+    //$('.in-progess-list').html('')
+    $('.in-progess-list').append(inprogress_course_template(course))
+
+    makeGrid('in-progess-list')
+    $(`#cip_${course.courseId}`).off('click')
+    $(`#cip_${course.courseId}`).click((e) => {
+        $('.e-view-box').remove()
+        $('.dash-body').append(cip_item_template(course, link))
+        $('.e-view-box').fadeIn(200, () => {
+            //$('.e-view-box').css('display', 'flex')
+            /*$(`#diseng_${element.engagementId}`).off('click')
+            $(`#diseng_${element.engagementId}`).click((event) => {
+                //loader.removeClass('hidden')
+                disengageUser(element)
+                remove_eng_item_template(e.target.closest('.list-item'))
+                remove_engagement_view_box()
+            })*/
+            $('.e-view-box').get(0).style.top = e.pageY + ($(`#cip_${course.courseId}`).get(0).offsetHeight - (e.pageY - $(`#cip_${course.courseId}`).get(0).offsetTop)) + 'px'
+            if (innerWidth <= parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', '')) * 2) {
+                $('.e-view-box').get(0).style.left = (innerWidth / 2 - parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', '')) / 2) + 'px'
+                return
+            }
+            $('.e-view-box').get(0).style.left = (e.pageX - parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', '')) / 2) + 'px'
+        })
+    })
+}
+
+function addToCompletedCourseList(course, link) {
+    //console.log(course)
+    //$('.in-progess-list').html('')
+    $('.completed-list').append(completed_course_template(course))
+
+    makeGrid('completed-list')
+    $(`#cc_${course.courseId}`).off('click')
+    $(`#cc_${course.courseId}`).click((e) => {
+        $('.e-view-box').remove()
+        $('.dash-body').append(cc_item_template(course, link))
+        $('.e-view-box').fadeIn(200, () => {
+            //$('.e-view-box').css('display', 'flex')
+            /*$(`#diseng_${element.engagementId}`).off('click')
+            $(`#diseng_${element.engagementId}`).click((event) => {
+                //loader.removeClass('hidden')
+                disengageUser(element)
+                remove_eng_item_template(e.target.closest('.list-item'))
+                remove_engagement_view_box()
+            })*/
+            $('.e-view-box').get(0).style.top = e.pageY + ($(`#cc_${course.courseId}`).get(0).offsetHeight - (e.pageY - $(`#cc_${course.courseId}`).get(0).offsetTop)) + 'px'
+            if (innerWidth <= parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', '')) * 2) {
+                $('.e-view-box').get(0).style.left = (innerWidth / 2 - parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', '')) / 2) + 'px'
+                return
+            }
+            $('.e-view-box').get(0).style.left = (e.pageX - parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', '')) / 2) + 'px'
+        })
     })
 }
 
@@ -483,53 +720,43 @@ function loadDash() {
     $('.u-dob').text(formatDate(_user.dob))
     $('.u-g').text(_user.gender)
     $('.u-address').text(_user.address)
-    if (_user.image.length != 0)
-        $('.u-img').attr('src', 'data:image/png;base64,'+_user.image)
-    
-    getCatalogCaptions(Token, ()=>{
-        getEngagements(UserId, Token, (data)=>{
+    if (_user.profileImage.length != 0)
+        $('.u-img').attr('src', 'site_data/user_profile_pictures/' + _user.profileImage + "_thumbnail.png")
+
+    getCatalogCaptions(Token, () => {
+        getEngagements(UserId, Token, (data) => {
             //try {
-                data.forEach(element => {
-                    for(let i = 0; i < CatalogCaptions.length; i++){
-                        if(element.catalogId == CatalogCaptions[i].item1) {
-                            $('.in-progess-list').html('')
-                            $('.in-progess-list').append(progress_template(element, CatalogCaptions[i].item2))
-                            
-                            makeGrid()
-                            $(`#eng_${element.engagementId}`).off('click')
-                            $(`#eng_${element.engagementId}`).click((e)=>{
-                                $('.e-view-box').remove()
-                                $('.dash-body').append(eng_item_template(element, CatalogCaptions[i].item2))
-                                $('.e-view-box').fadeIn(200, ()=>{
-                                    //$('.e-view-box').css('display', 'flex')
-                                    $(`#diseng_${element.engagementId}`).off('click')
-                                    $(`#diseng_${element.engagementId}`).click((event)=>{
-                                        //loader.removeClass('hidden')
-                                        disengageUser(element)
-                                        remove_eng_item_template(e.target.closest('.list-item'))
-                                        remove_engagement_view_box()
-                                    })
-                                    $('.e-view-box').get(0).style.top = e.pageY + ($(`#eng_${element.engagementId}`).get(0).offsetHeight - (e.pageY - $(`#eng_${element.engagementId}`).get(0).offsetTop)) + 'px'
-                                    if(innerWidth <= parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', '')) * 2){
-                                        $('.e-view-box').get(0).style.left = (innerWidth/2 - parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', ''))/2) + 'px'
-                                        return
-                                    }
-                                    $('.e-view-box').get(0).style.left = (e.pageX - parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', ''))/2) + 'px'
+            $('.engaged-list').html('')
+            data.forEach(element => {
+                for (let i = 0; i < CatalogCaptions.length; i++) {
+                    if (element.catalogId == CatalogCaptions[i].item1) {
+                        $('.engaged-list').append(progress_template(element, CatalogCaptions[i].item2))
+
+                        makeGrid('engaged-list')
+                        $(`#eng_${element.engagementId}`).off('click')
+                        $(`#eng_${element.engagementId}`).click((e) => {
+                            $('.e-view-box').remove()
+                            $('.dash-body').append(eng_item_template(element, CatalogCaptions[i].item2))
+                            $('.e-view-box').fadeIn(200, () => {
+                                //$('.e-view-box').css('display', 'flex')
+                                $(`#diseng_${element.engagementId}`).off('click')
+                                $(`#diseng_${element.engagementId}`).click((event) => {
+                                    //loader.removeClass('hidden')
+                                    disengageUser(element)
+                                    remove_eng_item_template(e.target.closest('.list-item'))
+                                    remove_engagement_view_box()
                                 })
-                                /* let elementId = e.target.closest('.e-item').id
-                                try {
-                                    Engagements.forEach(item => {
-                                        if(item.engagementId == parseInt(elementId.substring(5))){
-                                            
-                                        }
-                                    })
-                                } catch (error) {
-                                    
-                                } */
+                                $('.e-view-box').get(0).style.top = e.pageY + ($(`#eng_${element.engagementId}`).get(0).offsetHeight - (e.pageY - $(`#eng_${element.engagementId}`).get(0).offsetTop)) + 'px'
+                                if (innerWidth <= parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', '')) * 2) {
+                                    $('.e-view-box').get(0).style.left = (innerWidth / 2 - parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', '')) / 2) + 'px'
+                                    return
+                                }
+                                $('.e-view-box').get(0).style.left = (e.pageX - parseInt(getComputedStyle($('.e-view-box').get(0)).width.replace('px', '')) / 2) + 'px'
                             })
-                        }
+                        })
                     }
-                });
+                }
+            });
             /* } catch (error) {
                 
             } */
@@ -540,16 +767,16 @@ function loadDash() {
     $('.dash-greetings').fadeIn(100)
 }
 
-function stickyHeader(){
+function stickyHeader() {
     var header = $('header')
     header.unbind('scroll')
     g_header_height = parseInt(getComputedStyle(document.querySelector('header')).height.replace('px', ''))
     //g_list_height = parseInt(getComputedStyle(document.querySelector('.thumb-list')).height.replace('px', ''))
     let headerOffset = header.offset().top
-    $(document).scroll((event)=>{
+    $(document).scroll((event) => {
         if (header.offset().top < scrollY) {
-            header.next().next()[0].style.position = 'relative'
-            header.next().next()[0].style.top = g_header_height + 2 + 'px'
+            //header.next().next()[0].style.position = 'relative'
+            //header.next().next()[0].style.top = g_header_height + 2 + 'px'
             header.css('position', 'fixed')
         } else
             if (scrollY == headerOffset) {
@@ -562,10 +789,10 @@ function calc_height(h, l) {
     return (window.innerHeight - (h + l))
 }
 
-const getAccountDetail = (userId, token) => {
+const getAccount = (userId, token) => {
     $.ajax({
         type: 'post',
-        url: `${BaseURL}api/AccountDetail/GetAccountDetail?userId=${userId}`,
+        url: `${BaseURL}api/Account/GetAccount?userId=${userId}`,
         beforeSend: (xhr) => {
             xhr.setRequestHeader('Authorization', `Bearer ${token}`)
         },
@@ -579,7 +806,7 @@ const getAccountDetail = (userId, token) => {
     })
 }
 
-const getCatalogs = (token, callback = () => {}) => {
+const getCatalogs = (token, callback = () => { }) => {
     $.ajax({
         type: 'get',
         url: `${BaseURL}api/Catalog/GetAllCatalogs`,
@@ -590,7 +817,7 @@ const getCatalogs = (token, callback = () => {}) => {
             Catalogs = catalogs
             //console.log(catalogs)
         }
-    }).done(()=>{
+    }).done(() => {
         callback(cat_template)
         setEventHandlers()
         chAuth()
@@ -598,7 +825,7 @@ const getCatalogs = (token, callback = () => {}) => {
     })
 }
 
-const getCatalogCaptions = (token, callback = () => {}) => {
+const getCatalogCaptions = (token, callback = () => { }) => {
     $.ajax({
         type: 'get',
         url: `${BaseURL}api/Catalog/captions`,
@@ -610,7 +837,7 @@ const getCatalogCaptions = (token, callback = () => {}) => {
             //console.log(captions)
             callback()
         }
-    }).done(()=>{
+    }).done(() => {
         /* callback(cat_template)
         setEventHandlers()
         chAuth()
@@ -628,6 +855,36 @@ const getCatalog = (catalogId, token) => {
     })
 }
 
+function addCatalogRequest(catalog) {
+    loader.removeClass('hidden')
+    //let catalog = new Catalog($('#catCaption').val(), $('#catDesc').val(), '', '', $('#catLink').val())
+    if ((catalog.caption == null || catalog.caption == "") || (catalog.description == null || catalog.description == "") /* || c_img[0].files[0] === undefined) */) {
+        popUpBox('info', 'There are empty field(s), please check again!', 'catAlert')
+        loader.addClass('hidden')
+        return
+    }
+    let res = $.ajax({
+        type: 'get',
+        url: `https://www.youtube.com/oembed?url=${catalog.catalogLink}`,
+        error: (error) => {
+            popUpBox('info', 'Unable to get data from url! Reason:' + error.responseText, 'catAlert')
+            loader.addClass('hidden')
+            catalog.data = ''
+        },
+        success: (data) => {
+            //console.log(data)
+        }
+    }).done(() => {
+        catalog.data = JSON.stringify(res.responseJSON)
+        console.log(JSON.stringify(catalog))
+        addCatalog(catalog, new File([], 'image', { type: 'image/jpg' }), Token)
+        catalog = new Catalog()
+        $('input').val('')
+        $('textarea').val('')
+    })
+
+}
+
 const addCatalog = (catalog, image, token = '') => {
     let formData = new FormData()
     formData.append('image', image);
@@ -642,7 +899,7 @@ const addCatalog = (catalog, image, token = '') => {
         beforeSend: (xhr) => {
             xhr.setRequestHeader('Authorization', `Bearer ${token}`)
         },
-        error: function(error) {
+        error: function (error) {
             console.error(error.responseText)
             popUpBox('notify', `Failed: ${error.responseText} `, 'catAlert')
             loader.addClass('hidden')
@@ -650,9 +907,12 @@ const addCatalog = (catalog, image, token = '') => {
         success: (responseModel) => {
             if (responseModel.success == true) {
                 getCatalogs(Token)
-                loadCatalog()
+                //loadCatalog()
+                function cb() {
+                    location.reload()
+                }
                 console.log(responseModel.message)
-                popUpBox('done', 'Success: Catalog successfully added.')
+                popUpBox('done', 'Success: Catalog successfully added.', "cat_add_message_btn", "", cb)
                 return
             }
             loader.addClass('hidden')
@@ -687,8 +947,8 @@ const updateCatalog = (catalog, image, token) => {
     })
 }
 
-const engageRequest = (engagement, token, callback = () => {}) => {
-    console.log(JSON.stringify(engagement))
+const engageRequest = (engagement, token, callback = () => { }) => {
+    //console.log(engagement)
     $.ajax({
         type: 'post',
         url: `${BaseURL}api/Engagement/add`,
@@ -713,16 +973,17 @@ const engageRequest = (engagement, token, callback = () => {}) => {
     })
 }
 
-function makeGrid() {
-    var el = $('div.dash-element .list').get(0)
-    if(el.childElementCount <= 0) {
+function makeGrid(name) {
+    var el = $(`.${name}.list`).get(0)
+    if (el.childElementCount <= 0) {
         el.classList.remove('list-grid')
         return
     }
     el.classList.add('list-grid')
 }
 
-const getEngagements = (userId, token, callback = () => {}) => {
+const getEngagements = (userId, token, callback = () => { }) => {
+    //console.log(userId)
     $.ajax({
         type: 'get',
         url: `${BaseURL}api/Engagement/get?userId=${userId}`,
@@ -731,7 +992,7 @@ const getEngagements = (userId, token, callback = () => {}) => {
         },
         error: (error) => {
             loader.addClass('hidden')
-            popUpBox('error', `Failed: ${error.responseText} `, 'catAlert')
+            //popUpBox('error', `Failed: ${error.responseText} `, 'catAlert')
         },
         success: (data) => {
             Engagements = data
@@ -757,7 +1018,24 @@ const getEngagementslist = (userId, token) => {
     })
 }
 
-const disengageRequest = (engagement, token, callback = () => {}) => {
+const getEngagementUserCatalogIdList = (catalogId, userId, token, callback = () => { }) => {
+    $.ajax({
+        type: 'get',
+        url: `${BaseURL}api/Engagement/getUserCatalogIdList?catalogId=${catalogId}&userId=${userId}`,
+        beforeSend: (xhr) => {
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`)
+        },
+        error: (error) => {
+            console.log(error.responseText)
+        },
+        success: (data) => {
+            EngagementUserCatalogIdList = data.join(', ')
+            callback()
+        }
+    })
+}
+
+const disengageRequest = (engagement, token, callback = () => { }) => {
     $.ajax({
         type: 'delete',
         url: `${BaseURL}api/Engagement/remove`,
@@ -805,10 +1083,9 @@ const getUserSkill = (userId, token) => {
         success: (skills) => {
             userSkills = skills;
         },
-    }).done(()=> {
+    }).done(() => {
         loadSkills()
-        $('.sk-del').click((e) => 
-        {
+        $('.sk-del').click((e) => {
             let id = e.target.parentElement.id.substring(6) || e.target.id.substring(6);
             deleteUserSkill(id, Token)
             $(e.target.closest('.skill')).remove()
@@ -964,12 +1241,31 @@ const deleteUserSocial = (id, token) => {
         beforeSend: (xhr) => {
             xhr.setRequestHeader('Authorization', `Bearer ${token}`)
         },
-        error: (error) => {console.log(error)},
+        error: (error) => { console.log(error) },
         success: (responseModel) => {
-            if(responseModel.success == true){
+            if (responseModel.success == true) {
                 getUserSocial(UserId, Token)
             }
             popUpBox('notify', `Message: ${responseModel.message} `, 'catAlert')
         }
     })
+}
+
+async function getAccountNotifications(accountId, token, callback) {
+    if (token == '') return
+    let request = $.ajax({
+        type: "get",
+        url: `${BaseURL}api/account/notifications/getAccountNotifications?accountId=${accountId}`,
+        beforeSend: (xhr) => {
+            xhr.setRequestHeader("Authorization", `Bearer ${token}`)
+        },
+        error: (error) => {
+            console.log("Error on getting notifications. Details:", error)
+        },
+        success: (notifications) => {
+            //console.log(notifications)
+        },
+    })
+
+    return request
 }

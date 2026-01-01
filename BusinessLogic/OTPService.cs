@@ -35,24 +35,34 @@ namespace BusinessLogic
             }
         }
 
-        public ResetModel CreateOTP(Otp otp)
+        public ResponseModel AddEmailOTP(Otp otp)
         {
+            if (otp == null) return new(false, "OTPNull");
+            if (DatabaseContext.Otps.Find(otp.OtpId) != null) return new(false, "OTPExist");
             try
             {
-                otp.ExpiryDate = DateTime.Now.AddDays(1);
+                //otp.ExpiryDate = DateTime.Now.AddDays(1);
                 DatabaseContext.Add<Otp>(otp);
                 DatabaseContext.SaveChanges();
-                return new()
-                {
-                    Otp = otp.Code,
-                    UserId = otp.UserId,
-                    OtpId = otp.OtpId,
-                    Password = "",
-                };
+                return new(true, "Success");
             }
             catch (Exception ex)
             {
-                return new();
+                return new(false, $"Failed: {ex.Message}");
+            }
+        }
+
+        public ResponseModel CreateOTP(Otp otp)
+        {
+            try
+            {
+                DatabaseContext.Add<Otp>(otp);
+                DatabaseContext.SaveChanges();
+                return new(false, $"Success");
+            }
+            catch (Exception ex)
+            {
+                return new(false, $"Failed: {ex.Message}");
             }
         }
 
@@ -61,9 +71,24 @@ namespace BusinessLogic
             throw new NotImplementedException();
         }
 
+        public Otp GetOTP(long id)
+        {
+            return DatabaseContext.Otps.Where(o => o.UserId == id).FirstOrDefault();
+        }
+
         public Otp GetOTP(long id, long userId)
         {
             return DatabaseContext.Otps.Where(o => o.OtpId == id && o.UserId == userId).FirstOrDefault();
+        }
+
+        public Otp GetOTP(long userId, string guid)
+        {
+            return DatabaseContext.Otps.Where(o => o.Guid == guid && o.UserId == userId).FirstOrDefault();
+        }
+
+        public Otp GetUserOTP(long userId)
+        {
+            return DatabaseContext.Otps.Where(o => o.UserId == userId).FirstOrDefault();
         }
 
         public ObservableCollection<Otp> GetOTPs()

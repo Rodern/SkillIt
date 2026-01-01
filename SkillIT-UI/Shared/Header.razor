@@ -1,35 +1,65 @@
 ﻿<header class="landing-header w-[100vw] flex flex-row shadow items-center px-3 h-12">
-    <NavLink href="/" class="org-info flex flex-row items-center gap-2 ml-0 mr-auto">
+    <NavLink href="/" @onclick="ShowLoading" class="org-info flex flex-row items-center gap-2 ml-0 mr-auto">
         <img src="assets/icons/logo.png" class="h-24" alt="">
         <h4 class="org-name hidden ml-2 font-bold text-lg hidden">SkillIT</h4>
     </NavLink>
     <nav class="header-nav hidden md:flex ml-auto gap-5 flex-row text-slate-200">
-        <NavLink href="/dashboard" class="nav-links n-usr flex flex-row justify-between hover:bg-blue-700 hover:shadow-md focus:bg-blue-800 rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent ">
-            <span class="nav-un">Dashboard</span>
-            <!-- <img src="assets/icons/user.png" class="w-5 h-5 ml-5" alt=""> -->
+        <NavLink href="/" @onclick="ShowLoading"
+                 class="nav-links flex flex-row justify-between hover:bg-blue-700 hover:shadow-md rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent ">
+            Home
         </NavLink>
-        <NavLink href="catalogs"
-                 class="nav-links flex flex-row justify-between hover:bg-blue-700 hover:shadow-md focus:bg-blue-800 rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent ">
+        <AuthorizeView>
+            <Authorized>
+                <NavLink href="/dashboard" @onclick="ShowLoading" class="nav-links n-usr flex flex-row justify-between hover:bg-blue-700 hover:shadow-md rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent ">
+                    <span class="nav-un">Dashboard</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-1 user-svg">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                    <!-- <img src="assets/icons/user.png" class="w-5 h-5 ml-5" alt=""> -->
+                </NavLink>
+            </Authorized>
+        </AuthorizeView>
+        <NavLink href="/courses" @onclick="ShowLoading"
+                 class="nav-links flex flex-row justify-between hover:bg-blue-700 hover:shadow-md rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent ">
+            Courses
+        </NavLink>
+        <NavLink href="/catalogs" @onclick="ShowLoading"
+                 class="nav-links flex flex-row justify-between hover:bg-blue-700 hover:shadow-md rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent ">
             Catalogs
         </NavLink>@*
         <a
         class="nav-links nc-btn flex flex-row justify-between hover:bg-blue-700 hover:shadow-md focus:bg-blue-800 rounded w-auto px-3 py-1 border border-slate-200 hover:border-transparent ">
         Catalogs
         </a>*@
-        <a class="nav-links nl-btn hover:bg-rose-500 hover:shadow-md focus:bg-rose-600 rounded px-3 py-1 border border-slate-200 hover:border-transparent">
-            Sign
-            In
-        </a>
-        <a class="nav-links ns-btn hover:bg-blue-500 hover:shadow-md focus:bg-blue-600 rounded px-3 py-1 border border-slate-200 hover:border-transparent ">
-            Sign
-            Up
-        </a>
-        <NavLink href="/#about" class="nav-links l_about hover:shadow-md hover:bg-amber-500 focus:bg-amber-600 rounded px-3 py-1 border border-slate-200 hover:border-transparent ">
-            About
-        </NavLink>
+        <AuthorizeView>
+            <NotAuthorized>
+                <a class="nav-links nl-btn hover:bg-rose-500 hover:shadow-md focus:bg-rose-600 rounded px-3 py-1 border border-slate-200 hover:border-transparent">
+                    Sign
+                    In
+                </a>
+                <a class="nav-links hidden ns-btn hover:bg-blue-500 hover:shadow-md focus:bg-blue-600 rounded px-3 py-1 border border-slate-200 hover:border-transparent ">
+                    Sign
+                    Up
+                </a>
+                <NavLink href="/?section=about" class="nav-links l_about hover:shadow-md rounded px-3 py-1 border border-slate-200 hover:border-transparent ">
+                    About Us
+                </NavLink>
+            </NotAuthorized>
+        </AuthorizeView>
     </nav>
+    <AuthorizeView>
+        <Authorized>
+            <button id="notif_btn"
+                    class="menu-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                </svg>
+            </button>
+        </Authorized>
+    </AuthorizeView>
     <button id="menu_btn"
-            class="flex  flex-row hover:bg-blue-700 hover:shadow-md focus:shadow-lg rounded px-1 py-1 ml-5 gap-1 border border-slate-200 focus:border-1 hover:border-transparent focus:outline-blue-800">
+            class="menu-btn">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
             <path fill="black" stroke-linecap="round" stroke-linejoin="round"
                   d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -39,57 +69,97 @@
 </header>
 <nav class="menu hidden absolute ml-auto shadow-2xl text-slate-900 text-md p-3 backdrop-blur-sm backdrop-opacity-25 bg-white ">
     <ul class="menu-items">
-        <li class="menu-items m-usr avt-state flex flex-col
+        <AuthorizeView>
+            <Authorized>
+                <li class="menu-items m-usr avt-state flex flex-col
                 justify-between items-center
                 hover:border-b border-slate-200 my-1
                 mb-10 py-1 pl-2 rounded hover:text-white
                 text-lg hover:shadow hover:bg-blue-600
                 backdrop-blur-sm shadow"
-            style="border: none;">
-            <NavLink href="/dashboard" class="w-full h-full flex flex-col
+                    style="border: none;">
+                    <NavLink href="/dashboard" @onclick="ShowLoading" class="w-full h-full flex flex-col
                 justify-between items-center pr-2">
-                <img src="../assets/images/user-def.png" class="u-img h-[20vh] w-[20vh] mb-3" alt="">
-                <span class="nav-un">AlainKimbu</span>
-            </NavLink>
-        </li>
-        <li class="menu-items p-avt avt-state flex flex-col
+                        <img src="../assets/images/user-def.png" class="u-img h-[20vh] w-[20vh] mb-3" alt="">
+                        <span class="nav-un">AlainKimbu</span>
+                    </NavLink>
+                </li>
+            </Authorized>
+            <NotAuthorized>
+                <li class="menu-items p-avt avt-state flex flex-col
                 justify-between items-center pr-2
                 hover:border-b border-slate-200 my-1
                 mb-10 py-1 pl-2 rounded hover:text-white
                 text-lg hover:shadow hover:bg-blue-600
                 backdrop-blur-sm shadow"
-            style="border: none;">
-            <img src="../assets/images/user-def.png" class="u-img h-[20vh] w-[20vh] mb-3" alt="">
-            <i class="nav-un " style="font-size:1rem;font-weight: 400;">Not Signed In</i>
-        </li>
-        <NavLink href="/" class="menu-items home-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                    style="border: none;">
+                    <img src="../assets/images/user-def.png" class="u-img h-[20vh] w-[20vh] mb-3" alt="">
+                    <i class="nav-un " style="font-size:1rem;font-weight: 400;">Not Signed In</i>
+                </li>
+            </NotAuthorized>
+        </AuthorizeView>
+        <NavLink href="/" @onclick="ShowLoading" class="menu-items home-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
             Home
         </NavLink>
-        <NavLink href="catalogs"
+        <NavLink href="/catalogs" @onclick="ShowLoading"
                  class="menu-items hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
             Catalogs
         </NavLink>
-        <NavLink href="/courses" class="menu-items hidden mcb-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+        <NavLink href="/courses" @onclick="ShowLoading" class="menu-items hidden mcb-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
             Courses
         </NavLink>
-        <li class="menu-items ms-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
-            Sign Up
-        </li>
-        <li class="menu-items ml-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
-            Sign In
-        </li>
+        <AuthorizeView>
+            <NotAuthorized>
+                <li class="menu-items ms-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                    Sign Up
+                </li>
+                <li class="menu-items ml-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                    Sign In
+                </li>
+            </NotAuthorized>
+            <Authorized>
+                <NavLink href="/notifications" @onclick="ShowLoading" class="menu-items un_link hidden hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                    Notifications
+                </NavLink>
+            </Authorized>
+        </AuthorizeView>
+        <AuthorizeView Policy="admin">
+            <Authorized>
+                <NavLink href="/admin" @onclick="ShowLoading" class="menu-items hidden hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                    Admin Panel
+                </NavLink>
+            </Authorized>
+        </AuthorizeView>
+        <NavLink href="/feedback" class="menu-items hidden hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
+                Feedback
+        </NavLink>
         <li class="menu-items l_about hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
-            <NavLink href="/#about" style="width: -webkit-fill-available; display: block;">About</NavLink>
+            <a href="/?section=about" style="width: -webkit-fill-available; display: block;">About</a>
         </li>
-        <li class="menu-items hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:text-white text-lg hover:shadow hover:bg-blue-600 backdrop-blur-sm">
-            <a>Feedback</a>
-        </li>
-        <li class="menu-items mlg-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:shadow hover:bg-red-700 backdrop-blur-sm">
-            Logout
-        </li>
+        <AuthorizeView>
+            <Authorized>
+                <li class="menu-items mlg-btn hover:border-b border-slate-200 my-1 py-1 pl-2 rounded hover:shadow hover:bg-red-700 backdrop-blur-sm">
+                    Logout
+                </li>
+            </Authorized>
+        </AuthorizeView>
     </ul>
 </nav>
 
+
+<AuthorizeView>
+    <Authorized>
+        <div class="np-wrapper" id="np_wrapper">
+            @*<NotificationPanel></NotificationPanel>*@
+        </div>
+    </Authorized>
+</AuthorizeView>
+
 @code {
 
+    void ShowLoading()
+    {
+        //JSRuntime.InvokeVoidAsync("alert", NavigationManager.Uri);
+        JSRuntime.InvokeVoidAsync("showLoader");
+    }
 }

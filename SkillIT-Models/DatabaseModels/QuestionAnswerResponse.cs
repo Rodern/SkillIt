@@ -11,7 +11,7 @@ namespace SkillIT_Models.DatabaseModels
         public int QuestionId { get; set; }
         public int EnrollmentId { get; set; }
         public int QuestionAnswerId { get; set; }
-        public DateTime TimeAnswer { get; set; }
+        public DateTime TimeAnswered { get; set; }
 
         public virtual Enrollment Enrollment { get; set; }
         public virtual Question Question { get; set; }

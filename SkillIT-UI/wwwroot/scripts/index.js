@@ -1,160 +1,41 @@
-class UserCredential {
-    constructor(email, password, rememberMe = false, code = "") {
-        this.email = email
-        this.password = password
-        this.rememberMe = rememberMe
-        this.code = code
-    }
-}
 
-class Authenticate {
-    constructor(email, password, rememberMe = false, code = "") {
-        this.email = email
-        this.password = password
-        this.rememberMe = rememberMe;
-        this.code = code
-    }
-}
-
-class ResponseModel {
-    constructor(status, message) {
-        this.status = status
-        this.message = message
-    }
-}
-
-class LoginInfo {
-    constructor(longitude, latitude, dateTime, isOnline, isLoggedOut, ip) {
-        this.longitude = longitude
-        this.latitude = latitude
-        this.dateTime = dateTime
-        this.isOnline = isOnline
-        this.isLoggedOut = isLoggedOut
-        this.ip = ip
-    }
-}
-
-class LoginAttemp {
-    constructor(dateTime, reason, status) {
-        this.dateTime = dateTime
-        this.reason = reason
-        this.status = status
-    }
-}
-
-class User {
-    constructor(userId, gender, firstname, lastname, email, password, dob, address, dateCreated, phone, image, loginInfos, loginAttemps){
-        this.userId = userId
-        this.gender = gender
-        this.firstName = firstname
-        this.lastName = lastname
-        this.email = email
-        this.password = password
-        this.dob = dob
-        this.address = address
-        this.dateCreated = dateCreated
-        this.phone = phone
-        this.image = image
-        this.loginInfos = loginInfos
-        this.loginAttemps = loginAttemps
-    }
-}
-
-class AccountDetail {
-    constructor(acId, userId, lastLogin, accountType, loginInfos, accountStatus, loginAttemps) {
-        this.acId = acId
-        this.userId = userId
-        this.lastLogin = lastLogin
-        this.accountType = accountType
-        this.loginInfo = loginInfos
-        this.accountStatus = accountStatus
-        this.loginAttemp = loginAttemps
-        this.user = null
-    }
-}
-
-class Catalog {
-    constructor(caption, description, image, data, catalogLink = 'not set') {
-        this.catalogId = 0
-        this.caption = caption
-        this.description = description
-        this.image = image
-        this.data = data
-        this.catalogLink = catalogLink
-        this.userAchievements = []
-        this.engagements = []
-    }
-}
-
-const Level = [
-    'Beginner',
-    'Amateur',
-    'Intermediate',
-    'Professional',
-    'GodLevel &#128516'
-]
-
-class Engagement {
-    constructor(userId, catalogId) {
-        this.engagementId = 0
-        this.userId = userId
-        this.catalogId = catalogId
-        this.engagedDate = new Date()
-        this.user = null
-        this.catalog = null
-    }
-}
-
-class Skill {
-    constructor(skillId, name, level) {
-        this.skillId = skillId
-        this.name = name
-        this.level = level
-        this.userSkills = new Array()
-    }
-}
-
-class UserSkill {
-    constructor(userSkillId, skillId, userId, skill) {
-        this.userSkillId = userSkillId
-        this.skillId = skillId
-        this.userId = userId
-        this.skill = skill
-        this.user = null
-    }
-}
-
-class Social {
-    constructor(socialId, name, link) {
-        this.socialId = socialId
-        this.name = name
-        this.link = link
-        this.userSocials = []
-    }
-}
-
-class UserSocial {
-    constructor(userSocialId, socialId, userId, social) {
-        this.userSocialId = userSocialId
-        this.socialId = socialId
-        this.userId = userId
-        this.social = social
-        this.user = null
-    }
-}
-
-const loader = $('.loading-frame')
 
 const eng_item_template = (item, caption) => {
     return `<div class="e-view-box shadow-lg">
                 <div class="mb-2">
                     <img src="../assets/icons/skill_it 256x256.png" alt="image">
                     <h4 class="text-slate-800">
-                        .Net MAUI for beginners
+                        ${caption}
                     </h4>
                 </div>
-                <button id="diseng_${item.engagementId}" class="disengage-user-btn text-slate-800 relative text-md font-bold text-white w-auto md:text-center hover:border hover:text-[red] rounded px-2 sm:px-2">DISENGAGE</button>
-                <button id="visit_${item.catalogId}" class="visit-cat relative text-md font-bold text-white w-24 md:text-center bg-blue-600 hover:bg-blue-800 rounded px-2 sm:px-2">VISIT</button>
+                <button id="diseng_${item.engagementId}" class="disengage-user-btn">DISENGAGE</button>
+                <a id="visit_${item.catalogId}" href="/catalog/${item.catalogId}" class="visit-cat relative text-white w-24 text-center bg-blue-600 hover:bg-blue-800 rounded px-2 sm:px-2">VISIT</a>
+            </div>`
+}
+
+const cip_item_template = (course, link) => {
+    return `<div class="e-view-box shadow-lg">
+                <div class="mb-2">
+                    <img src="../assets/icons/skill_it 256x256.png" alt="image">
+                    <h4 class="text-slate-800">
+                        ${course.name}
+                    </h4>
+                </div>
+                <button id="unenroll_${course.courseId}" class="disengage-user-btn hidden text-slate-800 relative text-white w-auto text-center hover:border hover:text-[red] rounded px-2 sm:px-2">DISENGAGE</button>
+                <a id="visit_course_${course.courseId}" href="${link}" class="visit-course relative text-white w-24 text-center bg-blue-600 hover:bg-blue-800 rounded px-2 sm:px-2">VISIT</a>
+            </div>`
+}
+
+const cc_item_template = (course, link) => {
+    return `<div class="e-view-box shadow-lg">
+                <div class="mb-2">
+                    <img src="../assets/icons/skill_it 256x256.png" alt="image">
+                    <h4 class="text-slate-800">
+                        ${course.name}
+                    </h4>
+                </div>
+                <button id="unenroll_${course.courseId}" class="disengage-user-btn hidden text-slate-800 relative text-white w-auto text-center hover:border hover:text-[red] rounded px-2 sm:px-2">DISENGAGE</button>
+                <a id="visit_course_${course.courseId}" href="${link}" class="visit-course relative text-white w-24 text-center bg-blue-600 hover:bg-blue-800 rounded px-2 sm:px-2">Status</a>
             </div>`
 }
 
@@ -179,20 +60,53 @@ const progress_template = (item, caption) => {
             </li>`
 }
 
+const inprogress_course_template = (item) => {
+    return `<li class="list-item">
+                <a id="cip_${item.courseId}" class="e-item flex border">
+                    <img class="bdg_img" src="assets/icons/skill_it 256x256.png" alt="bage_image">
+                    <h4 class="truncate" >${item.name}</h4>
+                </a>
+            </li>`
+}
+
+const completed_course_template = (item) => {
+    return `<li class="list-item">
+                <a id="cc_${item.courseId}" class="e-item flex border">
+                    <img class="bdg_img" src="assets/icons/skill_it 256x256.png" alt="bage_image">
+                    <h4 class="truncate" >${item.name}</h4>
+                </a>
+            </li>`
+}
+
 const badge_template = (badge) => {
     return `<a class="flex border" href="">
-                <img src="" alt="bage_image">
+                <img src="" alt="badge_image">
                 <h4>${badge}</h4>
             </a>`
 }
 
+function getThumbnail(data) {
+    //console.log(JSON.parse(data).thumbnail_url)
+    return JSON.parse(data).thumbnail_url
+}
+
+function geVideoTitle(data) {
+    //console.log(JSON.parse(data).thumbnail_url)
+    return JSON.parse(data).title
+}
+
+function geVideoHtml(data) {
+    //console.log(JSON.parse(data).thumbnail_url)
+    return JSON.parse(data).html
+}
+
 let cat_template = (catalog) => {
-    return `<div class="catalog flex flex-col justify-center shadow-lg rounded-lg w-60 h-auto h-max px-2" id=${catalog.catalogId}>
+    return `<div class="catalog flex flex-col justify-center shadow-lg rounded-lg w-64 h-auto h-max px-2" id=${catalog.catalogId}>
                 <img src="${JSON.parse(catalog.data).thumbnail_url}" alt="" class="w-full h-40 rounded-md">
                 <h4 class="cat-name font-bold text-lg">${catalog.caption}</h4>
                 <p class="cat-desc brak-words truncate  pb-4" title="${catalog.description}">${catalog.description}</p>
                 <a id="cat_${catalog.catalogId}"
-                    class="view-cat text-md mt-auto text-center text-white bg-blue-600 w-24 hover:shadow-lg hover:bg-blue-700 rounded px-2 py-2" >View</a>
+                    class="view-cat btn-large header-btn mt-auto w-24" >View</a>
             </div>`
 }
 
@@ -228,8 +142,11 @@ const info_edit_template = (name, type, max, placeholder, callback) => {
     let t = `<div id="fl_edit" class="in  absolute bg-white  flex flex-row h-10 rounded-lg border shadow-2xl w-60 justify-center items-center">
                 <input  type="${type}" maxlength="${max}" placeholder="${placeholder}" class="w-full px-1 mx-1">
                 <button id="save-${name}" title="save change"
-                    class="edit-info h-8 w-8 mr-1 hover:bg-blue-600 focus:bg-blue-700 bg-slate-200 p-[.1rem] ml-auto rounded-md flex justify-center items-center">
-                    <img class=" h-8 w-8 m-5 " src="assets/icons/save.svg" alt="">
+                    class="save-info h-8 w-8 mr-1 hover:bg-blue-600 focus:bg-blue-700 bg-slate-200 p-[.1rem] ml-auto rounded-md flex justify-center items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"  class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                    </svg>
+
                 </button>
             </div>`
     $('.personal').append(t).ready(() => {
@@ -249,8 +166,8 @@ const info_edit_template = (name, type, max, placeholder, callback) => {
             callback(val)
             updateUser(
                 UserId,
-                new User(UserId, _user.gender, _user.firstName, _user.lastName, _user.email, decodeText(getKeyValue(userPassKey)), _user.dob, _user.address, _user.dateCreated, _user.phone, '', JSON.parse(_Detail.loginInfo), JSON.parse(_Detail.loginAttemp)),
-                dataURLtoFile(_user.image, 'userImage'),
+                new User(UserId, _user.gender, _user.firstName, _user.lastName, _user.email, decodeText(getKeyValue(userPassKey)), _user.dob, _user.address, _user.dateCreated, _user.phone, _user.profileImage, JSON.parse(_Detail.loginInfo), JSON.parse(_Detail.loginAttemp)),
+                //dataURLtoFile(_user.image, 'userImage'),
                 Token
             )
 
@@ -265,8 +182,10 @@ const info_img_template = (name, accept = '') => {
     t = `<div id="fl_edit" class="in  absolute bg-white  flex flex-row h-10 rounded-lg border shadow-2xl w-60 justify-center items-center">
                 <input  type="file"  accept="${accept}" class="w-full px-1 mx-1">
                 <button id="save-${name}" title="save change"
-                    class="edit-info h-8 w-8 mr-1 hover:bg-blue-600 focus:bg-blue-700 bg-slate-200 p-[.1rem] ml-auto rounded-md flex justify-center items-center">
-                    <img class=" h-8 w-8 m-5 " src="assets/icons/save.svg" alt="">
+                    class="save-info h-8 w-8 mr-1 hover:bg-blue-600 focus:bg-blue-700 bg-slate-200 p-[.1rem] ml-auto rounded-md flex justify-center items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"  class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                    </svg>
                 </button>
             </div>`
     $('.avt').append(t);
@@ -282,9 +201,8 @@ const info_img_template = (name, accept = '') => {
                 return
             }
             loader.removeClass('hidden')
-            updateUser(
+            updateProfilePicture(
                 UserId,
-                new User(UserId, _user.gender, _user.firstName, _user.lastName, _user.email, decodeText(getKeyValue('pass')), _user.dob, _user.address, _user.dateCreated, _user.phone, '', JSON.parse(_Detail.loginInfo), JSON.parse(_Detail.loginAttemp)),
                 file[0].files[0],
                 Token
             )
@@ -301,6 +219,35 @@ $(document).click((e)=>{
     $('#fl_edit').remove()
     if (e.target.className == 'menu' || e.target.closest('.menu') != null || e.target.id == 'menu_btn' || e.target.closest('#menu_btn') != null) return
     $('.menu').fadeOut(200)
+    if (e.target.className == 'notification-detail-card' || e.target.closest('.notification-detail-card') != null || e.target.className == 'ni-side-btn' || e.target.closest('.ni-side-btn') != null) return
+    $('.notification-detail-card').fadeOut(200, () => {
+        $('.notification-detail-card').remove()
+        isNPDetailOpen = false
+    })
+    if (e.target.className == 'notification-panel' || e.target.closest('.notification-panel') != null || e.target.id == 'notif_btn' || e.target.closest('#notif_btn') != null) return
+    $('.notification-panel').fadeOut(200, () => {
+        isNPOpen = false
+        isNPDetailOpen = false
+    })
+    if (e.target.className == 'ni-options-wrapper' || e.target.closest('.ni-options-wrapper') != null || e.target.className == 'ni-o-option' || e.target.closest('.ni-o-option') != null) return
+    $('.ni-options-wrapper').fadeOut(200)
+})
+
+$(document).scroll((e) => {
+    //if (e.target.className == 'menu' || e.target.closest('.menu') != null || e.target.id == 'menu_btn' || e.target.closest('#menu_btn') != null) return
+    //$('.menu').fadeOut(200)
+    //if (e.target.className == 'notification-panel' || e.target.closest('.notification-panel') != null || e.target.id == 'notif_btn' || e.target.closest('#notif_btn') != null) return
+    $('.notification-panel').fadeOut(200, () => {
+        isNPOpen = false
+        isNPDetailOpen = false
+    })
+    //if (e.target.className == 'notification-detail-card' || e.target.closest('.notification-detail-card') != null || e.target.id == 'ni-o-option' || e.target.closest('#notif_btn') != null) return
+    $('.notification-detail-card').fadeOut(200, () => {
+        $('.notification-detail-card').remove()
+        isNPDetailOpen = false
+    })
+    //if (e.target.className == 'ni-options-wrapper' || e.target.closest('.ni-options-wrapper') != null || e.target.id == 'ni-o-option' || e.target.closest('#notif_btn') != null) return
+    $('.ni-options-wrapper').fadeOut(200)
 })
 
 const loadLandingPage = () => {
@@ -369,6 +316,7 @@ let loadSignin = () => {
 
 const loadReset = () => {
     loader.removeClass('hidden')
+    $('title').text('SkillIT - Reset password')
     $('.modal').remove()
     $('.floating-content-2').load(location.origin + '/routes/reset.html').ready(() => {
         setEventHandlers()
@@ -523,24 +471,18 @@ const list2 = ".m-usr, .n-usr, .for-l, .mlg-btn"
 function chAuth(){
     if (_Detail.userId === undefined || _user.userId === undefined) {
         //console.log(true)
-        $("" + list2 + "").hide()
-        $("" + list1 + "").show()
+        //$("" + list2 + "").hide()
+        //$("" + list1 + "").show()
         $('.addToProfileBtn').addClass('hidden')
     }
     else {
         $('.addToProfileBtn').removeClass('hidden')
         $(' .m-usr > a > span, n-usr > span').text(_user.firstName + " " + _user.lastName);
         //$(' .m-usr > span, .n-usr').append(``)
-        $('.user-svg').remove()
-        $('.nav-links.n-usr').append(`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                    class="w-5 h-5 ml-1 user-svg">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                </svg>`)
-        if (_user.image.length != 0)
-            $('.u-img').attr('src', 'data:image/png;base64,'+_user.image)
-        $("" + list1 + "").hide()
-        $("" + list2 + "").show()
+        if (_user.profileImage.length != 0)
+            $('.u-img').attr('src', 'site_data/user_profile_pictures/' + _user.profileImage + "_thumbnail.png")
+        //$("" + list1 + "").hide()
+        //$("" + list2 + "").show()
         /* try {
             if (_Detail.accountType == 'admin') {
                 $('.add-catalog-form').removeClass('hidden')
@@ -568,22 +510,31 @@ const exitModal = (callback = () => { }) => {
 
 function setEventHandlers() {
     $(`
-        .org-info, .home-btn, .menu ul li, 
-        .about, #menu_btn, .ml-btn, 
+        .org-info, .home-btn, .menu ul li, .menu ul a, 
+        .about, #menu_btn, #notif_btn, .ml-btn, 
         .nl-btn, .bl-btn, .ms-btn, .ns-btn, 
         .bs-btn, .bc-btn, .nc-btn, .mc-btn, 
         .exit, .to-login, .to-signup, .forgot, 
         .mlg-btn, .nlg-btn, .ds-btn, .m-usr, 
         .n-usr, .code-submit, .email-submit, 
         .submit-email-btn, .code-send-btn, 
-        #reset_email, .l_about
+        #reset_email, .l_about, .notification-item
     `).unbind('click')
+
+    $('.notification-item').click((e) => {
+        globalEventPointer = e
+    })
+
     //$('.pg-section *').unbind('click')
     $('.org-info, .home-btn').click((e)=>{
         //_ROUTER.navigate('/home')
     })
-    $('.menu ul li').click(()=>{
+    $('.menu ul li, .menu ul a').click(()=>{
         $('.menu').fadeOut(200)
+    })
+    $('.np-see-all').click(()=>{
+        $('.notification-panel').fadeOut(200)
+        isNPOpen = false
     })
     $('.about, .l_about').click((e) => {
         loadAbout()
@@ -593,11 +544,24 @@ function setEventHandlers() {
         $('.menu').fadeToggle(200)
     })
     
+    $('#notif_btn').click(() => {
+        $('.notification-panel').fadeToggle(200)
+        if (isNPOpen == true) {
+            isNPOpen = false
+            return
+        }
+        isNPOpen = true
+    })
+    
     try {
         $('nav.menu').css({
-        'top': getComputedStyle(document.querySelector('header')).height,
-        height: innerHeight - parseInt(getComputedStyle(document.querySelector('header')).height.replace('px', '')) + 'px'
-    })
+            'top': getComputedStyle(document.querySelector('header')).height,
+            height: innerHeight - parseInt(getComputedStyle(document.querySelector('header')).height.replace('px', '')) + 'px'
+        })
+        //$('nav.notification-panel').css({
+        //    'top': getComputedStyle(document.querySelector('header')).height,
+        //    height: innerHeight - parseInt(getComputedStyle(document.querySelector('header')).height.replace('px', '')) + 'px'
+        //})
     } catch (error) {
         
     }
@@ -635,8 +599,15 @@ function setEventHandlers() {
             password.setAttribute("type", type);
 
             //toggle icon
-            src = password.getAttribute("type", src) === "password" ? "../assets/icons/locked.svg" : "../assets/icons/unlocked.svg";
-            e.children[0].setAttribute("src", src);
+            src = password.getAttribute("type", src) === "password" ? 
+                `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>`
+                :
+                `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>`
+            e.children[0].innerHTML = src
         });
     });
 
@@ -657,13 +628,16 @@ function setEventHandlers() {
         function callback(){
             clearPopUpBox()
             loader.removeClass('hidden')
-            sendResetcode(email, (msg) => {
-                popUpBox('notify', msg)
-                $('.email-submit').fadeOut(100)
-                $('.code-submit').fadeIn(100)
+            sendResetcode(email, (email) => {
+
+                //popUpBox('notify', msg)
+                //$('.email-submit').fadeOut(100)
+                //$('.code-submit').fadeIn(100)
+
+                location.href = `${location.origin}/reset?email=${email}`
             })
         }
-        popUpBox('warn', 'Complete this process in one session or you will lose your reset code.', 'confirmWarning', '', callback)
+        popUpBox('warn', 'Complete this process in one day or you will lose your reset link.', 'confirmWarning', '', callback)
     })
 
     $('.code-send-btn').click((e)=>{
@@ -680,7 +654,7 @@ function setEventHandlers() {
         $('.pass-reset').fadeIn(100)
     })
 
-    $('.pass-reset-btn').click((e)=>{
+    $('.pass-reset -btn').click((e)=>{
         let pass1 = $('#password').val()
         let pass2 = $('#cpassword').val()
         pass1 = TrimSpace(pass1)
@@ -706,8 +680,8 @@ function setEventHandlers() {
     })
 
     $('.forgot').click(() => {
-        location.href = location.origin + '/reset'
-        //loadReset()
+        //location.href = location.origin + '/reset'
+        loadReset()
     })
 
     $('.mlg-btn, .nlg-btn').click((e) => {
@@ -722,3 +696,28 @@ function setEventHandlers() {
     })
 }
 
+function resetBtnHandler(otpId, userId, guid, resetCode) {
+    let pass1 = $('#password').val()
+    let pass2 = $('#cpassword').val()
+    pass1 = TrimSpace(pass1)
+    pass2 = TrimSpace(pass2)
+    if (pass1 == '' || pass2 == '') {
+        popUpBox('alert', 'Enter and confirm your new password!')
+        return
+    }
+    if (pass1 != pass2) {
+        popUpBox('error', 'Password does not match, kindly check again.')
+        return
+    }
+    loader.removeClass('hidden')
+    resetPassword(new ResetModel(otpId, userId, guid, resetCode, pass1), function () {
+        //clearFlc('floating-content-2')
+        deleteKey('reset-email')
+        deleteKey('reset-code')
+        exitModal(() => {
+            //loadSignin();
+            clearPopUpBox()
+            location.href = location.origin
+        })
+    })
+}
