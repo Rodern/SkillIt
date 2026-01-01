@@ -60,10 +60,12 @@ namespace SkillIT_Models.DatabaseModels
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            // Configuration should be provided via dependency injection
+            // This method is kept for design-time scenarios only
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseMySQL("server=localhost;port=3306;database=skill_it_db;user=root;password=");
+                // Connection string will be provided through DI in production
+                // This is only used for migrations and design-time tools
             }
         }
 

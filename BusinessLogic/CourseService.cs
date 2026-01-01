@@ -1,73 +1,196 @@
 ﻿using BusinessLogic.Interfaces;
-using Microsoft.JSInterop;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SkillIT_Models;
+using SkillIT_Models.Constants;
 using SkillIT_Models.CRUD;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace BusinessLogic
 {
+    /// <summary>
+    /// Service for managing courses, chapters, lessons, and content
+    /// </summary>
     public class CourseService : ICourseService
     {
-        private readonly skill_it_dbContext DatabaseContext;
-    
-        private static readonly skill_it_dbContext StaticDatabaseContext;
+        private readonly skill_it_dbContext _databaseContext;
+        private readonly ILogger<CourseService> _logger;
 
-        public CourseService(skill_it_dbContext dbContext)
+        public CourseService(skill_it_dbContext dbContext, ILogger<CourseService> logger = null)
         {
-            this.DatabaseContext = dbContext;
+            _databaseContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _logger = logger;
         }
 
         #region Course
+
+        /// <summary>
+        /// Creates a new course
+        /// </summary>
         public ResponseModel CreateCourse(Course course)
         {
-            return Crud.Create(course.CourseId, course, DatabaseContext);
+            try
+            {
+                _logger?.LogInformation("Creating new course: {CourseName}", course?.Name);
+                return Crud.Create(course.CourseId, course, _databaseContext);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error creating course");
+                return new ResponseModel(false, $"{AppConstants.Messages.Failed}: {ex.Message}");
+            }
         }
 
+        /// <summary>
+        /// Deletes a course by ID
+        /// </summary>
         public ResponseModel DeleteCourse(int courseId)
         {
-            return Crud.Delete<Course>(courseId, DatabaseContext);
+            try
+            {
+                _logger?.LogInformation("Deleting course with ID: {CourseId}", courseId);
+                return Crud.Delete<Course>(courseId, _databaseContext);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error deleting course {CourseId}", courseId);
+                return new ResponseModel(false, $"{AppConstants.Messages.Failed}: {ex.Message}");
+            }
         }
 
+        /// <summary>
+        /// Updates an existing course
+        /// </summary>
         public ResponseModel UpdateCourse(Course course)
         {
-            return Crud.Update(course.CourseId, course, DatabaseContext);
+            try
+            {
+                _logger?.LogInformation("Updating course with ID: {CourseId}", course?.CourseId);
+                return Crud.Update(course.CourseId, course, _databaseContext);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error updating course {CourseId}", course?.CourseId);
+                return new ResponseModel(false, $"{AppConstants.Messages.Failed}: {ex.Message}");
+            }
         }
 
+        /// <summary>
+        /// Gets a course by ID
+        /// </summary>
         public Course GetCourse(int courseId)
         {
-            return Crud.Read<Course>(courseId, DatabaseContext);
+            try
+            {
+                return Crud.Read<Course>(courseId, _databaseContext);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error retrieving course {CourseId}", courseId);
+                return null;
+            }
         }
 
+        /// <summary>
+        /// Gets a course by GUID
+        /// </summary>
         public Course GetCourseByGuid(string guid)
         {
-            return DatabaseContext.Courses.FirstOrDefault(c => c.Guid == guid);
+            try
+            {
+                return _databaseContext.Courses
+                    .AsNoTracking()
+                    .FirstOrDefault(c => c.Guid == guid);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error retrieving course by GUID {Guid}", guid);
+                return null;
+            }
         }
 
+        /// <summary>
+        /// Gets a course chapter by GUID
+        /// </summary>
         public CourseChapter GetCourseChapterByGuid(string guid)
         {
-            return DatabaseContext.CourseChapters.FirstOrDefault(c => c.Guid == guid);
+            try
+            {
+                return _databaseContext.CourseChapters
+                    .AsNoTracking()
+                    .FirstOrDefault(c => c.Guid == guid);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error retrieving chapter by GUID {Guid}", guid);
+                return null;
+            }
         }
 
+        /// <summary>
+        /// Gets a course lesson by GUID
+        /// </summary>
         public CourseLesson GetCourseLessonByGuid(string guid)
         {
-            return DatabaseContext.CourseLessons.FirstOrDefault(c => c.Guid == guid);
+            try
+            {
+                return _databaseContext.CourseLessons
+                    .AsNoTracking()
+                    .FirstOrDefault(c => c.Guid == guid);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error retrieving lesson by GUID {Guid}", guid);
+                return null;
+            }
         }
 
+        /// <summary>
+        /// Gets course content by GUID
+        /// </summary>
         public CourseContent GetCourseContentByGuid(string guid)
         {
-            return DatabaseContext.CourseContents.FirstOrDefault(c => c.Guid == guid);
+            try
+            {
+                return _databaseContext.CourseContents
+                    .AsNoTracking()
+                    .FirstOrDefault(c => c.Guid == guid);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error retrieving content by GUID {Guid}", guid);
+                return null;
+            }
         }
 
+        /// <summary>
+        /// Gets all courses
+        /// </summary>
         public ObservableCollection<Course> GetCourses()
         {
-            ObservableCollection<Course> courses = new(DatabaseContext.Courses.ToList());
-            return courses;
+            try
+            {
+                var courses = _databaseContext.Courses
+                    .AsNoTracking()
+                    .ToList();
+                return new ObservableCollection<Course>(courses);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error retrieving all courses");
+                return new ObservableCollection<Course>();
+            }
         }
          
-		public ObservableCollection<CourseIndex> IndexCourse(int courseId)
-		{
+        /// <summary>
+        /// Indexes a course for navigation
+        /// </summary>
+        public ObservableCollection<CourseIndex> IndexCourse(int courseId)
+        {
 			ObservableCollection<CourseIndex> Indices = new();
 			ObservableCollection<int> chapterIds = new CourseService(new()).GetCourseChapterIds(courseId);
 

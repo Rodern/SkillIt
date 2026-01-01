@@ -3,34 +3,47 @@ using BusinessLogic;
 using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Models;
+using SkillIT_Models.Constants;
 using SkillIT_UI.Authentication;
 using SkillIT_UI.Shared;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Load authentication key from configuration
+AuthenticationHelper.AuthenticationKey = builder.Configuration["JwtSettings:SecretKey"] 
+    ?? throw new InvalidOperationException("JWT Secret Key not configured");
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor(options =>
 {
-	options.RootComponents.RegisterForJavaScript<NotificationPanel>("fl-notification-panel");
+    options.RootComponents.RegisterForJavaScript<NotificationPanel>("fl-notification-panel");
 });
 
 builder.Services.AddBlazoredLocalStorage();
-// Add services to the container.
+builder.Services.AddMemoryCache();
 
+// Add services to the container.
 builder.Services.AddControllers();
+
+// Configure database
 builder.Services.AddDbContext<skill_it_dbContext>(options =>
 {
-	options.UseMySQL(builder.Configuration.GetConnectionString("Default"));
-	//options.UseMySQL(builder.Configuration.GetConnectionString("NeilsAspDb"));
-	//options.UseMySQL(builder.Configuration.GetConnectionString("SkillAspDb"));
+    var connectionString = builder.Configuration.GetConnectionString("Default");
+    if (string.IsNullOrEmpty(connectionString) || connectionString == "CONFIGURE_IN_USER_SECRETS")
+    {
+        throw new InvalidOperationException("Database connection string not configured. Please set up user secrets.");
+    }
+    options.UseMySQL(connectionString);
 });
 
 builder.Services.AddAuthenticationCore();
 
+// Register services with dependency injection
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICatalogService, CatalogService>();
@@ -49,53 +62,53 @@ builder.Services.AddScoped<IEntityService, EntityService>();
 builder.Services.AddScoped<IMailingService, MailingService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
-//builder.Services.AddSingleton<IAuthenticationManager>(new AuthenticationManager(Authentication.AuthenticationKey));
 
-
+// Configure JWT authentication
 builder.Services.AddAuthentication(x =>
 {
-	x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-	x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(x =>
 {
-	x.RequireHttpsMetadata = false;
-	x.SaveToken = true;
-	x.TokenValidationParameters = new()
-	{
-		ValidateIssuerSigningKey = true,
-		IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthenticationHelper.AuthenticationKey)),
-		ValidateIssuer = false,
-		ValidateAudience = false
-	};
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthenticationHelper.AuthenticationKey)),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
+    };
 });
 
+// Configure authorization policies using constants
 builder.Services.AddAuthorization(options =>
 {
-	options.AddPolicy("admin", policy =>
-	{
-		policy.RequireClaim("Role", "admin");
-	});
-	options.AddPolicy("user", policy =>
-	{
-		policy.RequireClaim("Role", "user");
-	});
-	options.AddPolicy("creator", policy =>
-	{
-		policy.RequireClaim("Role", "creator");
-	});
-	options.AddPolicy("author", policy =>
-	{
-		policy.RequireClaim("Role", "author");
-	});
+    options.AddPolicy(AppConstants.Roles.Admin, policy =>
+    {
+        policy.RequireClaim("Role", AppConstants.Roles.Admin);
+    });
+    options.AddPolicy(AppConstants.Roles.User, policy =>
+    {
+        policy.RequireClaim("Role", AppConstants.Roles.User);
+    });
+    options.AddPolicy(AppConstants.Roles.Creator, policy =>
+    {
+        policy.RequireClaim("Role", AppConstants.Roles.Creator);
+    });
+    options.AddPolicy(AppConstants.Roles.Author, policy =>
+    {
+        policy.RequireClaim("Role", AppConstants.Roles.Author);
+    });
 });
 
-
+// Configure CORS
 builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {
-	build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+    build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
 builder.WebHost.UseStaticWebAssets();

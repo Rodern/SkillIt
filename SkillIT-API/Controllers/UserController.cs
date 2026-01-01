@@ -1,78 +1,213 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using SkillIT_Models.DatabaseModels;
+using Microsoft.Extensions.Logging;
+using SkillIT_Models.Constants;
 using SkillIT_Models.Models;
-using static System.Net.Mime.MediaTypeNames;
+using System;
 
 namespace SkillItAPI.Controllers
 {
-	[Authorize]
-	[Route("api/[controller]")]
-	[ApiController]
-	public class UserController : ControllerBase
-	{
-		private readonly IUserService userService;
-		public UserController(IUserService userService)
-		{
-			this.userService = userService;
-		}
+    /// <summary>
+    /// API controller for user management
+    /// </summary>
+    [Authorize]
+    [Route("api/v1/users")]
+    [ApiController]
+    public class UserController : ControllerBase
+    {
+        private readonly IUserService _userService;
+        private readonly ILogger<UserController> _logger;
 
-		[HttpGet]
-		[Route("GetAllUsers")]
-		public IActionResult GetAllUsers()
-		{
-			var data = userService.GetAllUsers();
-			return Ok(data);
-		}
-
-		[HttpPost]
-		[Route("GetUser")]
-		public IActionResult GetUser(long id)
-		{
-			var data = userService.GetUser(id);
-			return Ok(data);
-		}
-
-		[AllowAnonymous]
-		[HttpPost]
-		[Route("CheckEmailExistence")]
-		public IActionResult CheckEmailExistence(string email)
-		{
-			return Ok(userService.CheckEmailExistence(email));
+        public UserController(IUserService userService, ILogger<UserController> logger)
+        {
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("UpdateProfilePicture")]
-        public IActionResult UpdateProfilePicture([FromQuery] long userId, IFormFile image)
+        /// <summary>
+        /// Gets all users (admin only)
+        /// </summary>
+        [HttpGet]
+        [Authorize(Roles = "admin")]
+        public IActionResult GetAllUsers()
         {
-            //if (userJson.Length <= 0 || image == null) return BadRequest();
-            //         UserModel userModel = JsonConvert.DeserializeObject<UserModel>(userJson);
-            //         userModel.ProfileImage = ImageUpload.GetBytes(image);
-            return Ok(userService.UpdateProfilePicture(userId, image));
+            try
+            {
+                _logger.LogInformation("Getting all users");
+                var data = _userService.GetAllUsers();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all users");
+                return StatusCode(500, new ResponseModel(false, AppConstants.Messages.Failed));
+            }
         }
 
-        [AllowAnonymous]
-		[HttpPost]
-		[Route("AddUser")]
-		public IActionResult AddUser(UserModel userModel) //(string userJson, IFormFile image)
+        /// <summary>
+        /// Gets a specific user by ID
+        /// </summary>
+        /// <param name="id">The user ID</param>
+        [HttpGet("{id}")]
+        public IActionResult GetUser(long id)
         {
-			//if (userJson.Length <= 0 || image == null) return BadRequest();
-   //         UserModel userModel = JsonConvert.DeserializeObject<UserModel>(userJson);
-   //         userModel.ProfileImage = ImageUpload.GetBytes(image);
-            return Ok(userService.AddUser(userModel));
-		}
+            try
+            {
+                _logger.LogInformation("Getting user {UserId}", id);
+                var data = _userService.GetUser(id);
+                
+                if (data == null)
+                {
+                    return NotFound(new ResponseModel(false, AppConstants.Messages.UserNotFound));
+                }
 
-		[HttpPut]
-		[Route("UpdateUser")]
-		public IActionResult UpdateUser(UserModel userModel) //(string userJson, IFormFile image)
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting user {UserId}", id);
+                return StatusCode(500, new ResponseModel(false, AppConstants.Messages.Failed));
+            }
+        }
+
+        /// <summary>
+        /// Checks if an email exists in the system
+        /// </summary>
+        /// <param name="email">Email address to check</param>
+        [AllowAnonymous]
+        [HttpGet("check-email")]
+        public IActionResult CheckEmailExistence([FromQuery] string email)
         {
-   //         if (userJson.Length <= 0 || image == null) return BadRequest();
-   //         UserModel userModel = JsonConvert.DeserializeObject<UserModel>(userJson);
-			//userModel.ProfileImage = ImageUpload.GetBytes(image);
-			return Ok(userService.UpdateUser(userModel.UserId, userModel));
-		}
-	}
+            try
+            {
+                if (string.IsNullOrWhiteSpace(email))
+                {
+                    return BadRequest(new ResponseModel(false, "Email is required"));
+                }
+
+                _logger.LogInformation("Checking email existence: {Email}", email);
+                return Ok(_userService.CheckEmailExistence(email));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking email existence");
+                return StatusCode(500, new ResponseModel(false, AppConstants.Messages.Failed));
+            }
+        }
+
+        /// <summary>
+        /// Updates a user's profile picture
+        /// </summary>
+        /// <param name="userId">The user ID</param>
+        /// <param name="image">The image file</param>
+        [HttpPost("{userId}/profile-picture")]
+        public IActionResult UpdateProfilePicture([FromRoute] long userId, IFormFile image)
+        {
+            try
+            {
+                if (image == null)
+                {
+                    return BadRequest(new ResponseModel(false, "Image file is required"));
+                }
+
+                _logger.LogInformation("Updating profile picture for user {UserId}", userId);
+                return Ok(_userService.UpdateProfilePicture(userId, image));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating profile picture for user {UserId}", userId);
+                return StatusCode(500, new ResponseModel(false, AppConstants.Messages.Failed));
+            }
+        }
+
+        /// <summary>
+        /// Registers a new user
+        /// </summary>
+        /// <param name="userModel">User registration data</param>
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public IActionResult AddUser([FromBody] UserModel userModel)
+        {
+            try
+            {
+                if (userModel == null)
+                {
+                    return BadRequest(new ResponseModel(false, "User data is required"));
+                }
+
+                _logger.LogInformation("Registering new user: {Email}", userModel.Email);
+                var result = _userService.AddUser(userModel);
+                
+                if (result.Success)
+                {
+                    return CreatedAtAction(nameof(GetUser), new { id = userModel.UserId }, result);
+                }
+
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error registering user");
+                return StatusCode(500, new ResponseModel(false, AppConstants.Messages.Failed));
+            }
+        }
+
+        /// <summary>
+        /// Updates an existing user's information
+        /// </summary>
+        /// <param name="id">The user ID</param>
+        /// <param name="userModel">Updated user data</param>
+        [HttpPut("{id}")]
+        public IActionResult UpdateUser(long id, [FromBody] UserModel userModel)
+        {
+            try
+            {
+                if (userModel == null)
+                {
+                    return BadRequest(new ResponseModel(false, "User data is required"));
+                }
+
+                if (id != userModel.UserId)
+                {
+                    return BadRequest(new ResponseModel(false, "ID mismatch"));
+                }
+
+                _logger.LogInformation("Updating user {UserId}", id);
+                return Ok(_userService.UpdateUser(userModel.UserId, userModel));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating user {UserId}", id);
+                return StatusCode(500, new ResponseModel(false, AppConstants.Messages.Failed));
+            }
+        }
+
+        /// <summary>
+        /// Deletes a user (admin only)
+        /// </summary>
+        /// <param name="id">The user ID</param>
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
+        public IActionResult DeleteUser(long id)
+        {
+            try
+            {
+                _logger.LogInformation("Deleting user {UserId}", id);
+                var result = _userService.DeleteUser(id);
+                
+                if (!result.Success)
+                {
+                    return NotFound(result);
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting user {UserId}", id);
+                return StatusCode(500, new ResponseModel(false, AppConstants.Messages.Failed));
+            }
+        }
+    }
 }
