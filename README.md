@@ -1,12 +1,14 @@
 # SkillIT - Learning Management System
 
-[![.NET](https://img.shields.io/badge/.NET-6.0%20%7C%207.0-512BD4)](https://dotnet.microsoft.com/)
+[![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-2.1.0-green)](CHANGELOG.md)
 
-SkillIT is a comprehensive Learning Management System (LMS) designed to empower young Cameroonians with skills to fit the demands of the African tech system. The platform provides course management, skill tracking, achievements, certifications, and interactive learning experiences.
+SkillIT is a comprehensive Learning Management System (LMS) designed to empower young Cameroonians with skills to fit the demands of the African tech system. The platform provides course management, skill tracking, achievements, certifications, interactive learning experiences, real-time notifications, and analytics.
 
 ## 🚀 Features
 
+### Core Features
 - **Course Management**: Hierarchical course structure (Courses → Chapters → Lessons → Content)
 - **User Authentication**: JWT-based authentication with role-based access control
 - **Enrollment System**: Track user progress and course completions
@@ -14,13 +16,20 @@ SkillIT is a comprehensive Learning Management System (LMS) designed to empower 
 - **Gamification**: Achievements, certificates, and skill badges
 - **Content Cataloging**: Organize learning materials by categories
 - **Email Notifications**: Automated emails for registration, completion, and password reset
-- **RESTful API**: Well-documented API with Swagger/OpenAPI
-- **Blazor UI**: Modern, interactive server-side Blazor web application
+
+### Advanced Features (v2.1)
+- **Real-Time Notifications**: SignalR-powered live updates and messaging
+- **Analytics Dashboard**: Track course views, enrollments, and trending content
+- **Health Monitoring**: Built-in health checks for production monitoring
+- **Rate Limiting**: API protection against abuse (100 req/min)
+- **Request Logging**: Comprehensive HTTP request/response logging (dev mode)
+- **Pagination**: Efficient data loading for large datasets
+- **Memory Caching**: Improved performance with intelligent caching
+- **API Versioning**: Future-proof API design (v1)
 
 ## 📋 Prerequisites
 
-- [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0) or later
-- [.NET 7.0 SDK](https://dotnet.microsoft.com/download/dotnet/7.0) (for UI project)
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [MySQL Server](https://dev.mysql.com/downloads/mysql/) 5.7 or later
 - [Visual Studio 2022](https://visualstudio.microsoft.com/) or [VS Code](https://code.visualstudio.com/)
 
@@ -28,56 +37,69 @@ SkillIT is a comprehensive Learning Management System (LMS) designed to empower 
 
 ```
 SkillIt/
-├── SkillIT-API/          # RESTful API (ASP.NET Core)
-├── SkillIT-UI/           # Blazor Server UI
+├── SkillIT-API/          # RESTful API (ASP.NET Core 8.0)
+│   ├── Controllers/      # API endpoints (v1)
+│   ├── Middleware/       # Exception handling, logging
+│   └── Hubs/            # SignalR hubs
+├── SkillIT-UI/           # Blazor Server UI (8.0)
 ├── BusinessLogic/        # Business logic layer
+│   ├── Services/        # Service implementations
+│   └── Interfaces/      # Service interfaces
 └── SkillIT-Models/       # Data models & database entities
+    ├── DatabaseModels/  # EF Core entities
+    ├── Models/          # DTOs and view models
+    └── Constants/       # Application constants
 ```
 
 ### Technology Stack
 
-- **Backend**: ASP.NET Core 6.0
-- **Frontend**: Blazor Server (.NET 7.0)
-- **Database**: MySQL with Entity Framework Core
+- **Backend**: ASP.NET Core 8.0
+- **Frontend**: Blazor Server 8.0
+- **Database**: MySQL with Entity Framework Core 8.x
 - **Authentication**: JWT Bearer tokens
+- **Real-Time**: SignalR for WebSocket communication
 - **Styling**: TailwindCSS
 - **Email**: SendGrid
-- **Caching**: In-memory cache (production-ready for distributed cache)
+- **Caching**: IMemoryCache (extensible to Redis)
+- **API Documentation**: Swagger/OpenAPI
 
-## ⚙️ Installation & Setup
+## ⚙️ Quick Start
+
+### Automated Setup (Recommended)
+
+**Windows:**
+```powershell
+.\setup.ps1
+```
+
+**Linux/Mac:**
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+The setup script will:
+- Generate secure JWT keys
+- Configure database connections
+- Set up user secrets for both projects
+- Validate configuration
+
+### Manual Setup
+
+See [SETUP_USER_SECRETS.md](SETUP_USER_SECRETS.md) for detailed manual setup instructions.
+
+## 📦 Installation
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/SkillIt.git
+git clone https://github.com/Rodern/SkillIt.git
 cd SkillIt
 ```
 
-### 2. Configure User Secrets
+### 2. Configure Secrets
 
-For security, sensitive configuration is stored in User Secrets. Set them up for both projects:
-
-#### For API Project:
-
-```bash
-cd SkillIT-API
-dotnet user-secrets init
-dotnet user-secrets set "ConnectionStrings:Default" "server=localhost;port=3306;database=skill_it_db;user=root;password=YOUR_PASSWORD"
-dotnet user-secrets set "JwtSettings:SecretKey" "YOUR_SECURE_JWT_SECRET_KEY_AT_LEAST_32_CHARACTERS_LONG"
-dotnet user-secrets set "EmailSettings:SendGridApiKey" "YOUR_SENDGRID_API_KEY"
-dotnet user-secrets set "EmailSettings:FromEmail" "noreply@skillit.com"
-```
-
-#### For UI Project:
-
-```bash
-cd ../SkillIT-UI
-dotnet user-secrets init
-dotnet user-secrets set "ConnectionStrings:Default" "server=localhost;port=3306;database=skill_it_db;user=root;password=YOUR_PASSWORD"
-dotnet user-secrets set "JwtSettings:SecretKey" "YOUR_SECURE_JWT_SECRET_KEY_AT_LEAST_32_CHARACTERS_LONG"
-```
-
-> **Note**: Use the same JWT secret key for both projects!
+Run the automated setup script (see Quick Start above) or configure manually.
 
 ### 3. Database Setup
 
@@ -91,13 +113,24 @@ Run Entity Framework migrations:
 
 ```bash
 cd SkillIT-Models
-dotnet ef database update --context skill_it_dbContext
+dotnet ef migrations add InitialCreate
+dotnet ef database update
 ```
 
-### 4. Build the Solution
+### 4. Build and Run
 
 ```bash
-cd ..
+# Build entire solution
+dotnet build SkillIt.sln
+
+# Run API
+cd SkillIT-API
+dotnet run
+
+# In another terminal, run UI
+cd SkillIT-UI
+dotnet run
+```
 dotnet build SkillIt.sln
 ```
 

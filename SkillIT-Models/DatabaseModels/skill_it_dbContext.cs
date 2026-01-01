@@ -57,6 +57,8 @@ namespace SkillIT_Models.DatabaseModels
         public virtual DbSet<UserPhone> UserPhones { get; set; }
         public virtual DbSet<UserSkill> UserSkills { get; set; }
         public virtual DbSet<UserSocial> UserSocials { get; set; }
+        public virtual DbSet<CourseView> CourseViews { get; set; }
+        public virtual DbSet<CourseEnrollment> CourseEnrollments { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
