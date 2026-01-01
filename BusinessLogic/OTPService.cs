@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.Interfaces;
+using SkillIT_Models.Data;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
@@ -12,8 +13,8 @@ namespace BusinessLogic
 {
     public class OTPService : IOTPService
     {
-        public readonly skill_it_dbContext DatabaseContext;
-        public OTPService(skill_it_dbContext databaseContext)
+        public readonly ApplicationDbContext DatabaseContext;
+        public OTPService(ApplicationDbContext databaseContext)
         {
             DatabaseContext = databaseContext;
         }

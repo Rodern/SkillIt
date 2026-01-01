@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using SkillIT_Models.Data;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
@@ -13,8 +14,8 @@ namespace BusinessLogic
 {
     public class UserAchievementService : IUserAchievementService
     {
-        private readonly skill_it_dbContext DatabaseContext;
-        public UserAchievementService(skill_it_dbContext skill_It_DbContext)
+        private readonly ApplicationDbContext DatabaseContext;
+        public UserAchievementService(ApplicationDbContext skill_It_DbContext)
         {
             DatabaseContext = skill_It_DbContext;
         }

@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.Interfaces;
+using SkillIT_Models.Data;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
@@ -12,8 +13,8 @@ namespace BusinessLogic
 {
     public class EngagementService : IEngagementService
     {
-        private readonly skill_it_dbContext dbContext;
-        public EngagementService(skill_it_dbContext dbContext)
+        private readonly ApplicationDbContext dbContext;
+        public EngagementService(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

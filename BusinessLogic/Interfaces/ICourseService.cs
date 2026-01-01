@@ -1,4 +1,6 @@
-﻿using SkillIT_Models.DatabaseModels;
+﻿using SkillIT_Models.Entities.Courses;
+using SkillIT_Models.Entities.Learning;
+using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -14,7 +16,7 @@ namespace BusinessLogic.Interfaces
         ResponseModel CreateCourse(Course course);
         ResponseModel CreateCourseChapter(CourseChapter courseChapter);
         ResponseModel CreateCourseContent(CourseContent content);
-        ResponseModel CreateCourseDatum(CourseDatum courseData);
+        ResponseModel CreateCourseDatum(CourseData courseData);
         ResponseModel CreateCourseLesson(CourseLesson courseLesson);
         ResponseModel DeleteCourse(int courseId);
         ResponseModel DeleteCourseChapter(int chapterId);
@@ -36,11 +38,11 @@ namespace BusinessLogic.Interfaces
 		ObservableCollection<MiniINT> GetCourseContentIdsAndNumber(int lessonId);
 		ObservableCollection<CourseContent> GetCourseContents();
         ObservableCollection<CourseContent> GetCourseContents(int lessonId);
-        ObservableCollection<CourseDatum> GetCourseData();
-        ObservableCollection<CourseDatum> GetCourseData(int enrollmentId);
+        ObservableCollection<CourseData> GetCourseData();
+        ObservableCollection<CourseData> GetCourseData(int enrollmentId);
 		DataIndex GetCourseDataIndex(int courseId);
-		CourseDatum GetCourseDatum(int dataId);
-		CourseDatum GetCourseDatumByEnrollmentId(int enrollmentId);
+		CourseData GetCourseDatum(int dataId);
+		CourseData GetCourseDatumByEnrollmentId(int enrollmentId);
 		ObservableCollection<int> GetCourseIds();
 		CourseLesson GetCourseLesson(int lessonId);
 		CourseLesson GetCourseLessonByGuid(string guid);
@@ -57,7 +59,7 @@ namespace BusinessLogic.Interfaces
 		ResponseModel UpdateCourse(Course course);
         ResponseModel UpdateCourse(CourseChapter courseChapter);
         ResponseModel UpdateCourseContent(CourseContent content);
-        ResponseModel UpdateCourseDatum(CourseDatum courseData);
+        ResponseModel UpdateCourseDatum(CourseData courseData);
         ResponseModel UpdateCourseLesson(CourseLesson courseLesson);
     }
 }

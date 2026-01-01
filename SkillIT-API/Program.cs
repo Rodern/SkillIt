@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SkillIT_API.Hubs;
 using SkillIT_API.Middleware;
+using SkillIT_Models.Data;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System.Text;
@@ -29,7 +30,7 @@ builder.Services.AddSignalR();
 
 // Add health checks
 builder.Services.AddHealthChecks()
-    .AddDbContextCheck<skill_it_dbContext>("database");
+    .AddDbContextCheck<ApplicationDbContext>("database");
 
 // Add rate limiting
 builder.Services.AddRateLimiter(options =>
@@ -53,14 +54,25 @@ builder.Services.AddRateLimiter(options =>
 });
 
 // Configure database
-builder.Services.AddDbContext<skill_it_dbContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("Default");
     if (string.IsNullOrEmpty(connectionString) || connectionString == "CONFIGURE_IN_USER_SECRETS")
     {
         throw new InvalidOperationException("Database connection string not configured. Please set up user secrets.");
     }
-    options.UseMySQL(connectionString);
+    
+    options.UseMySql(connectionString, 
+        ServerVersion.AutoDetect(connectionString),
+        mySqlOptions =>
+        {
+            mySqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+            mySqlOptions.CommandTimeout(60);
+            mySqlOptions.MigrationsAssembly("SkillIT-Models");
+        });
 });
 
 // Register services with dependency injection

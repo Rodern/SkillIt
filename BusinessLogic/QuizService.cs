@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using SkillIT_Models.CRUD;
+using SkillIT_Models.Data;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
@@ -14,9 +15,9 @@ namespace BusinessLogic
 {
     public class QuizService: IQuizService
     {
-        private readonly skill_it_dbContext DatabaseContext;
+        private readonly ApplicationDbContext DatabaseContext;
 
-        public QuizService(skill_it_dbContext quizbaseContext)
+        public QuizService(ApplicationDbContext quizbaseContext)
         {
             DatabaseContext = quizbaseContext;
         }

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using SkillIT_Models;
 using SkillIT_Models.Constants;
 using SkillIT_Models.CRUD;
+using SkillIT_Models.Data;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
@@ -17,10 +18,10 @@ namespace BusinessLogic
     /// </summary>
     public class CourseService : ICourseService
     {
-        private readonly skill_it_dbContext _databaseContext;
+        private readonly ApplicationDbContext _databaseContext;
         private readonly ILogger<CourseService> _logger;
 
-        public CourseService(skill_it_dbContext dbContext, ILogger<CourseService> logger = null)
+        public CourseService(ApplicationDbContext dbContext, ILogger<CourseService> logger = null)
         {
             _databaseContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _logger = logger;
@@ -243,20 +244,20 @@ namespace BusinessLogic
 
         public ObservableCollection<CourseChapter> GetCourseChapters()
         {
-            ObservableCollection<CourseChapter> chapters = new(DatabaseContext.CourseChapters.ToList());
+            ObservableCollection<CourseChapter> chapters = new(_databaseContext.CourseChapters.ToList());
             
             return AddAuthors<CourseChapter>(chapters);
         }
 
         public ObservableCollection<CourseChapter> GetCourseChapters(int courseId)
         {
-            var chapters = new ObservableCollection<CourseChapter>(DatabaseContext.CourseChapters.Where(c => c.CourseId == courseId).ToList());
+            var chapters = new ObservableCollection<CourseChapter>(_databaseContext.CourseChapters.Where(c => c.CourseId == courseId).ToList());
             return chapters;
         }
 
         public ObservableCollection<CourseChapter> GetCourseChapters(int chapterId, int courseId)
         {
-            var chapters = new ObservableCollection<CourseChapter>(DatabaseContext.CourseChapters.Where(c => c.ChapterId == chapterId && c.CourseId == courseId).ToList());
+            var chapters = new ObservableCollection<CourseChapter>(_databaseContext.CourseChapters.Where(c => c.ChapterId == chapterId && c.CourseId == courseId).ToList());
             return chapters;
         }
         #endregion
@@ -284,13 +285,13 @@ namespace BusinessLogic
 
         public ObservableCollection<CourseLesson> GetCourseLessons()
         {
-            var lessons = new ObservableCollection<CourseLesson>(DatabaseContext.CourseLessons.ToList());
+            var lessons = new ObservableCollection<CourseLesson>(_databaseContext.CourseLessons.ToList());
             return lessons;
         }
 
         public ObservableCollection<CourseLesson> GetCourseLessons(int chapterId)
         {
-            var lessons = new ObservableCollection<CourseLesson>(DatabaseContext.CourseLessons.Where(l => l.ChapterId == chapterId).ToList());
+            var lessons = new ObservableCollection<CourseLesson>(_databaseContext.CourseLessons.Where(l => l.ChapterId == chapterId).ToList());
             return lessons;
         }
         #endregion
@@ -329,12 +330,12 @@ namespace BusinessLogic
 
         public ObservableCollection<CourseContent> GetCourseContents()
         {
-            return new(DatabaseContext.CourseContents.ToList());
+            return new(_databaseContext.CourseContents.ToList());
         }
 
         public SubContent GetContentFeilds(int contentId)
         {
-            return DatabaseContext.CourseContents.Select(x => new SubContent
+            return _databaseContext.CourseContents.Select(x => new SubContent
             {
                 ContentId = x.ContentId,
                 LessonId = x.LessonId,
@@ -346,7 +347,7 @@ namespace BusinessLogic
 
         public ObservableCollection<SubContent> GetContentFeildsByLessonId(int lessonId)
         {
-            return new(DatabaseContext.CourseContents.Select(x => new SubContent
+            return new(_databaseContext.CourseContents.Select(x => new SubContent
             {
                 ContentId = x.ContentId,
                 LessonId = x.LessonId,
@@ -358,7 +359,7 @@ namespace BusinessLogic
 
         public ObservableCollection<CourseContent> GetCourseContents(int lessonId)
         {
-            return new(DatabaseContext.CourseContents.Where(cc => cc.LessonId == lessonId).ToList());
+            return new(_databaseContext.CourseContents.Where(cc => cc.LessonId == lessonId).ToList());
         }
         #endregion
 
@@ -385,17 +386,17 @@ namespace BusinessLogic
 
         public ObservableCollection<CourseDatum> GetCourseData()
         {
-            return new(DatabaseContext.CourseData.ToList());
+            return new(_databaseContext.CourseData.ToList());
         }
 
         public ObservableCollection<CourseDatum> GetCourseData(int enrollmentId)
         {
-            return new(DatabaseContext.CourseData.Where(cd => cd.EnrollmentId == enrollmentId).ToList());
+            return new(_databaseContext.CourseData.Where(cd => cd.EnrollmentId == enrollmentId).ToList());
         }
 
         public CourseDatum GetCourseDatumByEnrollmentId(int enrollmentId)
         {
-            return DatabaseContext.CourseData.FirstOrDefault(cd => cd.EnrollmentId == enrollmentId);
+            return _databaseContext.CourseData.FirstOrDefault(cd => cd.EnrollmentId == enrollmentId);
         }
 
 		#endregion
@@ -405,22 +406,22 @@ namespace BusinessLogic
 
 		public ObservableCollection<int> GetCourseIds()
 		{
-			return new ObservableCollection<int>(DatabaseContext.CourseChapters.Select(x => x.ChapterId).ToList());
+			return new ObservableCollection<int>(_databaseContext.CourseChapters.Select(x => x.ChapterId).ToList());
 		}
 
 		public ObservableCollection<int> GetCourseChapterIds(int courseId)
 		{
-			return new ObservableCollection<int>(DatabaseContext.CourseChapters.OrderBy(x => x.ChapterNumber).Where(c => c.CourseId == courseId).Select(x => x.ChapterId).ToList());
+			return new ObservableCollection<int>(_databaseContext.CourseChapters.OrderBy(x => x.ChapterNumber).Where(c => c.CourseId == courseId).Select(x => x.ChapterId).ToList());
 		}
 
 		public ObservableCollection<int> GetCourseLessonIds(int chapterId)
 		{
-			return new ObservableCollection<int>(DatabaseContext.CourseLessons.OrderBy(x => x.LessonNumber).Where(c => c.ChapterId == chapterId).Select(x => x.LessonId).ToList());
+			return new ObservableCollection<int>(_databaseContext.CourseLessons.OrderBy(x => x.LessonNumber).Where(c => c.ChapterId == chapterId).Select(x => x.LessonId).ToList());
 		}
 
 		public ObservableCollection<int> GetCourseContentIds(int lessonId)
 		{
-			return new ObservableCollection<int>(DatabaseContext.CourseContents.OrderBy(x => x.ContentNumber).Where(c => c.LessonId == lessonId).Select(x => x.ContentId).ToList());
+			return new ObservableCollection<int>(_databaseContext.CourseContents.OrderBy(x => x.ContentNumber).Where(c => c.LessonId == lessonId).Select(x => x.ContentId).ToList());
 		}
 
 		//public ObservableCollection<int, int> GetCourseIds()
@@ -430,17 +431,17 @@ namespace BusinessLogic
 
 		public ObservableCollection<MiniINT> GetCourseChapterIdsAndNumber(int courseId)
 		{
-			return new(DatabaseContext.CourseChapters.OrderBy(x => x.ChapterNumber).Where(c => c.CourseId == courseId).Select(x => new MiniINT() { ObjectId = x.ChapterId, Number = x.ChapterNumber, Guid = x.Guid }).ToList());
+			return new(_databaseContext.CourseChapters.OrderBy(x => x.ChapterNumber).Where(c => c.CourseId == courseId).Select(x => new MiniINT() { ObjectId = x.ChapterId, Number = x.ChapterNumber, Guid = x.Guid }).ToList());
 		}
 
 		public ObservableCollection<MiniINT> GetCourseLessonIdsAndNumber(int chapterId)
 		{
-			return new(DatabaseContext.CourseLessons.OrderBy(x => x.LessonNumber).Where(c => c.ChapterId == chapterId).Select(x => new MiniINT() { ObjectId = x.LessonId, Number = x.LessonNumber, Guid = x.Guid }).ToList());
+			return new(_databaseContext.CourseLessons.OrderBy(x => x.LessonNumber).Where(c => c.ChapterId == chapterId).Select(x => new MiniINT() { ObjectId = x.LessonId, Number = x.LessonNumber, Guid = x.Guid }).ToList());
 		}
 
 		public ObservableCollection<MiniINT> GetCourseContentIdsAndNumber(int lessonId)
 		{
-			return new (DatabaseContext.CourseContents.OrderBy(x => x.ContentNumber).Where(c => c.LessonId == lessonId).Select(x => new MiniINT() { ObjectId = x.ContentId, Number = x.ContentNumber, Guid = x.Guid } ).ToList());
+			return new (_databaseContext.CourseContents.OrderBy(x => x.ContentNumber).Where(c => c.LessonId == lessonId).Select(x => new MiniINT() { ObjectId = x.ContentId, Number = x.ContentNumber, Guid = x.Guid } ).ToList());
 		}
 		#endregion
 
@@ -451,19 +452,19 @@ namespace BusinessLogic
 		}
 		public DataIndex GetDataIndexByCourseId(int courseId)
 		{
-			return DatabaseContext.DataIndices.FirstOrDefault(d => d.CourseId == courseId);
+			return _databaseContext.DataIndices.FirstOrDefault(d => d.CourseId == courseId);
 		}
 		public ObservableCollection<DataIndex> GetDataIndices()
         {
-            return new(DatabaseContext.DataIndices);
+            return new(_databaseContext.DataIndices);
         }
         public ObservableCollection<DataIndex> GetDataIndices(int courseId)
         {
-            return new(DatabaseContext.DataIndices.Where(i => i.CourseId == courseId));
+            return new(_databaseContext.DataIndices.Where(i => i.CourseId == courseId));
         }
         public DataIndex GetCourseDataIndex(int courseId)
         {
-            return DatabaseContext.DataIndices.FirstOrDefault(i => i.CourseId == courseId);
+            return _databaseContext.DataIndices.FirstOrDefault(i => i.CourseId == courseId);
         }
 		#endregion
 	}

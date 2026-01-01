@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using SkillIT_Models.Data;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
@@ -19,17 +20,17 @@ namespace BusinessLogic
 {
 	public class AuthenticationService: IAuthenticationService
 	{
-		private readonly skill_it_dbContext DatabaseContext;
+		private readonly ApplicationDbContext DatabaseContext;
 		private readonly IOTPService OTPService;
 		private readonly IEntityService EntityService;
 
-		public AuthenticationService(skill_it_dbContext skill_It_DbContext, IOTPService oTPService, IEntityService entityService)
+		public AuthenticationService(ApplicationDbContext skill_It_DbContext, IOTPService oTPService, IEntityService entityService)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 			OTPService = oTPService;
 			EntityService = entityService;
 		}
-		public AuthenticationService(skill_it_dbContext skill_It_DbContext)
+		public AuthenticationService(ApplicationDbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}

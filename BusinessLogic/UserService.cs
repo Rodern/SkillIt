@@ -9,6 +9,7 @@ using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using SkillIT_Models.Data;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 
@@ -16,14 +17,14 @@ namespace BusinessLogic
 {
 	public class UserService: IUserService
 	{
-		private readonly skill_it_dbContext DatabaseContext;
+		private readonly ApplicationDbContext DatabaseContext;
 		private readonly IWebHostEnvironment hostEnvironment;
 		private readonly IMailingService MailingService;
 		private readonly IOTPService OTPService;
 		private readonly IJSRuntime JSRuntime;
 		private readonly IAccountService AccountService;
         public AccountStatus AccountStatus = new();
-		public UserService(skill_it_dbContext skill_It_DbContext, IWebHostEnvironment webHostEnvironment, IMailingService mailingService, IJSRuntime jSRuntime, IOTPService oTPService, IAccountService accountService)
+		public UserService(ApplicationDbContext skill_It_DbContext, IWebHostEnvironment webHostEnvironment, IMailingService mailingService, IJSRuntime jSRuntime, IOTPService oTPService, IAccountService accountService)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 			hostEnvironment = webHostEnvironment;
@@ -32,7 +33,7 @@ namespace BusinessLogic
 			OTPService = oTPService;
 			AccountService = accountService;
 		}
-		public UserService(skill_it_dbContext skill_It_DbContext)
+		public UserService(ApplicationDbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}

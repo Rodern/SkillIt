@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using SkillIT_Models.Data;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
@@ -13,8 +14,8 @@ namespace BusinessLogic
 {
     public class EntityService : IEntityService
 	{
-		private readonly skill_it_dbContext DbContext;
-		public EntityService(skill_it_dbContext storeContext)
+		private readonly ApplicationDbContext DbContext;
+		public EntityService(ApplicationDbContext storeContext)
 		{
 			DbContext = storeContext;
 		}

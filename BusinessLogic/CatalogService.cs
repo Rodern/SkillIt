@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Http;
+using SkillIT_Models.Data;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
@@ -14,8 +15,8 @@ namespace BusinessLogic
 {
 	public class CatalogService : ICatalogService
 	{
-		private readonly skill_it_dbContext DatabaseContext;
-		public CatalogService(skill_it_dbContext skill_It_DbContext)
+		private readonly ApplicationDbContext DatabaseContext;
+		public CatalogService(ApplicationDbContext skill_It_DbContext)
 		{
 			this.DatabaseContext = skill_It_DbContext;
 		}

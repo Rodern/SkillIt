@@ -2,6 +2,7 @@ using BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SkillIT_Models;
+using SkillIT_Models.Data;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
@@ -16,11 +17,11 @@ namespace BusinessLogic
     /// </summary>
     public class AnalyticsService : IAnalyticsService
     {
-        private readonly skill_it_dbContext _databaseContext;
+        private readonly ApplicationDbContext _databaseContext;
         private readonly ILogger<AnalyticsService> _logger;
 
         public AnalyticsService(
-            skill_it_dbContext dbContext, 
+            ApplicationDbContext dbContext, 
             ILogger<AnalyticsService> logger = null)
         {
             _databaseContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
@@ -193,7 +194,7 @@ namespace BusinessLogic
                     if (course != null)
                     {
                         trending.CourseName = course.Name;
-                        trending.ThumbnailUrl = course.ThumbnailImage;
+                        trending.ThumbnailUrl = course.CoverImage;
                     }
                 }
 

@@ -1,4 +1,5 @@
-﻿using SkillIT_Models.DatabaseModels;
+﻿using SkillIT_Models.Entities.Core;
+using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,10 @@ namespace BusinessLogic.Interfaces
 		ResponseModel AddAccount(Account account);
         Account GetUserAccount(long userId);
 		ResponseModel UpdateAccount(long id, long id2, Account account);
-		Sentmail GetSentMail(int mailId);
-		Sentmail GetSentMail(long userId);
-		Sentmail GetSentMail(long userId, string type);
-		ResponseModel CreateSentMail(Sentmail sentMail);
+		SentMail GetSentMail(int mailId);
+		SentMail GetSentMail(long userId);
+		SentMail GetSentMail(long userId, string type);
+		ResponseModel CreateSentMail(SentMail sentMail);
         Role GetAccountRole(int roleId);
         Account GetAccount(long accountId);
         ResponseModel SendFirstNotifications(User user);

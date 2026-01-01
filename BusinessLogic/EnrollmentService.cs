@@ -2,6 +2,7 @@
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.EntityFrameworkCore;
 using SkillIT_Models.CRUD;
+using SkillIT_Models.Data;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
@@ -15,8 +16,8 @@ namespace BusinessLogic
 {
     public class EnrollmentService: IEnrollmentService
     {
-        private readonly skill_it_dbContext DatabaseContext;
-        public EnrollmentService(skill_it_dbContext skill_It_DbContext) {
+        private readonly ApplicationDbContext DatabaseContext;
+        public EnrollmentService(ApplicationDbContext skill_It_DbContext) {
             DatabaseContext = skill_It_DbContext;
         }
 
