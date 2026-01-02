@@ -50,6 +50,9 @@ public class Country : BaseEntity
     // Navigation properties
     public virtual ICollection<Phone> Phones { get; set; } = new List<Phone>();
     public virtual ICollection<Language> Languages { get; set; } = new List<Language>();
+    public virtual ICollection<City> Cities { get; set; } = new List<City>();
+    public virtual ICollection<Region> Regions { get; set; } = new List<Region>();
+    public virtual ICollection<UserCountry> UserCountries { get; set; } = new List<UserCountry>();
 }
 
 [Table("language")]

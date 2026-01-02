@@ -11,8 +11,8 @@ using SkillIT_Models.Data;
 namespace SkillIT_Models.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260102172330_SeedAllRemainingData")]
-    partial class SeedAllRemainingData
+    [Migration("20260102183354_AddNewsletterPasswordLocation")]
+    partial class AddNewsletterPasswordLocation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -195,6 +195,49 @@ namespace SkillIT_Models.Migrations
                         .IsUnique();
 
                     b.ToTable("account");
+                });
+
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.City", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("cityId");
+
+                    b.Property<long>("CountryId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("countryId");
+
+                    b.Property<string>("Guid")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)")
+                        .HasColumnName("guid");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("double")
+                        .HasColumnName("latitude");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("double")
+                        .HasColumnName("longitude");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId")
+                        .HasDatabaseName("idx_city_country");
+
+                    b.HasIndex("Guid")
+                        .IsUnique()
+                        .HasDatabaseName("idx_city_guid_unique");
+
+                    b.ToTable("city");
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Country", b =>
@@ -478,6 +521,90 @@ namespace SkillIT_Models.Migrations
                     b.ToTable("language");
                 });
 
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.NewsLetter", b =>
+                {
+                    b.Property<long>("NewsLetterId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("news_letterId");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("date_created");
+
+                    b.Property<string>("Guid")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)")
+                        .HasColumnName("guid");
+
+                    b.Property<string>("LetterBody")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("letter_body");
+
+                    b.Property<int>("LetterType")
+                        .HasColumnType("int")
+                        .HasColumnName("letter_type");
+
+                    b.Property<DateTime>("ScheduleDate")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("schedule_date");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("status");
+
+                    b.HasKey("NewsLetterId");
+
+                    b.HasIndex("Guid")
+                        .IsUnique()
+                        .HasDatabaseName("idx_newsletter_guid_unique");
+
+                    b.HasIndex("Status", "ScheduleDate")
+                        .HasDatabaseName("idx_newsletter_status_schedule");
+
+                    b.ToTable("news_letter");
+                });
+
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.NewsLetterSubscriber", b =>
+                {
+                    b.Property<int>("NewsLetterSubscriberId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("news_letter_subscriberId");
+
+                    b.Property<DateTime>("DateSubscribed")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("date_subscribed");
+
+                    b.Property<long>("EmailId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("emailId");
+
+                    b.Property<long?>("NewsLetterId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("SubscriberCode")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("varchar(8)")
+                        .HasColumnName("subscriber_code");
+
+                    b.HasKey("NewsLetterSubscriberId");
+
+                    b.HasIndex("EmailId")
+                        .HasDatabaseName("idx_newslettersubscriber_email");
+
+                    b.HasIndex("NewsLetterId");
+
+                    b.HasIndex("SubscriberCode")
+                        .IsUnique()
+                        .HasDatabaseName("idx_newslettersubscriber_code_unique");
+
+                    b.ToTable("news_letter_subscriber");
+                });
+
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Notification", b =>
                 {
                     b.Property<long>("Id")
@@ -600,6 +727,48 @@ namespace SkillIT_Models.Migrations
                     b.ToTable("otp");
                 });
 
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.Password", b =>
+                {
+                    b.Property<int>("PasswordId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("passwordId");
+
+                    b.Property<string>("Hashed")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)")
+                        .HasColumnName("hashed");
+
+                    b.Property<DateTime>("LastChanged")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("last_changed");
+
+                    b.Property<string>("PastPasswords")
+                        .IsRequired()
+                        .HasColumnType("json")
+                        .HasColumnName("past_passwords");
+
+                    b.Property<byte[]>("Salt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(128)")
+                        .HasColumnName("salt");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("userId");
+
+                    b.HasKey("PasswordId");
+
+                    b.HasIndex("LastChanged")
+                        .HasDatabaseName("idx_password_lastchanged");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("idx_password_user");
+
+                    b.ToTable("password");
+                });
+
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Phone", b =>
                 {
                     b.Property<long>("Id")
@@ -720,6 +889,63 @@ namespace SkillIT_Models.Migrations
                     b.ToTable("project");
                 });
 
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.Region", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("regionId");
+
+                    b.Property<long>("CapitalCityId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("capital_city");
+
+                    b.Property<long>("CountryId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("countryId");
+
+                    b.Property<string>("Guid")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)")
+                        .HasColumnName("guid");
+
+                    b.Property<string>("Latitude")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("varchar(11)")
+                        .HasColumnName("latitude");
+
+                    b.Property<string>("Longitude")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("varchar(11)")
+                        .HasColumnName("longitude");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("ShortCode")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("varchar(5)")
+                        .HasColumnName("short_code");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId")
+                        .HasDatabaseName("idx_region_country");
+
+                    b.HasIndex("Guid")
+                        .IsUnique()
+                        .HasDatabaseName("idx_region_guid_unique");
+
+                    b.ToTable("region");
+                });
+
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Role", b =>
                 {
                     b.Property<long>("Id")
@@ -771,6 +997,36 @@ namespace SkillIT_Models.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("sentmails");
+                });
+
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.SimpleLocation", b =>
+                {
+                    b.Property<int>("LocationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("locationId");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Latitude")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)")
+                        .HasColumnName("latitude");
+
+                    b.Property<string>("Longitude")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)")
+                        .HasColumnName("longitude");
+
+                    b.HasKey("LocationId");
+
+                    b.ToTable("simple_location");
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Skill", b =>
@@ -981,6 +1237,66 @@ namespace SkillIT_Models.Migrations
                     b.ToTable("user");
                 });
 
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.UserCity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("user_cityId");
+
+                    b.Property<long>("CityId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("cityId");
+
+                    b.Property<DateTime>("DateSet")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("date_set");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("userId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("UserId", "CityId")
+                        .IsUnique()
+                        .HasDatabaseName("idx_usercity_user_city_unique");
+
+                    b.ToTable("user_city");
+                });
+
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.UserCountry", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("user_countryId");
+
+                    b.Property<long>("CountryId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("countryId");
+
+                    b.Property<DateTime>("DateSet")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("date_set");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("userId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("UserId", "CountryId")
+                        .IsUnique()
+                        .HasDatabaseName("idx_usercountry_user_country_unique");
+
+                    b.ToTable("user_country");
+                });
+
             modelBuilder.Entity("SkillIT_Models.Entities.Core.UserEmail", b =>
                 {
                     b.Property<long>("Id")
@@ -1029,6 +1345,36 @@ namespace SkillIT_Models.Migrations
                     b.ToTable("user_phone");
                 });
 
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.UserRegion", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("user_regionId");
+
+                    b.Property<DateTime>("DateSet")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("date_set");
+
+                    b.Property<long>("RegionId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("regionId");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("userId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RegionId");
+
+                    b.HasIndex("UserId", "RegionId")
+                        .IsUnique()
+                        .HasDatabaseName("idx_userregion_user_region_unique");
+
+                    b.ToTable("user_region");
+                });
+
             modelBuilder.Entity("SkillIT_Models.Entities.Core.UserSkill", b =>
                 {
                     b.Property<long>("Id")
@@ -1075,6 +1421,44 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("user_social");
+                });
+
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.UserToken", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("user_tokenId");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("date_created");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("expiry_date");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("last_modified");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("token");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("userId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("idx_usertoken_user_unique");
+
+                    b.ToTable("user_token");
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Courses.Course", b =>
@@ -2097,6 +2481,17 @@ namespace SkillIT_Models.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.City", b =>
+                {
+                    b.HasOne("SkillIT_Models.Entities.Core.Country", "Country")
+                        .WithMany("Cities")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Creator", b =>
                 {
                     b.HasOne("SkillIT_Models.Entities.Core.Account", "Account")
@@ -2136,6 +2531,21 @@ namespace SkillIT_Models.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.NewsLetterSubscriber", b =>
+                {
+                    b.HasOne("SkillIT_Models.Entities.Core.Email", "Email")
+                        .WithMany("NewsLetterSubscribers")
+                        .HasForeignKey("EmailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkillIT_Models.Entities.Core.NewsLetter", null)
+                        .WithMany("Subscribers")
+                        .HasForeignKey("NewsLetterId");
+
+                    b.Navigation("Email");
+                });
+
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Notification", b =>
                 {
                     b.HasOne("SkillIT_Models.Entities.Core.Account", "Account")
@@ -2151,6 +2561,17 @@ namespace SkillIT_Models.Migrations
                 {
                     b.HasOne("SkillIT_Models.Entities.Core.User", "User")
                         .WithMany("Otps")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.Password", b =>
+                {
+                    b.HasOne("SkillIT_Models.Entities.Core.User", "User")
+                        .WithMany("Passwords")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2180,6 +2601,17 @@ namespace SkillIT_Models.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.Region", b =>
+                {
+                    b.HasOne("SkillIT_Models.Entities.Core.Country", "Country")
+                        .WithMany("Regions")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Testimonial", b =>
                 {
                     b.HasOne("SkillIT_Models.Entities.Core.User", "User")
@@ -2187,6 +2619,44 @@ namespace SkillIT_Models.Migrations
                         .HasForeignKey("SkillIT_Models.Entities.Core.Testimonial", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.UserCity", b =>
+                {
+                    b.HasOne("SkillIT_Models.Entities.Core.City", "City")
+                        .WithMany("UserCities")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkillIT_Models.Entities.Core.User", "User")
+                        .WithMany("UserCities")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.UserCountry", b =>
+                {
+                    b.HasOne("SkillIT_Models.Entities.Core.Country", "Country")
+                        .WithMany("UserCountries")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkillIT_Models.Entities.Core.User", "User")
+                        .WithMany("UserCountries")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
 
                     b.Navigation("User");
                 });
@@ -2229,6 +2699,25 @@ namespace SkillIT_Models.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.UserRegion", b =>
+                {
+                    b.HasOne("SkillIT_Models.Entities.Core.Region", "Region")
+                        .WithMany("UserRegions")
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkillIT_Models.Entities.Core.User", "User")
+                        .WithMany("UserRegions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Region");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SkillIT_Models.Entities.Core.UserSkill", b =>
                 {
                     b.HasOne("SkillIT_Models.Entities.Core.Skill", "Skill")
@@ -2263,6 +2752,17 @@ namespace SkillIT_Models.Migrations
                         .IsRequired();
 
                     b.Navigation("Social");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.UserToken", b =>
+                {
+                    b.HasOne("SkillIT_Models.Entities.Core.User", "User")
+                        .WithMany("UserTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -2575,11 +3075,22 @@ namespace SkillIT_Models.Migrations
                     b.Navigation("Notifications");
                 });
 
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.City", b =>
+                {
+                    b.Navigation("UserCities");
+                });
+
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Country", b =>
                 {
+                    b.Navigation("Cities");
+
                     b.Navigation("Languages");
 
                     b.Navigation("Phones");
+
+                    b.Navigation("Regions");
+
+                    b.Navigation("UserCountries");
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Creator", b =>
@@ -2599,12 +3110,24 @@ namespace SkillIT_Models.Migrations
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Email", b =>
                 {
+                    b.Navigation("NewsLetterSubscribers");
+
                     b.Navigation("UserEmails");
+                });
+
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.NewsLetter", b =>
+                {
+                    b.Navigation("Subscribers");
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Phone", b =>
                 {
                     b.Navigation("UserPhones");
+                });
+
+            modelBuilder.Entity("SkillIT_Models.Entities.Core.Region", b =>
+                {
+                    b.Navigation("UserRegions");
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Role", b =>
@@ -2640,17 +3163,27 @@ namespace SkillIT_Models.Migrations
 
                     b.Navigation("Otps");
 
+                    b.Navigation("Passwords");
+
                     b.Navigation("Projects");
 
                     b.Navigation("Testimonial");
+
+                    b.Navigation("UserCities");
+
+                    b.Navigation("UserCountries");
 
                     b.Navigation("UserEmails");
 
                     b.Navigation("UserPhones");
 
+                    b.Navigation("UserRegions");
+
                     b.Navigation("UserSkills");
 
                     b.Navigation("UserSocials");
+
+                    b.Navigation("UserTokens");
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.UserSkill", b =>

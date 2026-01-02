@@ -36,6 +36,7 @@ public class Email : AuditableEntity
 
     // Navigation properties
     public virtual ICollection<UserEmail> UserEmails { get; set; } = new List<UserEmail>();
+    public virtual ICollection<NewsLetterSubscriber> NewsLetterSubscribers { get; set; } = new List<NewsLetterSubscriber>();
 }
 
 public enum EmailType

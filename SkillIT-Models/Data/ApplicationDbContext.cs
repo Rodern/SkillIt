@@ -34,11 +34,27 @@ public class ApplicationDbContext : DbContext
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<SentMail> SentMails => Set<SentMail>();
 
+    // Location Entities
+    public DbSet<City> Cities => Set<City>();
+    public DbSet<Region> Regions => Set<Region>();
+
     // Junction Tables
     public DbSet<UserEmail> UserEmails => Set<UserEmail>();
     public DbSet<UserPhone> UserPhones => Set<UserPhone>();
+    public DbSet<UserCity> UserCities => Set<UserCity>();
+    public DbSet<UserCountry> UserCountries => Set<UserCountry>();
+    public DbSet<UserRegion> UserRegions => Set<UserRegion>();
+    public DbSet<UserToken> UserTokens => Set<UserToken>();
     public DbSet<UserSkill> UserSkills => Set<UserSkill>();
     public DbSet<UserSocial> UserSocials => Set<UserSocial>();
+
+    // Communication Entities
+    public DbSet<NewsLetter> NewsLetters => Set<NewsLetter>();
+    public DbSet<NewsLetterSubscriber> NewsLetterSubscribers => Set<NewsLetterSubscriber>();
+
+    // Location and Security Entities
+    public DbSet<SimpleLocation> SimpleLocations => Set<SimpleLocation>();
+    public DbSet<Password> Passwords => Set<Password>();
 
     // Course Entities
     public DbSet<Course> Courses => Set<Course>();
@@ -210,6 +226,11 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Project>()
             .Property(p => p.SkillSet)
             .HasColumnType("json");
+
+        // Password JSON column
+        modelBuilder.Entity<Password>()
+            .Property(p => p.PastPasswords)
+            .HasColumnType("json");
     }
 
     private void ConfigureIndexes(ModelBuilder modelBuilder)
@@ -320,6 +341,79 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<CourseEnrollmentAnalytics>()
             .HasIndex(cea => new { cea.UserId, cea.IsCompleted })
             .HasDatabaseName("idx_courseenrollment_user_completed");
+
+        // City indexes
+        modelBuilder.Entity<City>()
+            .HasIndex(c => c.Guid)
+            .IsUnique()
+            .HasDatabaseName("idx_city_guid_unique");
+
+        modelBuilder.Entity<City>()
+            .HasIndex(c => c.CountryId)
+            .HasDatabaseName("idx_city_country");
+
+        // Region indexes
+        modelBuilder.Entity<Region>()
+            .HasIndex(r => r.Guid)
+            .IsUnique()
+            .HasDatabaseName("idx_region_guid_unique");
+
+        modelBuilder.Entity<Region>()
+            .HasIndex(r => r.CountryId)
+            .HasDatabaseName("idx_region_country");
+
+        // UserCity indexes
+        modelBuilder.Entity<UserCity>()
+            .HasIndex(uc => new { uc.UserId, uc.CityId })
+            .IsUnique()
+            .HasDatabaseName("idx_usercity_user_city_unique");
+
+        // UserCountry indexes
+        modelBuilder.Entity<UserCountry>()
+            .HasIndex(uc => new { uc.UserId, uc.CountryId })
+            .IsUnique()
+            .HasDatabaseName("idx_usercountry_user_country_unique");
+
+        // UserRegion indexes
+        modelBuilder.Entity<UserRegion>()
+            .HasIndex(ur => new { ur.UserId, ur.RegionId })
+            .IsUnique()
+            .HasDatabaseName("idx_userregion_user_region_unique");
+
+        // UserToken indexes
+        modelBuilder.Entity<UserToken>()
+            .HasIndex(ut => ut.UserId)
+            .IsUnique()
+            .HasDatabaseName("idx_usertoken_user_unique");
+
+        // NewsLetter indexes
+        modelBuilder.Entity<NewsLetter>()
+            .HasIndex(nl => nl.Guid)
+            .IsUnique()
+            .HasDatabaseName("idx_newsletter_guid_unique");
+
+        modelBuilder.Entity<NewsLetter>()
+            .HasIndex(nl => new { nl.Status, nl.ScheduleDate })
+            .HasDatabaseName("idx_newsletter_status_schedule");
+
+        // NewsLetterSubscriber indexes
+        modelBuilder.Entity<NewsLetterSubscriber>()
+            .HasIndex(nls => nls.SubscriberCode)
+            .IsUnique()
+            .HasDatabaseName("idx_newslettersubscriber_code_unique");
+
+        modelBuilder.Entity<NewsLetterSubscriber>()
+            .HasIndex(nls => nls.EmailId)
+            .HasDatabaseName("idx_newslettersubscriber_email");
+
+        // Password indexes
+        modelBuilder.Entity<Password>()
+            .HasIndex(p => p.UserId)
+            .HasDatabaseName("idx_password_user");
+
+        modelBuilder.Entity<Password>()
+            .HasIndex(p => p.LastChanged)
+            .HasDatabaseName("idx_password_lastchanged");
     }
 
     private void ConfigureUniqueConstraints(ModelBuilder modelBuilder)

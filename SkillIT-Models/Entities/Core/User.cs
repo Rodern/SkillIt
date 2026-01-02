@@ -64,8 +64,13 @@ public class User : AuditableEntity
     public virtual Account? Account { get; set; }
     public virtual ICollection<UserEmail> UserEmails { get; set; } = new List<UserEmail>();
     public virtual ICollection<UserPhone> UserPhones { get; set; } = new List<UserPhone>();
+    public virtual ICollection<UserCity> UserCities { get; set; } = new List<UserCity>();
+    public virtual ICollection<UserCountry> UserCountries { get; set; } = new List<UserCountry>();
+    public virtual ICollection<UserRegion> UserRegions { get; set; } = new List<UserRegion>();
+    public virtual ICollection<UserToken> UserTokens { get; set; } = new List<UserToken>();
     public virtual ICollection<UserSkill> UserSkills { get; set; } = new List<UserSkill>();
     public virtual ICollection<UserSocial> UserSocials { get; set; } = new List<UserSocial>();
+    public virtual ICollection<Password> Passwords { get; set; } = new List<Password>();
     public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     public virtual ICollection<Engagement> Engagements { get; set; } = new List<Engagement>();
     public virtual ICollection<UserAchievement> Achievements { get; set; } = new List<UserAchievement>();
