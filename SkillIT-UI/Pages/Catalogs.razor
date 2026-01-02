@@ -12,24 +12,24 @@
                     <h1 class="font-bold text-2xl mb-10 text-center">Add new catalog</h1>
                     <EditForm Model="@Catalog" class="cat-form rounded-lg shadow-lg px-4 py-5">
                         <div class="input-group mb-6 flex flex-col">
-                            <h4 class="text-lg font-md ">Caption</h4>
+                            <h4 class="text-lg font-md ">Title</h4>
                             <div class="input-wrapper rounded-md flex flex-row w-full h-10 border hover:shadow overflow-hidden"
                                  style="border-radius: 5px;">
-                                <label for="catCaption">
+                                <label for="catTitle">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
                                     </svg>
                                 </label>
-                                <input @bind="@Catalog.Caption" class="w-full px-2 py-1" type="text" name="catalog-caption" id="catCaption"
-                                       placeholder="catalog caption" autocapitalize="on" title="Catalog caption" />
+                                <input @bind="@Catalog.Title" class="w-full px-2 py-1" type="text" name="catalog-Title" id="catTitle"
+                                       placeholder="catalog Title" autocapitalize="on" title="Catalog Title" />
                             </div>
                         </div>
                         <div class="input-group mb-6">
-                            <label class="text-lg font-md " for="catDesc">Description</label>
+                            <label class="text-lg font-md " for="catDesc">Descriptions</label>
                             <div class="input-wrapper rounded-md flex flex-row w-full h-24 border hover:shadow overflow-hidden"
                                  style="border-radius: 5px;">
-                                <textarea @bind="@Catalog.Description" class="h-full w-full px-2 py-1" type="text" name="catalog-desc" placeholder="description"
-                                          id="catDesc" autocapitalize="on" title="Catalog description"></textarea>
+                                <textarea @bind="@Catalog.Descriptions" class="h-full w-full px-2 py-1" type="text" name="catalog-desc" placeholder="Descriptions"
+                                          id="catDesc" autocapitalize="on" title="Catalog Descriptions"></textarea>
                             </div>
                         </div>
                         <div class="input-group hidden mb-6">
@@ -50,7 +50,7 @@
                                               d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
                                     </svg>
                                 </label>
-                                <input @bind="@Catalog.CatalogLink" class="w-full px-2 py-1" type="text" name="catalog-link" id="catLink" placeholder="catalog link"
+                                <input @bind="@Catalog.Link" class="w-full px-2 py-1" type="text" name="catalog-link" id="catLink" placeholder="catalog link"
                                        pattern="https?://.+" title="Must include http:// or https://" />
                             </div>
                         </div>
@@ -139,8 +139,8 @@
 
     public void SearchCollection(string value)
     {
-        ObservableCollection<Catalog> catalogs = new(AllCatalogs.Where(c => c.Caption.ToLower().Contains(value) == true || c.Caption.ToLower().StartsWith(value) == true || c.Caption.ToLower().EndsWith(value) == true).ToList());
-        if (catalogs.Count == 0) catalogs = new(AllCatalogs.Where(c => c.Description.ToLower().Contains(value) == true || c.Description.ToLower().StartsWith(value) == true || c.Description.ToLower().EndsWith(value) == true).ToList());
+        ObservableCollection<Catalog> catalogs = new(AllCatalogs.Where(c => c.Title.ToLower().Contains(value) == true || c.Title.ToLower().StartsWith(value) == true || c.Title.ToLower().EndsWith(value) == true).ToList());
+        if (catalogs.Count == 0) catalogs = new(AllCatalogs.Where(c => c.Descriptions.ToLower().Contains(value) == true || c.Descriptions.ToLower().StartsWith(value) == true || c.Descriptions.ToLower().EndsWith(value) == true).ToList());
         PageCatalogs = catalogs;
         if (string.IsNullOrEmpty(value)) PageCatalogs = AllCatalogs;
 

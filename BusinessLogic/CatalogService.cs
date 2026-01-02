@@ -1,7 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Http;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Learning;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -37,7 +37,7 @@ namespace BusinessLogic
 			}
 		}
 
-		public ResponseModel DeleteCatalog(int id)
+		public ResponseModel DeleteCatalog(long id)
 		{
 			try
 			{
@@ -62,21 +62,24 @@ namespace BusinessLogic
 			return new ObservableCollection<Catalog>(DatabaseContext.Catalogs.ToList());
 		}
 
-		public ObservableCollection<Tuple<int, string>> GetAllCatalogCaptions()
+		public ObservableCollection<Tuple<long, string>> GetAllCatalogCaptions()
 		{
-			return new ObservableCollection<Tuple<int, string>>(DatabaseContext.Catalogs.Select(c => new Tuple<int, string> ( c.CatalogId,  c.Caption )));
+			return new ObservableCollection<Tuple<long, string>>(DatabaseContext.Catalogs.Select(c => new Tuple<long, string>(c.Id, c.Descriptions)));
 		}
 
-		public Catalog GetCatalog(int id) => DatabaseContext.Catalogs.Where(cat => cat.CatalogId == id).FirstOrDefault();
+		public Catalog GetCatalog(long id)
+		{
+			return DatabaseContext.Catalogs.Find(id);
+		}
 
-		public ResponseModel UpdateCatalog(int id, Catalog catalog)
+		public ResponseModel UpdateCatalog(long id, Catalog catalog)
 		{
 			try
 			{
-				var this_catalog = DatabaseContext.Catalogs.Where(cat => cat.CatalogId == id).ToList().FirstOrDefault();
+				var this_catalog = DatabaseContext.Catalogs.Where(cat => cat.Id == id).ToList().FirstOrDefault();
 				if (this_catalog != null && catalog != null)
 				{
-					if (this_catalog.CatalogId == id)
+					if (this_catalog.Id == id)
 					{
 						DatabaseContext.Entry(this_catalog).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
 						DatabaseContext.Catalogs.Update(catalog);
@@ -89,10 +92,8 @@ namespace BusinessLogic
 			}
 			catch (Exception ex)
 			{
-
 				return new ResponseModel(false, ex.Message);
 			}
-			
 		}
 	}
 }

@@ -12,7 +12,7 @@ public class Phone : AuditableEntity
 
     [Required]
     [Column("countryId")]
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }  // Changed from int to long
 
     [Required]
     [Column("number")]

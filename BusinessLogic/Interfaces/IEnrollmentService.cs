@@ -1,5 +1,4 @@
 ﻿using SkillIT_Models.Entities.Learning;
-using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -12,23 +11,23 @@ namespace BusinessLogic.Interfaces
 {
     public interface IEnrollmentService
     {
-        int CountAllUserEnrollments(int enrollmentId, long userId);
-        int CountCompletedUserEnrollments(int enrollmentId, long userId);
-        int CountUnCompletedUserEnrollments(int enrollmentId, long userId);
+        long CountAllUserEnrollments(long enrollmentId, long userId);
+        long CountCompletedUserEnrollments(long enrollmentId, long userId);
+        long CountUnCompletedUserEnrollments(long enrollmentId, long userId);
         ResponseModel CreateEnrollment(Enrollment enrollment);
-        ResponseModel DeleteEnrollment(int enrollmentId);
-        ObservableCollection<Enrollment> GetCourseEnrollments(int enrollmentId);
-        Enrollment GetEnrollment(int enrollmentId);
+        ResponseModel DeleteEnrollment(long enrollmentId);
+        ObservableCollection<Enrollment> GetCourseEnrollments(long enrollmentId);
+        Enrollment GetEnrollment(long enrollmentId);
         ObservableCollection<Enrollment> GetEnrollments();
         ObservableCollection<Enrollment> GetEnrollments(long userId);
         ObservableCollection<Enrollment> GetCompletedEnrollments(long userId);
         ObservableCollection<Enrollment> GetUncompletedEnrollments(long userId);
-        ObservableCollection<Enrollment> GetUserEnrollments(int enrollmentId, long userId);
+        ObservableCollection<Enrollment> GetUserEnrollments(long enrollmentId, long userId);
         ResponseModel UpdateEnrollment(Enrollment enrollment);
-        int CountAllUserEnrollments(long userId);
-		Enrollment GetEnrollmentByCourseId(int courseId);
+        long CountAllUserEnrollments(long userId);
+		Enrollment GetEnrollmentByCourseId(long courseId);
 		Enrollment GetEnrollmentByUserId(long userId);
-        Enrollment GetEnrollment(long userId, int courseId);
-		int CountCourseEnrollments(int enrollmentId);
+        Enrollment GetEnrollment(long userId, long courseId);
+		long CountCourseEnrollments(long enrollmentId);
 	}
 }

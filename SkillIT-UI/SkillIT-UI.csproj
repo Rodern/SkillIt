@@ -10,6 +10,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Company>SkillIT Educate</Company>
     <Product>SkillIT WebApp</Product>
+    <UserSecretsId>23fd3ebd-e845-484f-9fa8-cf3e1db85ff3</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Core;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace BusinessLogic
 		{
 			try
 			{
-				var this_social = DatabaseContext.Socials.Where(s => s.SocialId == social.SocialId).FirstOrDefault();
+				var this_social = DatabaseContext.Socials.Where(s => s.Id == social.Id).FirstOrDefault();
 				if (this_social == null)
 				{
 					DatabaseContext.Socials.Add(social);
@@ -41,7 +41,7 @@ namespace BusinessLogic
 		{
 			try
 			{
-				var social = DatabaseContext.Socials.Where(s => s.SocialId == id).FirstOrDefault();
+				var social = DatabaseContext.Socials.Where(s => s.Id == id).FirstOrDefault();
 				DatabaseContext.Entry<Social>(social).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
 				DatabaseContext.Socials.Remove(social);
 				DatabaseContext.SaveChanges();
@@ -55,7 +55,7 @@ namespace BusinessLogic
 
 		public Social GetSocial(int id)
 		{
-			return DatabaseContext.Socials.Where(s => s.SocialId == id).ToList().FirstOrDefault();
+			return DatabaseContext.Socials.Where(s => s.Id == id).ToList().FirstOrDefault();
 		}
 
 		public ObservableCollection<Social> GetSocials()
@@ -67,7 +67,7 @@ namespace BusinessLogic
 		{
 			try
 			{
-				var this_social = DatabaseContext.Socials.Where(s => s.SocialId == id).FirstOrDefault();
+				var this_social = DatabaseContext.Socials.Where(s => s.Id == id).FirstOrDefault();
 				if (this_social == null)
 				{
 					return new(false, "NotFound");

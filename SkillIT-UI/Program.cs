@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SkillIT_Models.Data;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using SkillIT_Models.Constants;
@@ -19,10 +20,7 @@ AuthenticationHelper.AuthenticationKey = builder.Configuration["JwtSettings:Secr
     ?? throw new InvalidOperationException("JWT Secret Key not configured");
 
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor(options =>
-{
-    options.RootComponents.RegisterForJavaScript<NotificationPanel>("fl-notification-panel");
-});
+builder.Services.AddServerSideBlazor();
 
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddMemoryCache();
@@ -31,14 +29,14 @@ builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 
 // Configure database
-builder.Services.AddDbContext<skill_it_dbContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("Default");
     if (string.IsNullOrEmpty(connectionString) || connectionString == "CONFIGURE_IN_USER_SECRETS")
     {
         throw new InvalidOperationException("Database connection string not configured. Please set up user secrets.");
     }
-    options.UseMySQL(connectionString);
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
 builder.Services.AddAuthenticationCore();

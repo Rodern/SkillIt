@@ -1,4 +1,4 @@
-﻿using BusinessLogic.Interfaces;
+using BusinessLogic.Interfaces;
 using Newtonsoft.Json;
 using SkillIT_Models.CRUD;
 using SkillIT_Models.Data;
@@ -37,11 +37,11 @@ namespace BusinessLogic
 			}
 		}
 
-		public Account GetUserAccount(long userId)
+		public Account? GetUserAccount(long userId)
 		{
 			return DatabaseContext.Accounts.Where(ac => ac.UserId == userId).ToList().FirstOrDefault();
 		}
-		public Account GetAccount(long accountId)
+		public Account? GetAccount(long accountId)
 		{
 			return DatabaseContext.Accounts.Where(ac => ac.Id == accountId).ToList().FirstOrDefault();
 		}
@@ -126,7 +126,7 @@ namespace BusinessLogic
             }
         }
 
-        public Creator GetCreator(long? AuthorId)
+        public Creator? GetCreator(long? AuthorId)
         {
             return DatabaseContext.Creators.Find(AuthorId);
         }
@@ -227,11 +227,11 @@ namespace BusinessLogic
 				return new(false, $"Failed: {ex.Message}");
 			}
 		}
-		public SentMail GetSentMail(int mailId)
+		public SentMail? GetSentMail(int mailId)
 		{
 			return DatabaseContext.SentMails.Find(mailId);
 		}
-		public SentMail GetSentMail(long userId)
+		public SentMail? GetSentMail(long userId)
 		{
 			return DatabaseContext.SentMails.Find(userId);
 		}
@@ -244,9 +244,11 @@ namespace BusinessLogic
 			return null;
 		}
 
-		public Role GetAccountRole(int roleId)
+		public Role? GetAccountRole(long roleId)
 		{
 			return DatabaseContext.Roles.Find(roleId);
 		}
 	}
 }
+
+

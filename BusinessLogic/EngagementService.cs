@@ -1,6 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Learning;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -25,7 +25,7 @@ namespace BusinessLogic
             try
             {
                 dbContext.Entry<Engagement>(engagement).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
-                dbContext.Engagements.Remove(dbContext.Find<Engagement>(engagement.EngagementId));
+                dbContext.Engagements.Remove(dbContext.Find<Engagement>(engagement.Id));
                 dbContext.SaveChanges();
                 return new(true, "Success");
             }
@@ -50,7 +50,7 @@ namespace BusinessLogic
             }
         }
 
-        public ObservableCollection<int> EngagementCatalogIdList(int catalogId)
+        public ObservableCollection<long> EngagementCatalogIdList(int catalogId)
         {
             return new(dbContext.Engagements.Select(e => e.CatalogId));
         }
@@ -60,7 +60,7 @@ namespace BusinessLogic
             return new(dbContext.Engagements.Where(e => e.UserId == userId));
         }
 
-        public ObservableCollection<int> EngagementUserCatalogIdList(int catalogId, long userId)
+        public ObservableCollection<long> EngagementUserCatalogIdList(int catalogId, long userId)
         {
             return new(dbContext.Engagements.Where(e => e.UserId == userId).Select(e => e.CatalogId));
         }

@@ -1,6 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Core;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace BusinessLogic
 		{
 			try
 			{
-				Skill this_skill = DatabaseContext.Skills.Where(s => s.SkillId == skill.SkillId).ToList().FirstOrDefault();
+				Skill this_skill = DatabaseContext.Skills.Where(s => s.Id == skill.Id).ToList().FirstOrDefault();
 				if (this_skill == null)
 				{
 					DatabaseContext.Skills.Add(skill);
@@ -39,7 +39,7 @@ namespace BusinessLogic
 		{
 			try
 			{
-				Skill skill = DatabaseContext.Skills.Where(s => s.SkillId == id).FirstOrDefault();
+				Skill skill = DatabaseContext.Skills.Where(s => s.Id == id).FirstOrDefault();
 				if (skill == null) return new(false, "NotFound");
 				DatabaseContext.Entry<Skill>(skill).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
 				DatabaseContext.Skills.Remove(skill);
@@ -54,7 +54,7 @@ namespace BusinessLogic
 
 		public Skill GetSkill(int id)
 		{
-			return DatabaseContext.Skills.Where(s => s.SkillId == id).FirstOrDefault();
+			return DatabaseContext.Skills.Where(s => s.Id == id).FirstOrDefault();
 		}
 
 		public ObservableCollection<Skill> GetSkills()
@@ -66,7 +66,7 @@ namespace BusinessLogic
 		{
 			try
 			{
-				Skill this_skill = DatabaseContext.Skills.Where(s => s.SkillId == id).ToList().FirstOrDefault();
+				Skill this_skill = DatabaseContext.Skills.Where(s => s.Id == id).ToList().FirstOrDefault();
 				if (this_skill == null) return new(false, "NotFound");
 				//this_skill.SkillId = skill.SkillId;
 				this_skill.Name	= skill.Name;

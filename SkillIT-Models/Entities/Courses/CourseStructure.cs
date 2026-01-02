@@ -15,7 +15,7 @@ public class CourseChapter : AuditableEntity
 
     [Required]
     [Column("courseID")]
-    public int CourseId { get; set; }
+    public long CourseId { get; set; }
 
     [Required]
     [MaxLength(36)]
@@ -64,7 +64,7 @@ public class CourseLesson : AuditableEntity
 
     [Required]
     [Column("chapterID")]
-    public int ChapterId { get; set; }
+    public long ChapterId { get; set; }
 
     [Required]
     [MaxLength(36)]
@@ -102,7 +102,7 @@ public class CourseContent : AuditableEntity
 
     [Required]
     [Column("lessonID")]
-    public int LessonId { get; set; }
+    public long LessonId { get; set; }
 
     [Required]
     [MaxLength(36)]

@@ -63,11 +63,11 @@
 
                     var account = AccountService.GetUserAccount(UserId);
 
-                    account.AccountStatus = "verified";
+                    account.Status = SkillIT_Models.Entities.Core.AccountStatus.VERIFIED;
 
-                    AccountService.UpdateAccount(account.AccountId, account.UserId, account);
+                    AccountService.UpdateAccount(account.Id, account.UserId, account);
 
-                    EntityService.DeleteEntity<Otp>(otp.OtpId);
+                    EntityService.DeleteEntity<Otp>(otp.Id);
                     JSRuntime.InvokeVoidAsync("initCourseCompletedPage");
                     return;
                 }

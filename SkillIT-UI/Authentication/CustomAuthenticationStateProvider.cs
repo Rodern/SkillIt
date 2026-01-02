@@ -77,15 +77,15 @@ namespace SkillIT_UI.Authentication
 			string userEmail = await JSRuntime.InvokeAsync<string>("getEmailFromToken", userToken);
 
 			var user = UserService.GetUser(userEmail);
-			var account = AccountService.GetUserAccount(user.UserId);
+			var account = AccountService.GetUserAccount(user.Id);
 			var role = AccountService.GetAccountRole(account.RoleId);
 			//JSRuntime.InvokeVoidAsync("alert", userEmail);
 
 			var identity = new ClaimsIdentity(new[]
 			{
 				new Claim("Token", userToken),
-				new Claim("UserId", $"{user.UserId}"),
-				new Claim("AccountId", $"{account.AccountId}"),
+				new Claim("UserId", $"{user.Id}"),
+				new Claim("AccountId", $"{account.Id}"),
 				new Claim("Email", user.Email),
 				new Claim("Role", role.Name)
 			}, "apiauth_type");

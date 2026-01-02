@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Core;
 using SkillIT_Models.Models;
 
 namespace BusinessLogic
@@ -18,12 +18,12 @@ namespace BusinessLogic
 	public class UserService: IUserService
 	{
 		private readonly ApplicationDbContext DatabaseContext;
-		private readonly IWebHostEnvironment hostEnvironment;
-		private readonly IMailingService MailingService;
-		private readonly IOTPService OTPService;
-		private readonly IJSRuntime JSRuntime;
-		private readonly IAccountService AccountService;
-        public AccountStatus AccountStatus = new();
+	private readonly IWebHostEnvironment? hostEnvironment;
+	private readonly IMailingService? MailingService;
+	private readonly IOTPService? OTPService;
+	private readonly IJSRuntime? JSRuntime;
+	private readonly IAccountService? AccountService;
+        public SkillIT_Models.Models.AccountStatus AccountStatus = new();
 		public UserService(ApplicationDbContext skill_It_DbContext, IWebHostEnvironment webHostEnvironment, IMailingService mailingService, IJSRuntime jSRuntime, IOTPService oTPService, IAccountService accountService)
 		{
 			this.DatabaseContext = skill_It_DbContext;
@@ -53,12 +53,12 @@ namespace BusinessLogic
 
 		public ResponseModel UpdateProfilePicture(long userId, IFormFile formFile)
 		{
-			var user = DatabaseContext.Users.FirstOrDefault(u => u.UserId == userId);
+			var user = DatabaseContext.Users.FirstOrDefault(u => u.Id == userId);
 			if (user == null) return new(false, "UserNotFound");
 			if (formFile == null) return new(false, "FileIsNull");
 
-            string profilesPath = hostEnvironment.WebRootPath + "/site_data/user_profile_pictures/";
-			string fileName = $"{user.UserId}_{user.Email}_profileImage.png";
+            string profilesPath = hostEnvironment!.WebRootPath + "/site_data/user_profile_pictures/";
+			string fileName = $"{user.Id}_{user.Email}_profileImage.png";
 			string fullProfilePath = profilesPath + fileName;
 			string profileImageThumbnailPath = profilesPath + $"{fileName}_thumbnail.png";
 
@@ -81,40 +81,36 @@ namespace BusinessLogic
 
 		public ResponseModel AddUser(UserModel userModel)
 		{
-			var users = DatabaseContext.Users.Where(u => u.UserId == userModel.UserId).ToList();
+			var users = DatabaseContext.Users.Where(u => u.Id == userModel.UserId).ToList();
 			try
 			{
 				if (users.Count == 0)
 				{
 					User user = new()
 					{
-						UserId = userModel.UserId,
 						Address = userModel.Address,
 						DateCreated = DateTime.UtcNow,
 						Email = userModel.Email,
 						FirstName = userModel.FirstName,
 						LastName = userModel.LastName,
 						Password = AuthenticationHelper.EncryptPassword(userModel.Password),
-						Dob = userModel.Dob,
+						DateOfBirth = userModel.Dob,
 						Phone = userModel.Phone,
-						Gender = userModel.Gender,
+					Gender = Enum.TryParse<Gender>(userModel.Gender, true, out var gender) ? gender : Gender.Other,
 						ProfileImage = userModel.ProfileImage
 					};
 
 					Account account = new()
 					{
-						UserId = user.UserId,
-						AccountStatus = "not_verified",
+						UserId = user.Id,
+						Status = SkillIT_Models.Entities.Core.AccountStatus.PASSIVE,
 						LoginInfo = JsonConvert.SerializeObject(userModel.LoginInfos),
-						LoginAttemp = JsonConvert.SerializeObject(userModel.LoginAttemps),
-						AccountType = "user",
+						LoginAttempt = JsonConvert.SerializeObject(userModel.LoginAttemps),
+						AccountType = AccountType.user,
 						User = user,
 						RoleId = 1,
-						Role = null,
-						Creators = Array.Empty<Creator>(),
-						LastLogin = DateTime.UtcNow
+						Role = null!,
 					};
-
 					DatabaseContext.Accounts.Add(account);
 					DatabaseContext.Users.Add(user);
 					DatabaseContext.SaveChanges();
@@ -124,31 +120,29 @@ namespace BusinessLogic
                         Code = AuthenticationHelper.GenerateOTP(),
 						Guid = AuthenticationHelper.GenerateGuid(),
 						ExpiryDate = DateTime.UtcNow.AddMonths(2),
-						UserId = user.UserId,
-						User = null,
+						UserId = user.Id,
+						User = null!,
 					};
+					OTPService!.AddEmailOTP(otp);
+					//Sendmail(user.Email, user.Id, otp.Guid);
+					string emailConfirmationLink = $"{SiteSettings.BaseUrl}/confirm_email/{user.Id}?guid={otp.Guid}";
 
-					OTPService.AddEmailOTP(otp);
-					//Sendmail(user.Email, user.UserId, otp.Guid);
-
-					string emailConfirmationLink = $"{SiteSettings.BaseUrl}/confirm_email/{user.UserId}?guid={otp.Guid}";//$"{SiteSettings.BaseUrl}/confirm_email/{userId}?guid={guid}";
-					
 					string confirmationEmailTemplate = SiteSettings.GetConfirmEmailTemplate(emailConfirmationLink, "accounthelper@itskills.ovh", SiteSettings.SupportEmail, SiteSettings.BaseUrl);
 					string welcomeEmailTemplate = SiteSettings.GetWelcomeEmailTemplate(user.FirstName, SiteSettings.BaseUrl);
 
-					Sentmail confirmationSentmail = new()
+					SentMail confirmationSentmail = new()
 					{
-						UserId = user.UserId,
+						UserId = user.Id,
 						EmailBody = confirmationEmailTemplate,
 						DateSent = DateTime.UtcNow,
-						EmailType = Account_Status.ConfirmationEmail,
+						EmailType = EmailSentType.verify_email,
 					};
-					Sentmail userWelcomeSentmail = new()
+					SentMail userWelcomeSentmail = new()
 					{
-						UserId = user.UserId,
+						UserId = user.Id,
 						EmailBody = welcomeEmailTemplate,
 						DateSent = DateTime.UtcNow,
-						EmailType = Account_Status.WelcomeEmail,
+						EmailType = EmailSentType.welcome_email,
 					};
 
 					var response = AccountService.CreateSentMail(confirmationSentmail);
@@ -172,23 +166,23 @@ namespace BusinessLogic
 		public async Task<bool> Sendmail(string email, long userId, string guid)
 		{
 			string link = $"{SiteSettings.BaseUrl}/confirm_email/{userId}?guid={guid}";//$"{SiteSettings.BaseUrl}/confirm_email/{userId}?guid={guid}";
-			string emailTemplate = await JSRuntime.InvokeAsync<string>("getConfirmEmailTemplate", link, "accounthelper@itskills.ovh", email);
-			_ = MailingService.SendMail(email, "Please confirm your email", emailTemplate, SiteSettings.AccountHelperEmail);
-			JSRuntime.InvokeVoidAsync("alert", emailTemplate);
+		string emailTemplate = await JSRuntime!.InvokeAsync<string>("getConfirmEmailTemplate", link, "accounthelper@itskills.ovh", email);
+		_ = MailingService!.SendMail(email, "Please confirm your email", emailTemplate, SiteSettings.AccountHelperEmail);
+		_ = JSRuntime.InvokeVoidAsync("alert", emailTemplate);
 			return true;
 		}
 
-		public User GetUser(long id)
+public User? GetUser(long id)
+	{
+		var user = DatabaseContext.Users.Where(u => u.Id == id).FirstOrDefault();
+		if(user != null)
 		{
-			var user = DatabaseContext.Users.Where(u => u.UserId == id).FirstOrDefault();
-			if(user != null)
-			{
-				return user;
-			}
-			return new();
+			return user;
 		}
+		return null;
+	}
 
-		public User GetUser(string email)
+	public User? GetUser(string email)
 		{
 			return DatabaseContext.Users.Where(u => u.Email == email).FirstOrDefault();
 		}
@@ -197,7 +191,7 @@ namespace BusinessLogic
 		{
 			try
 			{
-				User user = DatabaseContext.Users.Where(_ => _.UserId == userId).FirstOrDefault();
+				User user = DatabaseContext.Users.Where(_ => _.Id == userId).FirstOrDefault();
 				if (user != null)
 				{
 					/*user.Gender = userModel.Gender;
@@ -216,7 +210,7 @@ namespace BusinessLogic
 					DatabaseContext.SaveChanges();
 					return new(true, "Success");
 				}
-				return new(false, Convert.ToString(user.UserId));
+				return new(false, Convert.ToString(user.Id));
 			}
 			catch (Exception ex)
 			{
@@ -228,17 +222,17 @@ namespace BusinessLogic
 		{
 			try
 			{
-				var user = DatabaseContext.Users.Where(u => u.UserId == userId).FirstOrDefault();
+				var user = DatabaseContext.Users.Where(u => u.Id == userId).FirstOrDefault();
 				if (user != null)
 				{
-					user.Gender = userModel.Gender;
+					user.Gender = Enum.TryParse<Gender>(userModel.Gender, true, out var gender) ? gender : Gender.Other;
 					user.Address = userModel.Address;
 					user.DateCreated = userModel.DateCreated;
 					user.Email = userModel.Email;
 					user.FirstName = userModel.FirstName;
 					user.LastName = userModel.LastName;
 					user.Password = AuthenticationHelper.EncryptPassword(userModel.Password);
-					user.Dob = userModel.Dob;
+				user.DateOfBirth = userModel.Dob;
 					user.Phone = userModel.Phone;
 					user.ProfileImage = userModel.ProfileImage;
 					DatabaseContext.Entry<User>(user).State = EntityState.Detached;

@@ -1,6 +1,6 @@
 ﻿@page "/catalog/{catalogId:int}"
 
-<PageTitle>Catalogs - @Catalog.Caption</PageTitle>
+<PageTitle>Catalogs - @Catalog.Title</PageTitle>
 
 <div class="catalog-page page cursor-default flex flex-col bottom-0 top-0 left-0 right-0">
     <div class="cw">
@@ -100,7 +100,7 @@
             <div class="cw-detail-box">
                 <h3 class="vid-caption">@title</h3>
                 <p class="vid-desc">
-                    @Catalog.Description
+                    @Catalog.Descriptions
                 </p>
             </div>
         </div>

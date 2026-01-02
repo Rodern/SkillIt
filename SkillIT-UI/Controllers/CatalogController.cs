@@ -3,13 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Utilities;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Learning;
 using SkillIT_Models.Models;
 using System.IO;
-using Ubiety.Dns.Core;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Net.WebRequestMethods;
 
 namespace SkillItAPI.Controllers
 {
@@ -61,7 +57,7 @@ namespace SkillItAPI.Controllers
         {
             if (catalogJson.Length <= 0 || image == null) return BadRequest();
             Catalog catalog = JsonConvert.DeserializeObject<Catalog>(catalogJson);
-            catalog.Image = ImageUpload.GetBytes(image);
+            //catalog.Image = ImageUpload.GetBytes(image);
             return Ok(_catalogService.AddCatalog(catalog));
         }
 
@@ -108,8 +104,8 @@ namespace SkillItAPI.Controllers
 		{
             if(catalogJson.Length <= 0 || image == null) return BadRequest();
             Catalog catalog = JsonConvert.DeserializeObject<Catalog>(catalogJson);
-            catalog.Image = ImageUpload.GetBytes(image);
-			return Ok(_catalogService.UpdateCatalog(catalog.CatalogId, catalog));
+            //catalog.Image = ImageUpload.GetBytes(image);
+			return Ok(_catalogService.UpdateCatalog(catalog.Id, catalog));
 		}
 	}
 	public class Object

@@ -1,7 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Core;
 
 namespace SkillItAPI.Controllers
 {

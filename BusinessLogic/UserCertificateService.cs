@@ -1,7 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Learning;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace BusinessLogic
             for (int i = 0; i < j; i++)
             {
                 userCertificates[i].Certificate = new Certificate();
-                userCertificates[i].Certificate = DatabaseContext.Certificates.Where(s => s.CertificateId == userCertificates[i].CertificateId).FirstOrDefault();
+                userCertificates[i].Certificate = DatabaseContext.Certificates.Where(s => s.Id == userCertificates[i].CertificateId).FirstOrDefault();
             }
             return userCertificates;
         }
@@ -53,12 +53,12 @@ namespace BusinessLogic
 
         public ResponseModel RemoveUserCertificate(int ucId, long userId)
         {
-            UserCertificate certificate = DatabaseContext.UserCertificates.Where(_ => _.UserCertificateId == ucId && _.UserId == userId).FirstOrDefault();
+            UserCertificate certificate = DatabaseContext.UserCertificates.Where(_ => _.Id == ucId && _.UserId == userId).FirstOrDefault();
             if (certificate == null) return new(false, "CertificateIsNull");
             try
             {
                 DatabaseContext.Entry<UserCertificate>(certificate).State = EntityState.Deleted;
-                DatabaseContext.Entry<Certificate>(DatabaseContext.Find<Certificate>(certificate.CertificateId)).State = EntityState.Deleted;
+                DatabaseContext.Entry<Certificate>(DatabaseContext.Find<Certificate>(certificate.Id)).State = EntityState.Deleted;
                 //DatabaseContext.UserCertificates.Update(certificate);
                 DatabaseContext.SaveChanges();
                 return new(true, "Success");

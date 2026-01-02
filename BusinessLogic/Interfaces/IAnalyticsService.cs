@@ -65,8 +65,8 @@ namespace BusinessLogic.Interfaces
     public class TrendingCourse
     {
         public int CourseId { get; set; }
-        public string CourseName { get; set; }
-        public string ThumbnailUrl { get; set; }
+        public string CourseName { get; set; } = string.Empty;
+        public string ThumbnailUrl { get; set; } = string.Empty;
         public int ViewCount { get; set; }
         public int UniqueViewers { get; set; }
     }

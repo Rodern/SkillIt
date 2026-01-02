@@ -8,7 +8,7 @@ namespace SkillIT_Models.Models
 {
 	public class CourseIndex
 	{
-		public CourseIndex(int courseIndexId, int courseId, int chapterId, int lessonId, int contentId)
+		public CourseIndex(long courseIndexId, long courseId, long chapterId, long lessonId, long contentId)
 		{
 			this.CourseIndexId = courseIndexId;
 			this.CourseId = courseId;
@@ -22,14 +22,14 @@ namespace SkillIT_Models.Models
 
 		}
 
-		public int CourseIndexId { get; set; }
-		public int CourseId { get; set; }
-		public int ChapterId { get; set; }
-		public int LessonId { get; set; }
-		public int ContentId { get; set; }
-		public int ChapterNumber { get; set; }
-		public int LessonNumber { get; set; }
-		public int ContentNumber { get; set; }
+		public long CourseIndexId { get; set; }
+		public long CourseId { get; set; }
+		public long ChapterId { get; set; }
+		public long LessonId { get; set; }
+		public long ContentId { get; set; }
+		public long ChapterNumber { get; set; }
+		public long LessonNumber { get; set; }
+		public long ContentNumber { get; set; }
 		public string ChapterGuid { get; set; }
 		public string LessonGuid { get; set; }
 		public string ContentGuid { get; set; }

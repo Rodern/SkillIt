@@ -57,9 +57,32 @@ This document outlines the comprehensive plan to migrate the SkillIt project fro
 
 ---
 
-## Migration Strategy
+## Migration Strategy - Combined Approach (Option 2 + 3)
 
-### Phase 1: Interface Updates (18 files)
+**Adopted Strategy:** Complete Full Refactoring with AutoMapper for DTO Mapping
+
+This combined approach provides:
+1. **Clean Entity Layer**: All services use new entity types internally (Option 2)
+2. **Backward Compatibility**: AutoMapper handles conversion between entities and legacy DatabaseModels (Option 3)
+3. **Gradual Migration**: Controllers and external interfaces can continue using DTOs during transition
+4. **Separation of Concerns**: Clear boundaries between persistence layer and API layer
+
+### AutoMapper Configuration
+
+**Installed Packages:**
+- AutoMapper 12.0.1
+- AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1
+
+**Mapping Profile Location:**
+`BusinessLogic/Mapping/EntityMappingProfile.cs`
+
+**Key Mappings:**
+- All primary key mappings (Id ↔ EntityId pattern)
+- Special property mappings (CoverImage ↔ ThumbnailImage)
+- Navigation property handling for foreign keys
+- Bidirectional mappings for full flexibility
+
+### Phase 1: Interface Updates (18 files) - ✅ COMPLETED
 Update all service interfaces in `BusinessLogic/Interfaces/` to return new entity types.
 
 **Pattern:**

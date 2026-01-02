@@ -19,7 +19,7 @@ public class Enrollment : AuditableEntity
 
     [Required]
     [Column("courseID")]
-    public int CourseId { get; set; }
+    public long CourseId { get; set; }
 
     [Column("date_enrolled")]
     public DateTime DateEnrolled { get; set; } = DateTime.UtcNow;
@@ -29,6 +29,15 @@ public class Enrollment : AuditableEntity
 
     [Column("date_completed")]
     public DateTime DateCompleted { get; set; }
+
+    [Column("completion_percentage")]
+    public decimal CompletionPercentage { get; set; } = 0;
+
+    [Column("last_accessed")]
+    public DateTime? LastAccessed { get; set; }
+
+    [Column("enrolled_at")]
+    public DateTime EnrolledAt { get; set; } = DateTime.UtcNow;
 
     // Navigation properties
     [ForeignKey(nameof(UserId))]
@@ -51,7 +60,7 @@ public class CourseData : AuditableEntity
 
     [Required]
     [Column("enrollmentID")]
-    public int EnrollmentId { get; set; }
+    public long EnrollmentId { get; set; }
 
     [Column("start_date")]
     public DateTime StartDate { get; set; } = DateTime.UtcNow;
@@ -76,7 +85,7 @@ public class DataIndex : BaseEntity
 
     [Required]
     [Column("courseId")]
-    public int CourseId { get; set; }
+    public long CourseId { get; set; }
 
     // JSON column - will be configured in Fluent API
     [Column("index_data", TypeName = "json")]

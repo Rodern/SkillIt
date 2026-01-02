@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
@@ -12,9 +13,11 @@ namespace SkillItAPI.Controllers
     public class AchievementController : Controller
     {
         private readonly IUserAchievementService userAchievementService;
-        public AchievementController(IUserAchievementService userAchievementService)
+        private readonly IMapper _mapper;
+        public AchievementController(IUserAchievementService userAchievementService, IMapper mapper)
         {
             this.userAchievementService = userAchievementService;
+            this._mapper = mapper;
         }
 
         [AllowAnonymous]
@@ -22,7 +25,8 @@ namespace SkillItAPI.Controllers
         [Route("add")]
         public IActionResult Add(UserAchievement userAchievement)
         {
-            return Ok(userAchievementService.AddUserCerticate(userAchievement));
+            var entity = _mapper.Map<SkillIT_Models.Entities.Learning.UserAchievement>(userAchievement);
+            return Ok(userAchievementService.AddUserCerticate(entity));
         }
 
         [AllowAnonymous]
@@ -30,7 +34,8 @@ namespace SkillItAPI.Controllers
         [Route("update")]
         public IActionResult Update(UserAchievement userAchievement)
         {
-            return Ok(userAchievementService.UpdateUserAchievement(userAchievement));
+            var entity = _mapper.Map<SkillIT_Models.Entities.Learning.UserAchievement>(userAchievement);
+            return Ok(userAchievementService.UpdateUserAchievement(entity));
         }
 
         [AllowAnonymous]

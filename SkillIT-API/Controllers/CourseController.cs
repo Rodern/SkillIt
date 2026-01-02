@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Interfaces;
+﻿using AutoMapper;
+using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -24,15 +25,18 @@ namespace SkillIT_API.Controllers
         private readonly ICourseService _courseService;
         private readonly IMemoryCache _cache;
         private readonly ILogger<CourseController> _logger;
+        private readonly IMapper _mapper;
 
         public CourseController(
             ICourseService service, 
             IMemoryCache cache, 
-            ILogger<CourseController> logger)
+            ILogger<CourseController> logger,
+            IMapper mapper)
         {
             _courseService = service ?? throw new ArgumentNullException(nameof(service));
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         /// <summary>
@@ -185,7 +189,8 @@ namespace SkillIT_API.Controllers
             {
                 _logger.LogInformation("Creating new course: {CourseName}", course?.Name);
 
-                var result = _courseService.CreateCourse(course);
+                var entity = _mapper.Map<SkillIT_Models.Entities.Courses.Course>(course);
+                var result = _courseService.CreateCourse(entity);
                 
                 if (result.Success)
                 {
@@ -218,7 +223,8 @@ namespace SkillIT_API.Controllers
                     return BadRequest(new ResponseModel(false, "ID mismatch"));
                 }
 
-                var result = _courseService.UpdateCourse(course);
+                var entity = _mapper.Map<SkillIT_Models.Entities.Courses.Course>(course);
+                var result = _courseService.UpdateCourse(entity);
                 
                 if (result.Success)
                 {

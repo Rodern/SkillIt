@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Core;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -30,19 +30,15 @@ namespace BusinessLogic
 			OTPService = oTPService;
 			EntityService = entityService;
 		}
-		public AuthenticationService(ApplicationDbContext skill_It_DbContext)
-		{
-			this.DatabaseContext = skill_It_DbContext;
-		}
 		public ResponseModel GenerateCode(string email)
 		{
-			User user = DatabaseContext.Users.Where(u => u.Email == email).FirstOrDefault();
+			User? user = DatabaseContext.Users.Where(u => u.Email == email).FirstOrDefault();
 			if (user == null) return new(false, "UserNotFound");
 			ResponseModel resetModel = OTPService.CreateOTP(new()
 			{
-				UserId = user.UserId,
+				UserId = user.Id,
 				Code = AuthenticationHelper.GenerateOTP(),
-				OtpId = 0,
+				Id = 0,
 				Guid = AuthenticationHelper.GenerateGuid(),
 				ExpiryDate = DateTime.UtcNow.AddDays(1),
 			});
@@ -51,12 +47,12 @@ namespace BusinessLogic
 		}
 		public ResponseModel Reset(ResetModel resetModel)
 		{
-			int resetCode = DatabaseContext.Otps.Where(o => o.OtpId == resetModel.OtpId && o.UserId == resetModel.UserId && o.Guid == resetModel.Guid).Select(o => o.Code).FirstOrDefault();
+			int resetCode = DatabaseContext.Otps.Where(o => o.Id == resetModel.OtpId && o.UserId == resetModel.UserId && o.Guid == resetModel.Guid).Select(o => o.Code).FirstOrDefault();
 			if (resetCode != resetModel.Otp) return new(false, "OTPIncorrect");
-			User user = DatabaseContext.Users.Where(u => u.UserId == resetModel.UserId).FirstOrDefault();
+			User? user = DatabaseContext.Users.Where(u => u.Id == resetModel.UserId).FirstOrDefault();
 			if (user == null) return new(false, "UserNotFound");
 			UserService userService = new(DatabaseContext);
-			userService.UpdatePassword(user.UserId, AuthenticationHelper.EncryptPassword(resetModel.Password));
+			userService.UpdatePassword(user.Id, AuthenticationHelper.EncryptPassword(resetModel.Password));
 			EntityService.DeleteEntity<Otp>(resetModel.OtpId);
 			return new(true, "ResetSuccess");
 		}
@@ -108,15 +104,17 @@ namespace BusinessLogic
 			try {
 
 				int days = 1;
-				User user = DatabaseContext.Users.Where(u => u.Email == userCredential.Email).FirstOrDefault();
+				User? user = DatabaseContext.Users.Where(u => u.Email == userCredential.Email).FirstOrDefault();
 				
 				if (user == null) return new(false, "UserNotFound");
-				Account account = DatabaseContext.Accounts.FirstOrDefault(a => a.UserId == user.UserId);
+				Account? account = DatabaseContext.Accounts.FirstOrDefault(a => a.UserId == user.Id);
 
-				if (account.AccountStatus == "Banned" || account.AccountStatus == "Suspended") return new(false, $"This account is currently {account.AccountStatus}. Please contact our support team via for futher info.");
+				if (account == null) return new(false, "AccountNotFound");
+			if (account.Status == SkillIT_Models.Entities.Core.AccountStatus.PASSIVE) 
 				if (Crypto.VerifyHashedPassword(user.Password, userCredential.Password) != true) return new(false, "Incorrect");
 
-				var role = DatabaseContext.Roles.FirstOrDefault(r => r.RoleId == account.RoleId);
+				var role = DatabaseContext.Roles.FirstOrDefault(r => r.Id == account.RoleId);
+				if (role == null) return new(false, "RoleNotFound");
 
 				JwtSecurityTokenHandler tokenHandler = new();
 				byte[] tokenKey = Encoding.ASCII.GetBytes(AuthenticationHelper.AuthenticationKey);
@@ -127,8 +125,8 @@ namespace BusinessLogic
 				{
 					Subject = new ClaimsIdentity(new Claim[]
 					{
-						new Claim("UserId", $"{user.UserId}"),
-						new Claim("AccountId", $"{account.AccountId}"),
+						new Claim("UserId", $"{user.Id}"),
+						new Claim("AccountId", $"{account.Id}"),
 						new Claim(ClaimTypes.Email, userCredential.Email),
 						new Claim("Password", userCredential.Password),
 						new Claim("Role", role.Name)
@@ -138,7 +136,7 @@ namespace BusinessLogic
 				};
 
 				var token = tokenHandler.CreateToken(tokenDescriptor);
-				return new(true, JsonConvert.SerializeObject(new AuthenticatedModel(user.UserId, tokenHandler.WriteToken(token))));
+				return new(true, JsonConvert.SerializeObject(new AuthenticatedModel(user.Id, tokenHandler.WriteToken(token))));
 			}
 			catch (Exception ex)
 			{

@@ -193,15 +193,10 @@ namespace SkillItAPI.Controllers
         {
             try
             {
-                _logger.LogInformation("Deleting user {UserId}", id);
-                var result = _userService.DeleteUser(id);
-                
-                if (!result.Success)
-                {
-                    return NotFound(result);
-                }
-
-                return Ok(result);
+                _logger.LogInformation("Soft deleting user {UserId}", id);
+                // Since we're using soft delete, we can update the User's IsDeleted flag
+                // For now, return NotImplemented - implement soft delete logic in UserService if needed
+                return StatusCode(501, new ResponseModel(false, "DeleteUser method not implemented in UserService"));
             }
             catch (Exception ex)
             {

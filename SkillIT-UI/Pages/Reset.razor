@@ -43,14 +43,14 @@
                 NavigationManager.NavigateTo("/link_error");
                 return;
             }
-            var otp = OtpService.GetOTP(user.UserId);
+            var otp = OtpService.GetOTP(user.Id);
             if(otp == null)
             {
                 NavigationManager.NavigateTo("/link_error");
                 return;
             }
 
-            SendResetEmail(email, user.UserId, otp.Guid);
+            SendResetEmail(email, user.Id, otp.Guid);
         }
 
         base.OnParametersSet();
@@ -61,12 +61,12 @@
         string link = $"{SiteSettings.BaseUrl}/reset_password/{userId}?guid={guid}";//$"{SiteSettings.BaseUrl}/confirm_email/{userId}?guid={guid}";
         string emailTemplate = SiteSettings.GetResetEmailTemplate(link, SiteSettings.BaseUrl);
 
-        Sentmail sentmail = new()
+        SentMail sentmail = new()
             {
                 UserId = userId,
                 EmailBody = emailTemplate,
                 DateSent = DateTime.UtcNow,
-                EmailType = Account_Status.ResetPasswordEmail,
+                EmailType = EmailSentType.reset_password,
             };
 
         var res = AccountService.CreateSentMail(sentmail);

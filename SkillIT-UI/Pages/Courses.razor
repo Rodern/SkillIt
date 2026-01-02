@@ -149,7 +149,7 @@
 					JSRuntime.InvokeVoidAsync("console.log", enrs);
 					foreach (var e in enrs)
 					{
-						CoursesList.Add(AllCourses.Where(c => c.CourseId == e).FirstOrDefault());
+						CoursesList.Add(AllCourses.Where(c => c.Id == e).FirstOrDefault());
 					}
 					break;
 				case "old":

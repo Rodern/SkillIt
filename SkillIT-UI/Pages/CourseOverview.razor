@@ -26,11 +26,11 @@
 			<ul class="course-content-list" start="1">
 				@foreach (var chapter in CourseChapters.OrderBy(e => e.ChapterNumber))
 				{
-					<li id="course_chapter_@chapter.ChapterId" data-bs-toggle="collapse" data-bs-target="#collapseChapter_@chapter.ChapterId" role="button" aria-expanded="false" aria-controls="collapseChapter_@chapter.ChapterId">@chapter.Title</li>
-					<ul start="1" class="chapter-lessons collapse" id="collapseChapter_@chapter.ChapterId">
-						@foreach (var lesson in chapter.CourseLessons.OrderBy(e => e.LessonNumber))
+					<li id="course_chapter_@chapter.Id" data-bs-toggle="collapse" data-bs-target="#collapseChapter_@chapter.Id" role="button" aria-expanded="false" aria-controls="collapseChapter_@chapter.Id">@chapter.Title</li>
+					<ul start="1" class="chapter-lessons collapse" id="collapseChapter_@chapter.Id">
+						@foreach (var lesson in chapter.Lessons.OrderBy(e => e.LessonNumber))
 						{
-							<li id="course_lesson_@lesson.LessonId">@lesson.Topic</li>
+							<li id="course_lesson_@lesson.Id">@lesson.Topic</li>
 						}
 					</ul>
 				}
@@ -58,10 +58,10 @@
 				</div>
 			</div>
 			<ul class="chapter-lesson-list" start="1">
-				<ul start="1" class="chapter-lesson" id="collapseChapter_@Chapter.ChapterId">
-					@foreach (var lesson in Chapter.CourseLessons.OrderBy(e => e.LessonNumber))
+				<ul start="1" class="chapter-lesson" id="collapseChapter_@Chapter.Id">
+					@foreach (var lesson in Chapter.Lessons.OrderBy(e => e.LessonNumber))
 					{
-						<li id="course_lesson_@lesson.LessonId">@lesson.Topic</li>
+						<li id="course_lesson_@lesson.Id">@lesson.Topic</li>
 					}
 				</ul>
 			</ul>
@@ -155,21 +155,21 @@
 
 		if (firstRender)
 		{
-			CourseChapters = CourseService.GetCourseChapters(Course.CourseId);
+			CourseChapters = CourseService.GetCourseChapters(Course.Id);
 			for (int i = 0; i < CourseChapters.Count; i++)
 			{
-				CourseChapters[i].CourseLessons = CourseService.GetCourseLessons(CourseChapters[i].ChapterId);
+				CourseChapters[i].Lessons = CourseService.GetCourseLessons(CourseChapters[i].Id);
 			}
 			JSRuntime.InvokeVoidAsync("console.log", CourseChapters);
 
 			if (CourseChapters.Count > 0)
 			{
 				Chapter = CourseChapters[0];
-				if (Chapter.CourseLessons.Count > 0)
+				if (Chapter.Lessons.Count > 0)
 				{
 
-					Lesson = Chapter.CourseLessons.FirstOrDefault(e => e.LessonId == 1);
-					Content = CourseService.GetCourseContents(Lesson.LessonId)[0];
+					Lesson = Chapter.Lessons.FirstOrDefault(e => e.Id == 1);
+					Content = CourseService.GetCourseContents(Lesson.Id)[0];
 				}
 			}
 

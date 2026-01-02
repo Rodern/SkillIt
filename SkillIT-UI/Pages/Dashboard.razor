@@ -184,115 +184,115 @@
 	</Authorized>
 </AuthorizeView>
 @code {
-	private ObservableCollection<Course> Courses { get; set; } = new();
+    private ObservableCollection<Course> Courses { get; set; } = new();
 
-	[Parameter]
-	public long userId { get; set; }
+    [Parameter]
+    public long userId { get; set; }
 
 
-	public async Task<bool> SendConfirmationEmail(string email, long userId, string guid, string firstname, string lastname)
-	{
-		string link = $"{SiteSettings.BaseUrl}/confirm_email/{userId}?guid={guid}";//$"{SiteSettings.BaseUrl}/confirm_email/{userId}?guid={guid}";
-		string emailTemplate = await JSRuntime.InvokeAsync<string>("getConfirmEmailTemplate", link, "accounthelper@itskills.ovh", email);
-		string welcomeEmailTemplate = await JSRuntime.InvokeAsync<string>("getWelcomeEmailTemplate", firstname);
+    public async Task<bool> SendConfirmationEmail(string email, long userId, string guid, string firstname, string lastname)
+    {
+        string link = $"{SiteSettings.BaseUrl}/confirm_email/{userId}?guid={guid}";//$"{SiteSettings.BaseUrl}/confirm_email/{userId}?guid={guid}";
+        string emailTemplate = await JSRuntime.InvokeAsync<string>("getConfirmEmailTemplate", link, "accounthelper@itskills.ovh", email);
+        string welcomeEmailTemplate = await JSRuntime.InvokeAsync<string>("getWelcomeEmailTemplate", firstname);
 
-		Sentmail sentmail = new()
+        SentMail sentmail = new()
 			{
 				UserId = userId,
 				EmailBody = emailTemplate,
 				DateSent = DateTime.UtcNow,
-				EmailType = Account_Status.ConfirmationEmail,
+				EmailType = EmailSentType.verify_email,
 			};
-		Sentmail sentmail1 = new()
+        SentMail sentmail1 = new()
 			{
 				UserId = userId,
 				EmailBody = welcomeEmailTemplate,
 				DateSent = DateTime.UtcNow,
-				EmailType = Account_Status.WelcomeEmail,
+				EmailType = EmailSentType.welcome_email,
 			};
 
-		var res = AccountService.CreateSentMail(sentmail);
-		res = AccountService.CreateSentMail(sentmail1);
+        var res = AccountService.CreateSentMail(sentmail);
+        res = AccountService.CreateSentMail(sentmail1);
 
-		var response = MailingService.SendMailWithInFoMaill(email, $"Welcome {firstname}", welcomeEmailTemplate, SiteSettings.InfoEmail);
-		//response = MailingService.SendMail(email, "Please confirm your email", emailTemplate, SiteSettings.AccountHelperEmail);
+        var response = MailingService.SendMailWithInFoMaill(email, $"Welcome {firstname}", welcomeEmailTemplate, SiteSettings.InfoEmail);
+        //response = MailingService.SendMail(email, "Please confirm your email", emailTemplate, SiteSettings.AccountHelperEmail);
 
-		//MailingService.SendMailUsingSendGridAsync(email, $"{firstname} {lastname}", $"Welcome {firstname}", welcomeEmailTemplate, SiteSettings.InfoEmail, SiteSettings.InfoEmailName).Wait();
-		MailingService.SendMailUsingSendGridAsync(email, $"{firstname} {lastname}", "Please confirm your email", emailTemplate, SiteSettings.AccountHelperEmail, SiteSettings.AccountHelperEmailName).Wait();
+        //MailingService.SendMailUsingSendGridAsync(email, $"{firstname} {lastname}", $"Welcome {firstname}", welcomeEmailTemplate, SiteSettings.InfoEmail, SiteSettings.InfoEmailName).Wait();
+        MailingService.SendMailUsingSendGridAsync(email, $"{firstname} {lastname}", "Please confirm your email", emailTemplate, SiteSettings.AccountHelperEmail, SiteSettings.AccountHelperEmailName).Wait();
 
-		//var welcomeEmailResponse = MailingService.SendMailUsingSendGridAsync(email, $"{firstname} {lastname}", $"Welcome {firstname}", welcomeEmailTemplate, SiteSettings.InfoEmail, SiteSettings.InfoEmailName);
-		//var confirmEmailResponse = MailingService.SendMailUsingSendGridAsync(email, $"{firstname} {lastname}", "Please confirm your email", emailTemplate, SiteSettings.AccountHelperEmail, SiteSettings.AccountHelperEmailName);
+        //var welcomeEmailResponse = MailingService.SendMailUsingSendGridAsync(email, $"{firstname} {lastname}", $"Welcome {firstname}", welcomeEmailTemplate, SiteSettings.InfoEmail, SiteSettings.InfoEmailName);
+        //var confirmEmailResponse = MailingService.SendMailUsingSendGridAsync(email, $"{firstname} {lastname}", "Please confirm your email", emailTemplate, SiteSettings.AccountHelperEmail, SiteSettings.AccountHelperEmailName);
 
-		//JSRuntime.InvokeVoidAsync("console.log", welcomeEmailResponse, confirmEmailResponse);
-		//JSRuntime.InvokeVoidAsync("console.log", "confirmEmailResponse");
-		return true;
-	}
+        //JSRuntime.InvokeVoidAsync("console.log", welcomeEmailResponse, confirmEmailResponse);
+        //JSRuntime.InvokeVoidAsync("console.log", "confirmEmailResponse");
+        return true;
+    }
 
-	[JSInvokable]
-	public async void getcourses()
-	{
-		long userId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
+    [JSInvokable]
+    public async void getcourses()
+    {
+        long userId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
 
-		ObservableCollection<Enrollment> ongoingEnrollments = EnrollmentService.GetUncompletedEnrollments(userId);
-		ObservableCollection<Enrollment> completedEnrollments = EnrollmentService.GetCompletedEnrollments(userId);
+        ObservableCollection<Enrollment> ongoingEnrollments = EnrollmentService.GetUncompletedEnrollments(userId);
+        ObservableCollection<Enrollment> completedEnrollments = EnrollmentService.GetCompletedEnrollments(userId);
 
-		if (ongoingEnrollments.Count > 0)
-		{
-			await JSRuntime.InvokeVoidAsync("clearInnerHtml", "in-progess-list");
-			//await JSRuntime.InvokeVoidAsync("loadCourseList", Courses);
-		}
-		if (completedEnrollments.Count > 0)
-		{
-			await JSRuntime.InvokeVoidAsync("clearInnerHtml", "completed-list");
-			//await JSRuntime.InvokeVoidAsync("loadCourseList", Courses);
-		}
-		for (int i = 0; i < ongoingEnrollments.Count; i++)
-		{
-			ongoingEnrollments[i].Course = new();
-			ongoingEnrollments[i].Course = CourseService.GetCourse(ongoingEnrollments[i].CourseId);
-			var data = CourseService.GetCourseDatumByEnrollmentId(ongoingEnrollments[i].EnrollmentId);
+        if (ongoingEnrollments.Count > 0)
+        {
+            await JSRuntime.InvokeVoidAsync("clearInnerHtml", "in-progess-list");
+            //await JSRuntime.InvokeVoidAsync("loadCourseList", Courses);
+        }
+        if (completedEnrollments.Count > 0)
+        {
+            await JSRuntime.InvokeVoidAsync("clearInnerHtml", "completed-list");
+            //await JSRuntime.InvokeVoidAsync("loadCourseList", Courses);
+        }
+        for (int i = 0; i < ongoingEnrollments.Count; i++)
+        {
+            ongoingEnrollments[i].Course = new();
+            ongoingEnrollments[i].Course = CourseService.GetCourse(ongoingEnrollments[i].CourseId);
+            var data = CourseService.GetCourseDatumByEnrollmentId(ongoingEnrollments[i].Id);
 
-			string studyRecordString = data.StudyRecord;
+            string studyRecordString = data.StudyRecord;
 
-			ObservableCollection<CourseIndex> studyRecords = new(JsonConvert.DeserializeObject<ObservableCollection<CourseIndex>>(studyRecordString).OrderBy(x => x.CourseIndexId));
+            ObservableCollection<CourseIndex> studyRecords = new(JsonConvert.DeserializeObject<ObservableCollection<CourseIndex>>(studyRecordString).OrderBy(x => x.CourseIndexId));
 
-			try
-			{
-				var index = studyRecords.LastOrDefault(x => x.IsUnlocked == true);
-				string link = $"/course/{ongoingEnrollments[i].Course.Guid}?cryptId={ongoingEnrollments[i].EnrollmentId}&courseIndexId={index.CourseIndexId}";
+            try
+            {
+                var index = studyRecords.LastOrDefault(x => x.IsUnlocked == true);
+                string link = $"/course/{ongoingEnrollments[i].Course.Guid}?cryptId={ongoingEnrollments[i].Id}&courseIndexId={index.CourseIndexId}";
 
-				JSRuntime.InvokeVoidAsync("addToCourseInProgressList", CourseService.GetCourse(ongoingEnrollments[i].CourseId), link);
-			}
-			catch (Exception)
-			{
-				string link = $"/course_detail/{ongoingEnrollments[i].Course.Guid}";
+                JSRuntime.InvokeVoidAsync("addToCourseInProgressList", CourseService.GetCourse(ongoingEnrollments[i].CourseId), link);
+            }
+            catch (Exception)
+            {
+                string link = $"/course_detail/{ongoingEnrollments[i].Course.Guid}";
 
-				JSRuntime.InvokeVoidAsync("addToCourseInProgressList", CourseService.GetCourse(ongoingEnrollments[i].CourseId), link);
-			}
-		}
-		for (int i = 0; i < completedEnrollments.Count; i++)
-		{
-			completedEnrollments[i].Course = new();
-			completedEnrollments[i].Course = CourseService.GetCourse(completedEnrollments[i].CourseId);
+                JSRuntime.InvokeVoidAsync("addToCourseInProgressList", CourseService.GetCourse(ongoingEnrollments[i].CourseId), link);
+            }
+        }
+        for (int i = 0; i < completedEnrollments.Count; i++)
+        {
+            completedEnrollments[i].Course = new();
+            completedEnrollments[i].Course = CourseService.GetCourse(completedEnrollments[i].CourseId);
 
-			string link = $"/course/completed/{completedEnrollments[i].Course.Guid}?cryptId={completedEnrollments[i].EnrollmentId}";
+            string link = $"/course/completed/{completedEnrollments[i].Course.Guid}?cryptId={completedEnrollments[i].Id}";
 
-			JSRuntime.InvokeVoidAsync("addToCompletedCourseList", completedEnrollments[i].Course, link);
-		}
-	}
+            JSRuntime.InvokeVoidAsync("addToCompletedCourseList", completedEnrollments[i].Course, link);
+        }
+    }
 
-	protected override async void OnAfterRender(bool firstRender)
-	{
-		getcourses();
-		//await JSRuntime.InvokeVoidAsync("initDashboard");
-		await JSRuntime.InvokeVoidAsync("LoadScripts", "initDashboard");
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        getcourses();
+        //await JSRuntime.InvokeVoidAsync("initDashboard");
+        await JSRuntime.InvokeVoidAsync("LoadScripts", "initDashboard");
 
-		long userId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
-		var user = UserService.GetUser(userId);
-		var account = AccountService.GetUserAccount(userId);
+        long userId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
+        var user = UserService.GetUser(userId);
+        var account = AccountService.GetUserAccount(userId);
 
-		if(account.AccountStatus != "verified")
-		{
+        if(account.Status != SkillIT_Models.Entities.Core.AccountStatus.NOT_VERIFIED)
+        {
 			var sentMail = AccountService.GetSentMail(userId, Account_Status.ConfirmationEmail);
 			if(sentMail == null)
 			{
@@ -304,16 +304,16 @@
 							Code = AuthenticationHelper.GenerateOTP(),
 							Guid = AuthenticationHelper.GenerateGuid(),
 							ExpiryDate = DateTime.UtcNow.AddMonths(2),
-							UserId = user.UserId,
+							UserId = user.Id,
 							User = null,
 						};
 
 					OtpService.AddEmailOTP(OTP);
-					SendConfirmationEmail(user.Email, user.UserId, OTP.Guid, user.FirstName, user.LastName);
+					SendConfirmationEmail(user.Email, user.Id, OTP.Guid, user.FirstName, user.LastName);
 				}
 				else
 				{
-					SendConfirmationEmail(user.Email, user.UserId, otp.Guid, user.FirstName, user.LastName);
+					SendConfirmationEmail(user.Email, user.Id, otp.Guid, user.FirstName, user.LastName);
 				}
 			}
 		}

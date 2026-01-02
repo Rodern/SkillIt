@@ -1,7 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Core;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -39,7 +39,7 @@ namespace BusinessLogic
 			for (int i = 0; i < j; i++)
 			{
 				userSocials[i].Social = new Social();
-				userSocials[i].Social = DatabaseContext.Socials.Where(s => s.SocialId == userSocials[i].SocialId).FirstOrDefault();
+				userSocials[i].Social = DatabaseContext.Socials.Where(s => s.Id == userSocials[i].SocialId).FirstOrDefault();
 			}
 			return userSocials;
 		}
@@ -47,8 +47,8 @@ namespace BusinessLogic
 		{
 			try
 			{
-				UserSocial userSocial = DatabaseContext.UserSocials.Where(us => us.UserSocialId == id).FirstOrDefault();
-				Social social = DatabaseContext.Socials.Where(s => s.SocialId == userSocial.SocialId).FirstOrDefault();
+				UserSocial userSocial = DatabaseContext.UserSocials.Where(us => us.Id == id).FirstOrDefault();
+				Social social = DatabaseContext.Socials.Where(s => s.Id == userSocial.SocialId).FirstOrDefault();
 				DatabaseContext.Entry<UserSocial>(userSocial).State = EntityState.Detached;
 				DatabaseContext.Entry<Social>(social).State = EntityState.Detached;
 				DatabaseContext.UserSocials.Remove(userSocial);
@@ -77,7 +77,7 @@ namespace BusinessLogic
 		{
 			try
 			{
-				UserSocial this_userSocial = DatabaseContext.UserSocials.Where(s => s.UserSocialId == id).FirstOrDefault();
+				UserSocial this_userSocial = DatabaseContext.UserSocials.Where(s => s.Id == id).FirstOrDefault();
 				if (this_userSocial == null) return new(false, "NotFound");
 				//this_userSocial = userSocial;
 				DeleteUserSocial(id);

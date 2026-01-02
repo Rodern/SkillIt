@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Interfaces;
+﻿using AutoMapper;
+using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkillIT_Models.DatabaseModels;
@@ -12,9 +13,11 @@ namespace SkillItAPI.Controllers
     public class EngagementController : ControllerBase
     {
         private readonly IEngagementService engagementService;
-        public EngagementController(IEngagementService engagementService)
+        private readonly IMapper _mapper;
+        public EngagementController(IEngagementService engagementService, IMapper mapper)
         {
             this.engagementService = engagementService;
+            this._mapper = mapper;
         }
 
         [HttpGet]
@@ -33,13 +36,15 @@ namespace SkillItAPI.Controllers
         [Route("add")]
         public IActionResult Add(Engagement engagement)
         {
-            return Ok(engagementService.Engage(engagement));
+            var entity = _mapper.Map<SkillIT_Models.Entities.Learning.Engagement>(engagement);
+            return Ok(engagementService.Engage(entity));
         }
         [HttpDelete]
         [Route("remove")]
         public IActionResult Remove(Engagement engagement)
         {
-            return Ok(engagementService.Disengage(engagement));
+            var entity = _mapper.Map<SkillIT_Models.Entities.Learning.Engagement>(engagement);
+            return Ok(engagementService.Disengage(entity));
         }
     }
 }

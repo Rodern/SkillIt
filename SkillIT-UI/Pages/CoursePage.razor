@@ -69,7 +69,7 @@
 				<ul class="course-content-list" start="1">
 					@foreach (var chapter in CourseChapters.OrderBy(e => e.ChapterNumber))
 					{
-						<li class="accordion-button  course-chapter" id="panel_course_chapter_@chapter.ChapterId" data-bs-toggle="collapse" data-bs-target="#panel_collapseChapter_@chapter.ChapterId" role="button" aria-expanded="false" aria-controls="panel_collapseChapter_@chapter.ChapterId">
+						<li class="accordion-button  course-chapter" id="panel_course_chapter_@chapter.Id" data-bs-toggle="collapse" data-bs-target="#panel_collapseChapter_@chapter.Id" role="button" aria-expanded="false" aria-controls="panel_collapseChapter_@chapter.Id">
 							@chapter.Title
 
 							<span class="li-right">
@@ -81,7 +81,7 @@
 								}
 
 
-								@if (checkcs(chapter.ChapterId) == -1)
+								@if (checkcs(chapter.Id) == -1)
 								{
 									<svg class="li-icons li-circle-svg" title="Not done" viewBox="0 0 50 50" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 										<defs>
@@ -99,7 +99,7 @@
 									</svg>
 								}
 
-								@if (checkcs(chapter.ChapterId) == 1)
+								@if (checkcs(chapter.Id) == 1)
 								{
 									<svg class="li-icons li-circle-svg" title="Marked as partially done" viewBox="0 0 50 50" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 										<defs>
@@ -118,7 +118,7 @@
 									</svg>
 								}
 
-								@if (checkcs(chapter.ChapterId) == 0)
+								@if (checkcs(chapter.Id) == 0)
 								{
 									<svg class="li-icons li-circle-svg" title="Marked as done" viewBox="0 0 50 50" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 										<defs>
@@ -142,20 +142,20 @@
 
 
 
-						<ul start="1" class="chapter-lessons collapse" id="panel_collapseChapter_@chapter.ChapterId">
-							@foreach (var lesson in chapter.CourseLessons.OrderBy(e => e.LessonNumber))
+						<ul start="1" class="chapter-lessons collapse" id="panel_collapseChapter_@chapter.Id">
+							@foreach (var lesson in chapter.Lessons.OrderBy(e => e.LessonNumber))
 							{
-								<li id="panel_course_lesson_@lesson.LessonId" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#panel_collapseChapterLesson_@lesson.LessonId" role="button" aria-expanded="false" aria-controls="panel_collapseChapterLesson_@lesson.LessonId">
+								<li id="panel_course_lesson_@lesson.Id" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#panel_collapseChapterLesson_@lesson.Id" role="button" aria-expanded="false" aria-controls="panel_collapseChapterLesson_@lesson.Id">
 									<span class="li-left">
 										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
 											<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
 										</svg>
 										@lesson.Topic
-										<a class="hidden" @onclick="()=>{NavigateTo(Course.Guid, lesson.ChapterId, lesson.LessonId);}">@lesson.Topic</a>
+										<a class="hidden" @onclick="()=>{NavigateTo(Course.Guid, lesson.Id, lesson.Id);}">@lesson.Topic</a>
 									</span>
 									<span class="li-right">
 
-										@if (!StudyRecords.FirstOrDefault(x => x.LessonId == lesson.LessonId).IsUnlocked)
+										@if (!StudyRecords.FirstOrDefault(x => x.LessonId == lesson.Id).IsUnlocked)
 										{
 											<svg title=" is locked" class="li-icons li-locks" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
@@ -163,7 +163,7 @@
 										}
 
 
-										@if (checkls(lesson.LessonId) == -1)
+										@if (checkls(lesson.Id) == -1)
 										{
 											<svg class="li-icons li-circle-svg" title="Not done" viewBox="0 0 50 50" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 												<defs>
@@ -181,7 +181,7 @@
 											</svg>
 										}
 
-										@if (checkls(lesson.LessonId) == 1)
+										@if (checkls(lesson.Id) == 1)
 										{
 											<svg class="li-icons li-circle-svg" title="Marked as done" viewBox="0 0 50 50" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 												<defs>
@@ -200,7 +200,7 @@
 											</svg>
 										}
 
-										@if (checkls(lesson.LessonId) == 0)
+										@if (checkls(lesson.Id) == 0)
 										{
 											<svg class="li-icons li-circle-svg" title="Marked as done" viewBox="0 0 50 50" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 												<defs>
@@ -222,20 +222,20 @@
 
 									</span>
 								</li>
-								<ul start="1" class="chapter-lessons collapse" id="panel_collapseChapterLesson_@lesson.LessonId">
-									@foreach (var content in CourseService.GetCourseContents(lesson.LessonId).OrderBy(e => e.ContentNumber))
+								<ul start="1" class="chapter-lessons collapse" id="panel_collapseChapterLesson_@lesson.Id">
+									@foreach (var content in CourseService.GetCourseContents(lesson.Id).OrderBy(e => e.ContentNumber))
 									{
-										<li id="panel_course_content_@content.LessonId" disabled="@(!StudyRecords.FirstOrDefault(x => x.ContentGuid == content.Guid).IsUnlocked)">
+										<li id="panel_course_content_@content.Id" disabled="@(!StudyRecords.FirstOrDefault(x => x.ContentGuid == content.Guid).IsUnlocked)">
 											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
 												<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
 											</svg>
 
-											@*<a @onclick="()=>{NavigateToContent(Course.Guid, lesson.ChapterId, content.LessonId, content.LessonId);}">@content.Title</a>*@
+											@*<a @onclick="()=>{NavigateToContent(Course.Guid, lesson.Id, content.Id, content.Id);}">@content.Title</a>*@
 											<a @onclick="()=>{NavigateToContent(content.Guid);}">@content.Title</a>
 
 
 											<span class="li-right">
-												@if (!StudyRecords.FirstOrDefault(x => x.ContentId == content.ContentId).IsDone)
+												@if (!StudyRecords.FirstOrDefault(x => x.ContentId == content.Id).IsDone)
 												{
 													<svg class="li-icons li-circle-svg" title="Not done" viewBox="0 0 50 50" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 														<defs>
@@ -253,7 +253,7 @@
 													</svg>
 												}
 
-												@if (StudyRecords.FirstOrDefault(x => x.ContentId == content.ContentId).IsDone)
+												@if (StudyRecords.FirstOrDefault(x => x.ContentId == content.Id).IsDone)
 												{
 													<svg class="li-icons li-circle-svg" title="Marked as done" viewBox="0 0 50 50" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 														<defs>
@@ -290,7 +290,7 @@
 			<div class="breadcrumb">
 				<a class="breadcrumb-item" href="/course_detail/@Course.Guid">@Course.Name </a> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-				</svg> <a href="/course/@Course.Guid?cryptId=@Enrollment.EnrollmentId&courseIndexId=@courseIndexId" class="breadcrumb-item">@Chapter.Title</a>
+				</svg> <a href="/course/@Course.Guid?cryptId=@Enrollment.Id&courseIndexId=@courseIndexId" class="breadcrumb-item">@Chapter.Title</a>
 			</div>
 			<div class="course-progress mt-4">
 				CHAPTER <span class="chapter-number">&nbsp; @Chapter.ChapterNumber OF @CourseChapters.Count </span>&nbsp;<p class="text-blue-800"> In Progress</p>
@@ -307,20 +307,20 @@
 						<span class="sum-of-lessons">@numberOfLessons Lessons</span>
 					</div>
 				</div>
-				<ul start="1" class="chapter-lessons" id="cv_collapseChapter_@Chapter.ChapterId">
-					@foreach (var lesson in Chapter.CourseLessons.OrderBy(e => e.LessonNumber))
+				<ul start="1" class="chapter-lessons" id="cv_collapseChapter_@Chapter.Id">
+					@foreach (var lesson in Chapter.Lessons.OrderBy(e => e.LessonNumber))
 					{
-						<li id="course_lesson_@lesson.LessonId" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseChapterLesson_@lesson.LessonId" role="button" aria-expanded="false" aria-controls="collapseChapterLesson_@lesson.LessonId">
+						<li id="course_lesson_@lesson.Id" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseChapterLesson_@lesson.Id" role="button" aria-expanded="false" aria-controls="collapseChapterLesson_@lesson.Id">
 							<span class="li-left">
 								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
 								</svg>
 								@lesson.Topic
-								<a class="hidden" @onclick="()=>{NavigateTo(Course.Guid, lesson.ChapterId, lesson.LessonId);}">@lesson.Topic</a>
+								<a class="hidden" @onclick="()=>{NavigateTo(Course.Guid, lesson.Id, lesson.Id);}">@lesson.Topic</a>
 							</span>
 							<span class="li-right">
 
-								@if(!StudyRecords.FirstOrDefault(x => x.LessonId == lesson.LessonId).IsUnlocked)
+								@if(!StudyRecords.FirstOrDefault(x => x.LessonId == lesson.Id).IsUnlocked)
 								{
 									<svg title=" is locked" class="li-icons li-locks" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 										<path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
@@ -328,7 +328,7 @@
 								}
 							
 
-								@if(checkls(lesson.LessonId) == -1)
+								@if(checkls(lesson.Id) == -1)
 								{
 									<svg class="li-icons li-circle-svg" title="Not done" viewBox="0 0 50 50" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 										<defs>
@@ -346,7 +346,7 @@
 									</svg>
 								}
 
-								@if (checkls(lesson.LessonId) == 1)
+								@if (checkls(lesson.Id) == 1)
 								{
 									<svg class="li-icons li-circle-svg" title="Marked as done" viewBox="0 0 50 50" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 										<defs>
@@ -365,7 +365,7 @@
 									</svg>
 								}
 
-								@if (checkls(lesson.LessonId) == 0)
+								@if (checkls(lesson.Id) == 0)
 								{
 									<svg class="li-icons li-circle-svg" title="Marked as done" viewBox="0 0 50 50" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 										<defs>
@@ -387,20 +387,20 @@
 							
 							</span>
 						</li>
-						<ul start="1" class="chapter-lessons collapse" id="collapseChapterLesson_@lesson.LessonId">
-							@foreach (var content in CourseService.GetCourseContents(lesson.LessonId).OrderBy(e => e.ContentNumber))
+						<ul start="1" class="chapter-lessons collapse" id="collapseChapterLesson_@lesson.Id">
+							@foreach (var content in CourseService.GetCourseContents(lesson.Id).OrderBy(e => e.ContentNumber))
 							{
-								<li id="course_content_@content.LessonId" disabled="@(!StudyRecords.FirstOrDefault(x => x.ContentGuid == content.Guid).IsUnlocked)">
+								<li id="course_content_@content.Id" disabled="@(!StudyRecords.FirstOrDefault(x => x.ContentGuid == content.Guid).IsUnlocked)">
 									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
 									</svg>
 
-									@*<a @onclick="()=>{NavigateToContent(Course.Guid, lesson.ChapterId, content.LessonId, content.LessonId);}">@content.Title</a>*@
+									@*<a @onclick="()=>{NavigateToContent(Course.Guid, lesson.Id, content.Id, content.Id);}">@content.Title</a>*@
 									<a @onclick="()=>{NavigateToContent(content.Guid);}">@content.Title</a>
 
 									
 								<span class="li-right">
-									@if (!StudyRecords.FirstOrDefault(x => x.ContentId == content.ContentId).IsDone)
+									@if (!StudyRecords.FirstOrDefault(x => x.ContentId == content.Id).IsDone)
 									{
 										<svg class="li-icons li-circle-svg" title="Not done" viewBox="0 0 50 50" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 											<defs>
@@ -418,7 +418,7 @@
 										</svg>
 									}
 
-									@if (StudyRecords.FirstOrDefault(x => x.ContentId == content.ContentId).IsDone)
+									@if (StudyRecords.FirstOrDefault(x => x.ContentId == content.Id).IsDone)
 									{
 										<svg class="li-icons li-circle-svg" title="Marked as done" viewBox="0 0 50 50" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 											<defs>
@@ -449,7 +449,7 @@
 			<div class="breadcrumb">
 				<a href="/course_detail/@Course.Guid" class="breadcrumb-item">@Course.Name</a> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-				</svg> <a href="/course/@Course.Guid?cryptId=@Enrollment.EnrollmentId&courseIndexId=@courseIndexId" class="breadcrumb-item">@Chapter.Title</a> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="">
+				</svg> <a href="/course/@Course.Guid?cryptId=@Enrollment.Id&courseIndexId=@courseIndexId" class="breadcrumb-item">@Chapter.Title</a> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
 				</svg> <a class="breadcrumb-item">@Lesson.Topic</a>
 			</div>
@@ -494,15 +494,15 @@
 
 @code {
 	[Parameter]
-	public int courseId { get; set; } = 0;
+	public long courseId { get; set; } = 0;
 	[Parameter]
-	public int chapterId { get; set; } = 0;
+	public long chapterId { get; set; } = 0;
 	[Parameter]
-	public int lessonId { get; set; } = 0;
+	public long lessonId { get; set; } = 0;
 	[Parameter]
-	public int contentId { get; set; } = 0;
+	public long contentId { get; set; } = 0;
 	[Parameter]
-	public int courseIndexId { get; set; } = 0;
+	public long courseIndexId { get; set; } = 0;
 	[Parameter]
 	public int cryptId { get; set; } = 0;
 	[Parameter]
@@ -513,7 +513,7 @@
 	private CourseLesson Lesson { get; set; } = new();
 	private CourseContent Content { get; set; } = new();
 	private Enrollment Enrollment { get; set; } = new();
-	private CourseDatum CourseDatum { get; set; } = new();
+	private CourseData CourseDatum { get; set; } = new();
 
 	private ObservableCollection<CourseChapter> CourseChapters { get; set; } = new();
 	private ObservableCollection<CourseContent> Contents { get; set; } = new();
@@ -526,18 +526,18 @@
 	int lessonNumber = 0, contentNumber = 0, FirstIndex = 1, LastIndex = 0;
 	float percentage = 0;
 
-	async void PreviousContent(int indexId)
+	async void PreviousContent(long indexId)
 	{
 		if (indexId < FirstIndex) return;
 		//var index = StudyRecords[indexId];
-		string link = $"/course/{guid}?cryptId={Enrollment.EnrollmentId}&courseIndexId={indexId}";
+		string link = $"/course/{guid}?cryptId={Enrollment.Id}&courseIndexId={indexId}";
 		courseIndexId = indexId;
-		SetContent(Enrollment.EnrollmentId, indexId);
+		SetContent(Enrollment.Id, indexId);
 		await JSRuntime.InvokeVoidAsync("setUrl", link);
 		//NavigationManager.NavigateTo(link);
 	}
 
-	int checkls(int id)
+	int checkls(long id)
 	{
 		var rec = StudyRecords.Where(x => x.LessonId == id);
 		int total = rec.ToList().Count;
@@ -548,9 +548,9 @@
 	}
 
 
-	int checkcs(int id)
+	int checkcs(long id)
 	{
-		var rec = StudyRecords.Where(x => x.ChapterId == id);
+		var rec = StudyRecords.Where(x => x.ContentId == id);
 		int total = rec.ToList().Count;
 		int numberedMarkDone = rec.Where(x => x.IsDone == true).ToList().Count();
 		if (numberedMarkDone == total) return 0;
@@ -584,7 +584,7 @@
 		}
 	}
 
-	async void NextContent(int indexId)
+	async void NextContent(long indexId)
 	{
 		if (indexId > LastIndex)
 		{
@@ -593,25 +593,25 @@
 
 			var datum = CourseService.GetCourseDatumByEnrollmentId(cryptId);
 			datum.StudyRecord = JsonConvert.SerializeObject(StudyRecords);
-			EntityService.UpdateEntity<CourseDatum>(datum);
+			EntityService.UpdateEntity<CourseData>(datum);
 
 			Enrollment.DateCompleted = DateTime.UtcNow;
 			Enrollment.IsCompleted = true;
 			EnrollmentService.UpdateEnrollment(Enrollment);
 
-			SetContent(Enrollment.EnrollmentId, indexId - 1);
+			SetContent(Enrollment.Id, indexId - 1);
 			if(StudyRecords.Count(x => x.IsDone == false) > 0)
 			{
 				var index = StudyRecords.FirstOrDefault(x => x.IsDone == false);
-				SetContent(Enrollment.EnrollmentId, index.CourseIndexId);
+				SetContent(Enrollment.Id, index.CourseIndexId);
 				return;
 
 			}
-			NavigationManager.NavigateTo($"/course/completed/{Course.Guid}?cryptId={Enrollment.EnrollmentId}");
+			NavigationManager.NavigateTo($"/course/completed/{Course.Guid}?cryptId={Enrollment.Id}");
 			return;
 		}
 		//var index = StudyRecords[indexId];
-		string link = $"/course/{guid}?cryptId={Enrollment.EnrollmentId}&courseIndexId={indexId}";
+		string link = $"/course/{guid}?cryptId={Enrollment.Id}&courseIndexId={indexId}";
 		courseIndexId = indexId;
 
 		StudyRecords.FirstOrDefault(x => x.CourseIndexId == indexId - 1).IsDone = true;
@@ -619,9 +619,9 @@
 
 		var data = CourseService.GetCourseDatumByEnrollmentId(cryptId);
 		data.StudyRecord = JsonConvert.SerializeObject(StudyRecords);
-		EntityService.UpdateEntity<CourseDatum>(data);
+		EntityService.UpdateEntity<CourseData>(data);
 
-		SetContent(Enrollment.EnrollmentId, indexId);
+		SetContent(Enrollment.Id, indexId);
 		await JSRuntime.InvokeVoidAsync("setUrl", link);
 
 		if(indexId == LastIndex)
@@ -630,16 +630,16 @@
 
 			var datum = CourseService.GetCourseDatumByEnrollmentId(cryptId);
 			datum.StudyRecord = JsonConvert.SerializeObject(StudyRecords);
-			EntityService.UpdateEntity<CourseDatum>(datum);
+			EntityService.UpdateEntity<CourseData>(datum);
 
-			SetContent(Enrollment.EnrollmentId, indexId);
+			SetContent(Enrollment.Id, indexId);
 			return;
 		}
 
 		//NavigationManager.NavigateTo(link);
 	}
 
-	async void SetContent(int enId, int indexId)
+	async void SetContent(long enId, long indexId)
 	{
 		CourseDatum = CourseService.GetCourseDatumByEnrollmentId(enId);
 
@@ -664,21 +664,21 @@
 		if (!index.IsUnlocked)
 		{
 			index = StudyRecords.LastOrDefault(i => i.IsUnlocked == true);
-			string link = $"/course/{guid}?cryptId={Enrollment.EnrollmentId}&courseIndexId={index.CourseIndexId}";
+			string link = $"/course/{guid}?cryptId={Enrollment.Id}&courseIndexId={index.CourseIndexId}";
 			await JSRuntime.InvokeVoidAsync("setUrl", link);
 			courseIndexId = index.CourseIndexId;
 		}
 
 		Chapter = CourseService.GetCourseChapter(index.ChapterId);
 		Lesson = CourseService.GetCourseLesson(index.LessonId);
-		Content = CourseService.GetCourseContent(index.ContentId);
+		Content = CourseService.GetCourseContent(index.CourseId);
 
-		CourseChapters = CourseService.GetCourseChapters(Course.CourseId);
+		CourseChapters = CourseService.GetCourseChapters(Course.Id);
 		totalNumberOfLessons = 0;
 		for (int i = 0; i < CourseChapters.Count; i++)
 		{
-			CourseChapters[i].CourseLessons = CourseService.GetCourseLessons(CourseChapters[i].ChapterId);
-			totalNumberOfLessons += CourseChapters[i].CourseLessons.Count;
+			CourseChapters[i].Lessons = CourseService.GetCourseLessons(CourseChapters[i].Id);
+			totalNumberOfLessons += CourseChapters[i].Lessons.Count;
 		}
 		numberOfCompletedLessons = StudyRecords.Where(x => x.IsDone == true).GroupBy(x => x.LessonId).Select(group => group.First()).ToList().Count;
 
@@ -689,11 +689,11 @@
 
 		numberOfChapters = CourseChapters.Count;
 
-		numberOfLessons = CourseChapters.FirstOrDefault(cc => cc.ChapterId == index.ChapterId).CourseLessons.Count;
+		numberOfLessons = CourseChapters.FirstOrDefault(cc => cc.Id == index.ChapterId).Lessons.Count;
 		this.StateHasChanged();
 	}
 
-	Course GetCourse(int courseId)
+	Course GetCourse(long courseId)
 	{
 		return CourseStaticHelper.GetCourse(courseId);
 	}
@@ -702,12 +702,12 @@
 		return CourseStaticHelper.GetCourseByGuid(guid);
 	}
 
-	void NavigateTo(string guid, int chapterId, int lessonId)
+	void NavigateTo(string guid, long chapterId, long lessonId)
 	{
 		var index = StudyRecords.FirstOrDefault(x => x.ChapterId == chapterId && x.LessonId == lessonId);
 		var indexId = index.CourseIndexId;
 		if (index.IsUnlocked == false) return;
-		NavigationManager.NavigateTo($"/course/{guid}?cryptId={Enrollment.EnrollmentId}&courseIndexId={indexId}", true);
+		NavigationManager.NavigateTo($"/course/{guid}?cryptId={Enrollment.Id}&courseIndexId={indexId}", true);
 		return;
 	}
 
@@ -716,7 +716,7 @@
 		var index = StudyRecords.FirstOrDefault(x => x.ChapterId == chapterId && x.LessonId == lessonId && x.ContentId == contentId);
 		JSRuntime.InvokeVoidAsync("console.log", chapterId, lessonId, contentId, index, StudyRecords);
 		var indexId = StudyRecords.FirstOrDefault(x => x.ChapterId == chapterId && x.LessonId == lessonId && x.ContentId == contentId).CourseIndexId;
-		NavigationManager.NavigateTo($"/course/{guid}?cryptId={Enrollment.EnrollmentId}&courseIndexId={indexId}", true);
+		NavigationManager.NavigateTo($"/course/{guid}?cryptId={Enrollment.Id}&courseIndexId={indexId}", true);
 		return;
 	}
 
@@ -725,7 +725,7 @@
 		var index = StudyRecords.FirstOrDefault(x => x.ContentGuid == contentGuid);
 		var indexId = index.CourseIndexId;
 		if (index.IsUnlocked == false) return;
-		NavigationManager.NavigateTo($"/course/{guid}?cryptId={Enrollment.EnrollmentId}&courseIndexId={indexId}", true);
+		NavigationManager.NavigateTo($"/course/{guid}?cryptId={Enrollment.Id}&courseIndexId={indexId}", true);
 		return;
 	}
 
@@ -770,7 +770,7 @@
 
 					Enrollment = EnrollmentService.GetEnrollment(cryptId);
 
-					if (Enrollment == null || userId == 0 || Enrollment.UserId != userId || Enrollment.CourseId != Course.CourseId)
+					if (Enrollment == null || userId == 0 || Enrollment.UserId != userId || Enrollment.CourseId != Course.Id)
 					{
 						NavigationManager.NavigateTo("/courses");
 						return;

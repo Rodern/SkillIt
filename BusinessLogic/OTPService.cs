@@ -1,6 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Core;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace BusinessLogic
         public ResponseModel AddOTP(Otp otp)
         {
             if (otp == null) return new(false, "OTPNull");
-            if (DatabaseContext.Otps.Find(otp.OtpId) != null) return new(false, "OTPExist");
+            if (DatabaseContext.Otps.Find(otp.Id) != null) return new(false, "OTPExist");
             try
             {
                 otp.ExpiryDate = DateTime.Now.AddDays(1);
@@ -39,7 +39,7 @@ namespace BusinessLogic
         public ResponseModel AddEmailOTP(Otp otp)
         {
             if (otp == null) return new(false, "OTPNull");
-            if (DatabaseContext.Otps.Find(otp.OtpId) != null) return new(false, "OTPExist");
+            if (DatabaseContext.Otps.Find(otp.Id) != null) return new(false, "OTPExist");
             try
             {
                 //otp.ExpiryDate = DateTime.Now.AddDays(1);
@@ -79,7 +79,7 @@ namespace BusinessLogic
 
         public Otp GetOTP(long id, long userId)
         {
-            return DatabaseContext.Otps.Where(o => o.OtpId == id && o.UserId == userId).FirstOrDefault();
+            return DatabaseContext.Otps.Where(o => o.Id == id && o.UserId == userId).FirstOrDefault();
         }
 
         public Otp GetOTP(long userId, string guid)

@@ -1,5 +1,6 @@
 using BusinessLogic;
 using BusinessLogic.Interfaces;
+using BusinessLogic.Mapping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
@@ -29,8 +30,9 @@ builder.Services.AddMemoryCache();
 builder.Services.AddSignalR();
 
 // Add health checks
-builder.Services.AddHealthChecks()
-    .AddDbContextCheck<ApplicationDbContext>("database");
+builder.Services.AddHealthChecks();
+    // Note: AddDbContextCheck requires Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore package
+    // Uncomment when package is added: .AddDbContextCheck<ApplicationDbContext>("database");
 
 // Add rate limiting
 builder.Services.AddRateLimiter(options =>
@@ -75,6 +77,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         });
 });
 
+// Configure AutoMapper
+builder.Services.AddAutoMapper(typeof(EntityMappingProfile));
+
 // Register services with dependency injection
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICatalogService, CatalogService>();
@@ -88,6 +93,13 @@ builder.Services.AddScoped<IOTPService, OTPService>();
 builder.Services.AddScoped<IEngagementService, EngagementService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
+builder.Services.AddScoped<ISkillService, SkillService>();
+builder.Services.AddScoped<ISocialService, SocialService>();
+builder.Services.AddScoped<IEntityService, EntityService>();
+builder.Services.AddScoped<IMailingService, MailingService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IQuizService, QuizService>();
+builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 
 // Configure Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();

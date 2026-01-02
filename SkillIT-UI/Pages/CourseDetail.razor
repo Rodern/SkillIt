@@ -44,7 +44,7 @@
 					</tr>
 					<tr>
 						<th>Course Enrollments: </th>
-						<td>@EnrollmentService.CountCourseEnrollments(Course.CourseId) Skillers</td>
+						<td>@EnrollmentService.CountCourseEnrollments(Course.Id) Skillers</td>
 					</tr>
 					<tr>
 						<th>Author: </th>
@@ -61,11 +61,11 @@
 				<ul class="course-content-list" start="1">
 					@foreach (var chapter in CourseChapters.OrderBy(e => e.ChapterNumber))
 					{
-						<li id="course_chapter_@chapter.ChapterId">@chapter.Title</li>
+						<li id="course_chapter_@chapter.Id">@chapter.Title</li>
 						<ul start="1" class="chapter-lessons">
-							@foreach (var lesson in chapter.CourseLessons.OrderBy(e => e.LessonNumber))
+							@foreach (var lesson in chapter.Lessons.OrderBy(e => e.LessonNumber))
 							{
-								<li id="course_lesson_@lesson.LessonId">@lesson.Topic</li>
+								<li id="course_lesson_@lesson.Id">@lesson.Topic</li>
 							}
 						</ul>
 					}
@@ -163,12 +163,12 @@
 
 		Enrollment enrollment = new()
 			{
-				EnrollmentId = 0,
+				Id = 0,
 				DateEnrolled = DateTime.Now,
 				IsCompleted = false,
 				DateCompleted = DateTime.Now,
 				UserId = userId,
-				CourseId = Course.CourseId,
+				CourseId = Course.Id,
 			};
 		var response = EnrollmentService.CreateEnrollment(enrollment);
 		if (!response.Success)
@@ -177,24 +177,24 @@
 			return;
 		}
 
-		var data = CourseService.GetDataIndexByCourseId(Course.CourseId);
+		var data = CourseService.GetDataIndexByCourseId(Course.Id);
 		if (data == null)
 		{
 			data = new()
 			{
-				IndexId = 0,
-				CourseId = Course.CourseId,
-				IndexData = JsonConvert.SerializeObject(CourseStaticHelper.IndexCourse(Course.CourseId)),
+				Id = 0,
+				CourseId = Course.Id,
+				IndexData = JsonConvert.SerializeObject(CourseStaticHelper.IndexCourse(Course.Id)),
 				LastModified = DateTime.UtcNow,
 			};
 
 			EntityService.AddEntity<DataIndex>(data);
 		}
 
-		CourseDatum  courseDatum = new()
+		CourseData  courseDatum = new()
 		{
-			DataId = 0,
-			EnrollmentId = EnrollmentService.GetEnrollments(userId).FirstOrDefault(e => e.CourseId == Course.CourseId).EnrollmentId,
+			Id = 0,
+			EnrollmentId = EnrollmentService.GetEnrollments(userId).FirstOrDefault(e => e.Id == Course.Id).Id,
 			StartDate = DateTime.UtcNow,
 			LastModified = DateTime.UtcNow,
 			StudyRecord = data.IndexData,
@@ -204,7 +204,7 @@
 		if (!response.Success)
 		{
 			await JSRuntime.InvokeVoidAsync("popUpBox", "alert", "An error occurred, please try again later.");
-			EnrollmentService.DeleteEnrollment(courseDatum.EnrollmentId);
+			EnrollmentService.DeleteEnrollment(courseDatum.Id);
 			return;
 		}
 
@@ -218,14 +218,14 @@
 			new()
 			{
 				Name = "Visit",
-				Command = $"/course/{guid}?cryptId={enrollment.EnrollmentId}&courseIndexId={courseIndices[0].CourseIndexId}"
+				Command = $"/course/{guid}?cryptId={enrollment.Id}&courseIndexId={courseIndices[0].CourseIndexId}"
 			}
 		};
 
 		var account = AccountService.GetUserAccount(userId);
 		Notification notification = new()
 		{
-			AccountId = account.AccountId,
+			AccountId = account.Id,
 			NotificationGuid = AuthenticationHelper.GenerateGuid(),
 			Caption = $"Course registered {user.FirstName}!",
 			Details = $"You successfully enrolled to our {Course.Name}. Hoping you will learn a lot from this course, for we are so glad you are taking the course with us.",
@@ -240,7 +240,7 @@
 
 		try
 		{
-			NavigationManager.NavigateTo($"/course/{guid}?cryptId={enrollment.EnrollmentId}&courseIndexId={courseIndices[0].CourseIndexId}", true);
+			NavigationManager.NavigateTo($"/course/{guid}?cryptId={enrollment.Id}&courseIndexId={courseIndices[0].CourseIndexId}", true);
 		}
 		catch (Exception)
 		{
@@ -253,12 +253,12 @@
 		string link = $"{SiteSettings.BaseUrl}/course_detail/{Course.Guid}";//$"{SiteSettings.BaseUrl}/confirm_email/{userId}?guid={guid}";
 		string emailTemplate = SiteSettings.GetCourseRegisteredEmail(Course.Name, startDate.ToString("D"), link, SiteSettings.SupportEmail, $"{SiteSettings.BaseUrl}/feedback", SiteSettings.BaseUrl);
 
-		Sentmail sentmail = new()
+		SentMail sentmail = new()
 			{
 				UserId = userId,
 				EmailBody = emailTemplate,
 				DateSent = DateTime.UtcNow,
-				EmailType = Account_Status.CourseRegisteredEmail,
+				EmailType = EmailSentType.course_registered,
 			};
 
 		var res = AccountService.CreateSentMail(sentmail);
@@ -275,10 +275,10 @@
 		base.OnAfterRender(firstRender);
 		if (firstRender)
 		{
-			CourseChapters = CourseService.GetCourseChapters(Course.CourseId);
+			CourseChapters = CourseService.GetCourseChapters(Course.Id);
 			for (int i = 0; i < CourseChapters.Count; i++)
 			{
-				CourseChapters[i].CourseLessons = CourseService.GetCourseLessons(CourseChapters[i].ChapterId);
+				CourseChapters[i].Lessons = CourseService.GetCourseLessons(CourseChapters[i].Id);
 			}
 			
 			//JSRuntime.InvokeVoidAsync("console.log", CourseChapters);
@@ -298,19 +298,19 @@
 
 		if (userId != 0)
 		{
-			var enrollment = EnrollmentService.GetEnrollment(userId, Course.CourseId);
+			var enrollment = EnrollmentService.GetEnrollment(userId, Course.Id);
 			if (enrollment != null)
 			{
-				var data = CourseService.GetCourseDatumByEnrollmentId(enrollment.EnrollmentId).StudyRecord;
+				var data = CourseService.GetCourseDatumByEnrollmentId(enrollment.Id).StudyRecord;
 				ObservableCollection<CourseIndex> dataIndices = new(JsonConvert.DeserializeObject<ObservableCollection<CourseIndex>>(data).Where(x => x.IsDeleted == false).OrderBy(x => x.CourseIndexId));
 
 				ObservableCollection<CourseIndex> filtered = new (dataIndices.Where(x => x.IsDone == false).OrderBy(x => x.CourseIndexId));
 
-				string link = $"{guid}?cryptId={enrollment.EnrollmentId}&courseIndexId={dataIndices[0].CourseIndexId}";
+				string link = $"{guid}?cryptId={enrollment.Id}&courseIndexId={dataIndices[0].CourseIndexId}";
 
 				if (filtered.Count > 0)
 				{
-					link = $"{guid}?cryptId={enrollment.EnrollmentId}&courseIndexId={filtered[0].CourseIndexId}";
+					link = $"{guid}?cryptId={enrollment.Id}&courseIndexId={filtered[0].CourseIndexId}";
 				}
 				
 				//string link = $"{guid}?chapterId={dataIndices[0].ChapterId}&lessonId={dataIndices[0].LessonId}&contentId={dataIndices[0].ContentId}";
@@ -334,7 +334,7 @@
 	//    {
 	//        //JSRuntime.InvokeVoidAsync("showLoader");
 
-	//        CourseChapters = CourseService.GetCourseChapters(Course.CourseId);
+	//        CourseChapters = CourseService.GetCourseChapters(Course.Id);
 	//        for (int i = 0; i < CourseChapters.Count; i++)
 	//        {
 	//            CourseChapters[i].CourseLessons = CourseService.GetCourseLessons(CourseChapters[i].ChapterId);

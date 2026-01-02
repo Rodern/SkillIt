@@ -36,13 +36,13 @@
 		string link = $"{SiteSettings.BaseUrl}/course_detail/{Course.Guid}";//$"{SiteSettings.BaseUrl}/confirm_email/{userId}?guid={guid}";
 		string emailTemplate = SiteSettings.GetCourseCompletedEmail(Course.Name, completionDate.ToString("D"), link, SiteSettings.SupportEmail, $"{SiteSettings.BaseUrl}/feedback", SiteSettings.BaseUrl);
 
-		Sentmail sentmail = new()
-			{
-				UserId = userId,
-				EmailBody = emailTemplate,
-				DateSent = DateTime.UtcNow,
-				EmailType = Account_Status.CourseCompletedEmail,
-			};
+		SentMail sentmail = new()
+		{
+			UserId = userId,
+			EmailBody = emailTemplate,
+			DateSent = DateTime.UtcNow,
+			EmailType = EmailSentType.verify_email,
+		};
 
 		var res = AccountService.CreateSentMail(sentmail);
 		var user = UserService.GetUser(userId);
@@ -59,7 +59,7 @@
 		var account = AccountService.GetUserAccount(userId);
 		Notification notification = new()
 			{
-				AccountId = account.AccountId,
+				AccountId = account.Id,
 				NotificationGuid = AuthenticationHelper.GenerateGuid(),
 				Caption = $"Course completed {user.FirstName}!",
 				Details = $"Hoping you have learnt a lot from this course, for we are so glad you took the course and keep learning more with us.",
@@ -102,7 +102,7 @@
 
 					Enrollment = EnrollmentService.GetEnrollment(cryptId);
 
-					if (Enrollment == null || userId == 0 || Enrollment.UserId != userId || Enrollment.CourseId != Course.CourseId || !Enrollment.IsCompleted)
+					if (Enrollment == null || userId == 0 || Enrollment.UserId != userId || Enrollment.CourseId != Course.Id || !Enrollment.IsCompleted)
 					{
 						await JSRuntime.InvokeVoidAsync("history.back");
 						return;
@@ -113,7 +113,7 @@
 					var sentMail = AccountService.GetSentMail(userId, Account_Status.CourseCompletedEmail);
 					if (sentMail == null)
 					{
-						SendCourseCompletedEmail(user.Email, user.UserId, Enrollment.DateCompleted);
+						SendCourseCompletedEmail(user.Email, user.Id, Enrollment.DateCompleted);
 					}
 				}
 			}

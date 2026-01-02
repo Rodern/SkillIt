@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Learning;
 using SkillIT_Models.Models;
 using BusinessLogic.Interfaces;
 

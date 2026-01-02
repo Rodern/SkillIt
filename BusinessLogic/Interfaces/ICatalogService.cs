@@ -1,5 +1,4 @@
 ﻿using SkillIT_Models.Entities.Learning;
-using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -14,10 +13,10 @@ namespace BusinessLogic.Interfaces
 	public interface ICatalogService
 	{
 		ObservableCollection<Catalog> GetAllCatalogs();
-		ObservableCollection<Tuple<int, string>> GetAllCatalogCaptions();
+		ObservableCollection<Tuple<long, string>> GetAllCatalogCaptions();
         ResponseModel AddCatalog(Catalog catalog);
-		Catalog GetCatalog(int id);
-		ResponseModel UpdateCatalog(int id, Catalog catalog);
-		ResponseModel DeleteCatalog(int id);
+		Catalog GetCatalog(long id);
+		ResponseModel UpdateCatalog(long id, Catalog catalog);
+		ResponseModel DeleteCatalog(long id);
 	}
 }

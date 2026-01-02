@@ -1,9 +1,9 @@
 ﻿
-<div class="catalog flex flex-col justify-center shadow-lg rounded-lg w-64 h-auto h-max px-2" id="@Catalog.CatalogId">
+<div class="catalog flex flex-col justify-center shadow-lg rounded-lg w-64 h-auto h-max px-2" id="@Catalog.Id">
     <img src="@ThumbnailUrl" alt="" class="w-full h-40 rounded-md">
-    <h4 class="cat-name font-bold text-lg my-2">@Catalog.Caption</h4>
-    <p class="cat-desc brak-words pb-4" title="@Catalog.Description.Substring(0, 50)...">@Catalog.Description.Substring(0, 100)...</p>
-    <a id="cat_@Catalog.CatalogId" href="/catalog/@Catalog.CatalogId"
+    <h4 class="cat-name font-bold text-lg my-2">@Catalog.Title</h4>
+    <p class="cat-desc brak-words pb-4" title="@Catalog.Descriptions.Substring(0, 50)...">@Catalog.Descriptions.Substring(0, 100)...</p>
+    <a id="cat_@Catalog.Id" href="/catalog/@Catalog.Id"
         class="view-cat btn-large header-btn mt-auto px-14" >View</a>
 </div>
 

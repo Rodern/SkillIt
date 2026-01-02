@@ -18,7 +18,7 @@ public class Creator : BaseEntity
 
     [Required]
     [Column("roleID")]
-    public int RoleId { get; set; }
+    public long RoleId { get; set; }
 
     [Required]
     [Column("status")]

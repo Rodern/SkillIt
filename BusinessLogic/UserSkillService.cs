@@ -1,7 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Core;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -53,7 +53,7 @@ namespace BusinessLogic
 			for (int i = 0; i < j; i++)
 			{
 				userSkills[i].Skill = new Skill();
-				userSkills[i].Skill = DatabaseContext.Skills.Where(s => s.SkillId == userSkills[i].SkillId).FirstOrDefault();
+				userSkills[i].Skill = DatabaseContext.Skills.Where(s => s.Id == userSkills[i].SkillId).FirstOrDefault();
 			}
 			return userSkills;
 		}
@@ -62,7 +62,7 @@ namespace BusinessLogic
 			try
 			{
 				UserSkill userSkill = DatabaseContext.UserSkills.Find(id);
-				Skill skill = DatabaseContext.Skills.Where(s => s.SkillId == userSkill.SkillId).FirstOrDefault();
+				Skill skill = DatabaseContext.Skills.Where(s => s.Id == userSkill.SkillId).FirstOrDefault();
 				DatabaseContext.Entry<UserSkill>(userSkill).State = EntityState.Detached;
 				DatabaseContext.Entry<Skill>(skill).State = EntityState.Detached;
 				DatabaseContext.UserSkills.Remove(userSkill);
@@ -91,7 +91,7 @@ namespace BusinessLogic
 		{
 			try
 			{
-				UserSkill this_userSkill = DatabaseContext.UserSkills.Where(s => s.UserSkillId == id).FirstOrDefault();
+				UserSkill this_userSkill = DatabaseContext.UserSkills.Where(s => s.Id == id).FirstOrDefault();
 				if (this_userSkill == null) return new(false, $"NotFound {id}");
 				//this_userSkill = userSkill;
 				DeleteUserSkill(id);

@@ -61,7 +61,7 @@ public class QuestionAnswer : BaseEntity
 
     [Required]
     [Column("questionID")]
-    public int QuestionId { get; set; }
+    public long QuestionId { get; set; }
 
     [Required]
     [Column("answer", TypeName = "text")]
@@ -85,11 +85,11 @@ public class QuizQuestion : BaseEntity
 
     [Required]
     [Column("quizID")]
-    public int QuizId { get; set; }
+    public long QuizId { get; set; }
 
     [Required]
     [Column("questionID")]
-    public int QuestionId { get; set; }
+    public long QuestionId { get; set; }
 
     // Navigation properties
     [ForeignKey(nameof(QuizId))]
@@ -107,11 +107,11 @@ public class ChapterQuiz : BaseEntity
 
     [Required]
     [Column("quizID")]
-    public int QuizId { get; set; }
+    public long QuizId { get; set; }
 
     [Required]
     [Column("chapterID")]
-    public int ChapterId { get; set; }
+    public long ChapterId { get; set; }
 
     [Column("authorID")]
     public long? AuthorId { get; set; }
@@ -135,11 +135,11 @@ public class EnrollmentQuiz : BaseEntity
 
     [Required]
     [Column("enrollmentID")]
-    public int EnrollmentId { get; set; }
+    public long EnrollmentId { get; set; }
 
     [Required]
     [Column("quizID")]
-    public int QuizId { get; set; }
+    public long QuizId { get; set; }
 
     [Column("date_taken")]
     public DateTime DateTaken { get; set; } = DateTime.UtcNow;
@@ -169,15 +169,15 @@ public class QuestionAnswerResponse : BaseEntity
 
     [Required]
     [Column("questionID")]
-    public int QuestionId { get; set; }
+    public long QuestionId { get; set; }
 
     [Required]
     [Column("enrollmentID")]
-    public int EnrollmentId { get; set; }
+    public long EnrollmentId { get; set; }
 
     [Required]
     [Column("question_answerID")]
-    public int QuestionAnswerId { get; set; }
+    public long QuestionAnswerId { get; set; }
 
     [Column("time_answered")]
     public DateTime TimeAnswered { get; set; } = DateTime.UtcNow;
@@ -192,3 +192,4 @@ public class QuestionAnswerResponse : BaseEntity
     [ForeignKey(nameof(QuestionAnswerId))]
     public virtual QuestionAnswer QuestionAnswer { get; set; } = null!;
 }
+

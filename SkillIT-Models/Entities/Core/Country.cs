@@ -59,7 +59,7 @@ public class Language : BaseEntity
     public override long Id { get; set; }
 
     [Column("countryId")]
-    public int? CountryId { get; set; }
+    public long? CountryId { get; set; }  // Changed from int? to long?
 
     [Required]
     [MaxLength(15)]

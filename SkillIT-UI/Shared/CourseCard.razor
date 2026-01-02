@@ -4,7 +4,7 @@
 			<div class="relative overflow-hidden bg-no-repeat bg-cover relative overflow-hidden bg-no-repeat bg-cover shadow-lg rounded-lg mx-4 -mt-4"
 				 data-mdb-ripple="true" data-mdb-ripple-color="light">
 				<img src="site_data/course_cover_images/@course.CoverImage" class="w-full" />
-				<a @onclick="()=>{checkAuth(course.Guid, course.CourseId);}">
+				<a @onclick="()=>{checkAuth(course.Guid, course.Id);}">
 					<div class="absolute top-0 right-0 bottom-0 left-0 w-full h-full overflow-hidden bg-fixed opacity-0 hover:opacity-100 transition duration-300 ease-in-out"
 						 style="background-color: rgba(251, 251, 251, 0.15)"></div>
 				</a>
@@ -33,7 +33,7 @@
 	[Parameter]
 	public Course course { get; set; } = new();
 
-	async void checkAuth(string guid, int courseId)
+	async void checkAuth(string guid, long courseId)
 	{
 		bool isLoggedIn = await JSRuntime.InvokeAsync<bool>("isLoggedIn");
 		if (isLoggedIn)

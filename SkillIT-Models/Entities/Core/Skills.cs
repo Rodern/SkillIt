@@ -41,7 +41,7 @@ public class UserSkill : BaseEntity
 
     [Required]
     [Column("skillID")]
-    public int SkillId { get; set; }
+    public long SkillId { get; set; }
 
     [Required]
     [Column("userID")]
@@ -85,7 +85,7 @@ public class UserSocial : BaseEntity
 
     [Required]
     [Column("socialID")]
-    public int SocialId { get; set; }
+    public long SocialId { get; set; }
 
     [Required]
     [Column("userID")]

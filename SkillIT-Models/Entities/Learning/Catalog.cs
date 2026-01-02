@@ -34,6 +34,10 @@ public class Catalog : AuditableEntity
     [Column("descriptions", TypeName = "text")]
     public string Descriptions { get; set; } = string.Empty;
 
+    [Required]
+    [Column("link", TypeName = "text")]
+    public string Link { get; set; } = string.Empty;
+
     [Column("date_created")]
     public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
@@ -57,7 +61,7 @@ public class Engagement : AuditableEntity
 
     [Required]
     [Column("catalogID")]
-    public int CatalogId { get; set; }
+    public long CatalogId { get; set; }
 
     [Column("engagedDate")]
     public DateTime EngagedDate { get; set; } = DateTime.UtcNow;

@@ -1,11 +1,12 @@
-﻿using SkillIT_Models.DatabaseModels;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.WebPages;
+using SkillIT_Models.Entities.Analytics;
+using SkillIT_Models.Entities.Core;
+using SkillIT_Models.Entities.Courses;
+using SkillIT_Models.Entities.Learning;
 
 namespace SkillIT_Models.Models
 {

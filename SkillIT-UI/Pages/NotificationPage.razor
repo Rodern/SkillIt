@@ -86,7 +86,7 @@
 
     void NP_Envent(object source, System.Timers.ElapsedEventArgs e)
     {
-        var nots = new NotificationService(new()).GetAccountNotifications(AccountId);
+        var nots = new NotificationService(new(new())).GetAccountNotifications(AccountId);
 
 
         Notifications = new();
@@ -117,7 +117,7 @@
             UserId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
 
             Account = AccountService.GetUserAccount(UserId);
-            AccountId = Account.AccountId;
+            AccountId = Account.Id;
 
             User = UserService.GetUser(UserId);
 

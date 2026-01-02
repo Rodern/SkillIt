@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Interfaces;
+﻿using AutoMapper;
+using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkillIT_Models.DatabaseModels;
@@ -12,16 +13,19 @@ namespace SkillItAPI.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService AccountService;
-        public AccountController(IAccountService accountService)
-        {
-            this.AccountService = accountService;
-        }
+		private readonly IMapper _mapper;
+		public AccountController(IAccountService accountService, IMapper mapper)
+		{
+			this.AccountService = accountService;
+			_mapper = mapper;
+		}
 
-        [HttpPost]
+		[HttpPost]
         [Route("AddAccount")]
         public IActionResult AddAccount(Account account)
         {
-            return Ok(AccountService.AddAccount(account));
+            var entity = _mapper.Map<SkillIT_Models.Entities.Core.Account>(account);
+            return Ok(AccountService.AddAccount(entity));
         }
 
         [AllowAnonymous]
@@ -43,7 +47,8 @@ namespace SkillItAPI.Controllers
         [Route("UpdateAccount")]
         public IActionResult UpdateAccount(long id, long id2, Account account)
         {
-            return Ok(AccountService.UpdateAccount(id, id2, account));
+            var entity = _mapper.Map<SkillIT_Models.Entities.Core.Account>(account);
+            return Ok(AccountService.UpdateAccount(id, id2, entity));
         }
     }
 }

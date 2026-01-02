@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Data;
 using SkillIT_Models.Models;
 
 namespace SkillIT_Models.CRUD
@@ -33,7 +33,7 @@ namespace SkillIT_Models.CRUD
 	//}
 	public static class Crud//<T>: ICrud<T>, where T: class
 	{
-		public static T Read<T>(dynamic id, skill_it_dbContext DbContext) where T: class
+		public static T Read<T>(dynamic id, ApplicationDbContext DbContext) where T: class
 		{
 			return DbContext.Find<T>(id);
 		}
@@ -41,7 +41,7 @@ namespace SkillIT_Models.CRUD
 		{
 			return new(true, "");
 		}
-		public static ResponseModel Create<T>(dynamic id, T value, skill_it_dbContext DbContext) where T: class
+		public static ResponseModel Create<T>(dynamic id, T value, ApplicationDbContext DbContext) where T: class
 		{
 			string name = typeof(T).Name;
 			if (value == null) return new(false, $"{name}Null");
@@ -57,7 +57,7 @@ namespace SkillIT_Models.CRUD
 				return new(false, $"Failed: {ex}");
 			}
 		}
-		public static ResponseModel CreateRange<T>(dynamic list, skill_it_dbContext DbContext) where T: class
+		public static ResponseModel CreateRange<T>(dynamic list, ApplicationDbContext DbContext) where T: class
 		{
 			try
 			{
@@ -70,7 +70,7 @@ namespace SkillIT_Models.CRUD
 				return new(false, $"Failed: {ex}");
 			}
 		}
-		public static ResponseModel Delete<T>(dynamic id, skill_it_dbContext DbContext) where T: class
+		public static ResponseModel Delete<T>(dynamic id, ApplicationDbContext DbContext) where T: class
 		{
 			T obj = DbContext.Find<T>(id);
 			string name = typeof(T).Name;
@@ -87,7 +87,7 @@ namespace SkillIT_Models.CRUD
 				return new(false, $"Failed: {ex}");
 			}
 		}
-		public static ResponseModel DeleteRange<T>(dynamic list, skill_it_dbContext DbContext) where T: class
+		public static ResponseModel DeleteRange<T>(dynamic list, ApplicationDbContext DbContext) where T: class
 		{
 			try
 			{
@@ -108,7 +108,7 @@ namespace SkillIT_Models.CRUD
 				return new(false, $"Failed: {ex}");
 			}
 		}
-		public static ResponseModel Update<T>(dynamic id, T value, skill_it_dbContext DbContext) where T: class
+		public static ResponseModel Update<T>(dynamic id, T value, ApplicationDbContext DbContext) where T: class
 		{
 			T obj = DbContext.Find<T>(id);
 			string name = typeof(T).Name;

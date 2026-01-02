@@ -1,7 +1,7 @@
 ﻿using BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Learning;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -25,7 +25,7 @@ namespace BusinessLogic
             for (int i = 0; i < j; i++)
             {
                 userAchievements[i].Achievement = new Achievement();
-                userAchievements[i].Achievement = DatabaseContext.Achievements.Where(s => s.AchievementId == userAchievements[i].AchievementId).FirstOrDefault();
+                userAchievements[i].Achievement = DatabaseContext.Achievements.Where(s => s.Id == userAchievements[i].AchievementId).FirstOrDefault();
             }
             return userAchievements;
         }
@@ -56,7 +56,7 @@ namespace BusinessLogic
             try
             {
                 DatabaseContext.Entry<UserAchievement>(achievement).State = EntityState.Deleted;
-                DatabaseContext.Entry<Achievement>(DatabaseContext.Find<Achievement>(achievement.AchievementId)).State = EntityState.Deleted;
+                DatabaseContext.Entry<Achievement>(DatabaseContext.Find<Achievement>(achievement.Id)).State = EntityState.Deleted;
                 //DatabaseContext.UserAchievements.Update(achievement);
                 DatabaseContext.SaveChanges();
                 return new(true, "Success");

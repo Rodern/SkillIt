@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Interfaces;
+﻿using AutoMapper;
+using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkillIT_Models.DatabaseModels;
@@ -12,9 +13,11 @@ namespace SkillItAPI.Controllers
 	public class UserSocialController : ControllerBase
 	{
 		private readonly IUserSocialService UserSocialService;
-		public UserSocialController(IUserSocialService userSocialService)
+		private readonly IMapper _mapper;
+		public UserSocialController(IUserSocialService userSocialService, IMapper mapper)
 		{
 			UserSocialService = userSocialService;
+			this._mapper = mapper;
 		}
 
 		[HttpGet]
@@ -28,7 +31,8 @@ namespace SkillItAPI.Controllers
 		[Route("AddUserSocial")]
 		public IActionResult AddUserSocial(UserSocial userSocial)
 		{
-			return Ok(UserSocialService.AddUserSocial(userSocial));
+			var entity = _mapper.Map<SkillIT_Models.Entities.Core.UserSocial>(userSocial);
+			return Ok(UserSocialService.AddUserSocial(entity));
 		}
 
 		[HttpPost]
@@ -49,7 +53,8 @@ namespace SkillItAPI.Controllers
 		[Route("UpdateUserSocial/{id}")]
 		public IActionResult UpdateUserSocial([FromRoute] int id, UserSocial userSocial)
 		{
-			return Ok(UserSocialService.UpdateUserSocial(id, userSocial));
+			var entity = _mapper.Map<SkillIT_Models.Entities.Core.UserSocial>(userSocial);
+			return Ok(UserSocialService.UpdateUserSocial(id, entity));
 		}
 	}
 }

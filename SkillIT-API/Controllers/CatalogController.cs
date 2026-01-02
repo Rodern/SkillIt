@@ -1,15 +1,12 @@
-﻿using BusinessLogic.Interfaces;
+﻿using AutoMapper;
+using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Utilities;
 using SkillIT_Models.DatabaseModels;
 using SkillIT_Models.Models;
 using System.IO;
-using Ubiety.Dns.Core;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Net.WebRequestMethods;
 
 namespace SkillItAPI.Controllers
 {
@@ -20,9 +17,11 @@ namespace SkillItAPI.Controllers
     {
         private byte[] Bytes { get; set; }
         private readonly ICatalogService _catalogService;
-        public CatalogController(ICatalogService catalogService)
+        private readonly IMapper _mapper;
+        public CatalogController(ICatalogService catalogService, IMapper mapper)
         {
             this._catalogService = catalogService;
+            this._mapper = mapper;
         }
 
         [AllowAnonymous]
@@ -62,7 +61,8 @@ namespace SkillItAPI.Controllers
             if (catalogJson.Length <= 0 || image == null) return BadRequest();
             Catalog catalog = JsonConvert.DeserializeObject<Catalog>(catalogJson);
             catalog.Image = ImageUpload.GetBytes(image);
-            return Ok(_catalogService.AddCatalog(catalog));
+            var entity = _mapper.Map<SkillIT_Models.Entities.Learning.Catalog>(catalog);
+            return Ok(_catalogService.AddCatalog(entity));
         }
 
 		[AllowAnonymous]
@@ -109,7 +109,8 @@ namespace SkillItAPI.Controllers
             if(catalogJson.Length <= 0 || image == null) return BadRequest();
             Catalog catalog = JsonConvert.DeserializeObject<Catalog>(catalogJson);
             catalog.Image = ImageUpload.GetBytes(image);
-			return Ok(_catalogService.UpdateCatalog(catalog.CatalogId, catalog));
+            var entity = _mapper.Map<SkillIT_Models.Entities.Learning.Catalog>(catalog);
+			return Ok(_catalogService.UpdateCatalog(catalog.CatalogId, entity));
 		}
 	}
 	public class Object

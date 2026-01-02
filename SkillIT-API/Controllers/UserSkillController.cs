@@ -1,4 +1,5 @@
-﻿using BusinessLogic;
+﻿using AutoMapper;
+using BusinessLogic;
 using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,11 @@ namespace SkillItAPI.Controllers
 	public class UserSkillController : ControllerBase
 	{
 		private readonly IUserSkillService UserSkillService;
-		public UserSkillController(IUserSkillService userSkillService)
+		private readonly IMapper _mapper;
+		public UserSkillController(IUserSkillService userSkillService, IMapper mapper)
 		{
 			UserSkillService = userSkillService;
+			this._mapper = mapper;
 		}
 
 		[HttpGet]
@@ -28,14 +31,16 @@ namespace SkillItAPI.Controllers
 		[Route("AddUserSkills")]
 		public IActionResult AddUserSkills(List<UserSkill> userSkills)
 		{
-			return Ok(UserSkillService.AddUserSkills(userSkills));
+			var entities = _mapper.Map<List<SkillIT_Models.Entities.Core.UserSkill>>(userSkills);
+			return Ok(UserSkillService.AddUserSkills(entities));
 		}
 
 		[HttpPost]
 		[Route("AddUserSkill")]
 		public IActionResult AddUserSkill(UserSkill userSkill)
 		{
-			return Ok(UserSkillService.AddUserSkill(userSkill));
+			var entity = _mapper.Map<SkillIT_Models.Entities.Core.UserSkill>(userSkill);
+			return Ok(UserSkillService.AddUserSkill(entity));
 		}
 
 		[HttpPost]
@@ -56,7 +61,8 @@ namespace SkillItAPI.Controllers
 		[Route("UpdateUserSkill/{id}")]
 		public IActionResult UpdateUserSkill([FromRoute] int id, UserSkill userSkill)
 		{
-			return Ok(UserSkillService.UpdateUserSkill(id, userSkill));
+			var entity = _mapper.Map<SkillIT_Models.Entities.Core.UserSkill>(userSkill);
+			return Ok(UserSkillService.UpdateUserSkill(id, entity));
 		}
 	}
 }

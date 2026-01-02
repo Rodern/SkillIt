@@ -5,7 +5,9 @@ using SkillIT_Models;
 using SkillIT_Models.Constants;
 using SkillIT_Models.CRUD;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Core;
+using SkillIT_Models.Entities.Courses;
+using SkillIT_Models.Entities.Learning;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.ObjectModel;
@@ -21,7 +23,7 @@ namespace BusinessLogic
         private readonly ApplicationDbContext _databaseContext;
         private readonly ILogger<CourseService> _logger;
 
-        public CourseService(ApplicationDbContext dbContext, ILogger<CourseService> logger = null)
+        public CourseService(ApplicationDbContext dbContext, ILogger<CourseService>? logger = null)
         {
             _databaseContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _logger = logger;
@@ -37,7 +39,7 @@ namespace BusinessLogic
             try
             {
                 _logger?.LogInformation("Creating new course: {CourseName}", course?.Name);
-                return Crud.Create(course.CourseId, course, _databaseContext);
+                return Crud.Create(course.Id, course, _databaseContext);
             }
             catch (Exception ex)
             {
@@ -49,7 +51,7 @@ namespace BusinessLogic
         /// <summary>
         /// Deletes a course by ID
         /// </summary>
-        public ResponseModel DeleteCourse(int courseId)
+        public ResponseModel DeleteCourse(long courseId)
         {
             try
             {
@@ -70,12 +72,12 @@ namespace BusinessLogic
         {
             try
             {
-                _logger?.LogInformation("Updating course with ID: {CourseId}", course?.CourseId);
-                return Crud.Update(course.CourseId, course, _databaseContext);
+                _logger?.LogInformation("Updating course with ID: {CourseId}", course?.Id);
+                return Crud.Update(course.Id, course, _databaseContext);
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, "Error updating course {CourseId}", course?.CourseId);
+                _logger?.LogError(ex, "Error updating course {CourseId}", course?.Id);
                 return new ResponseModel(false, $"{AppConstants.Messages.Failed}: {ex.Message}");
             }
         }
@@ -83,7 +85,7 @@ namespace BusinessLogic
         /// <summary>
         /// Gets a course by ID
         /// </summary>
-        public Course GetCourse(int courseId)
+        public Course? GetCourse(long courseId)
         {
             try
             {
@@ -99,7 +101,7 @@ namespace BusinessLogic
         /// <summary>
         /// Gets a course by GUID
         /// </summary>
-        public Course GetCourseByGuid(string guid)
+        public Course? GetCourseByGuid(string guid)
         {
             try
             {
@@ -117,7 +119,7 @@ namespace BusinessLogic
         /// <summary>
         /// Gets a course chapter by GUID
         /// </summary>
-        public CourseChapter GetCourseChapterByGuid(string guid)
+        public CourseChapter? GetCourseChapterByGuid(string guid)
         {
             try
             {
@@ -135,7 +137,7 @@ namespace BusinessLogic
         /// <summary>
         /// Gets a course lesson by GUID
         /// </summary>
-        public CourseLesson GetCourseLessonByGuid(string guid)
+        public CourseLesson? GetCourseLessonByGuid(string guid)
         {
             try
             {
@@ -153,7 +155,7 @@ namespace BusinessLogic
         /// <summary>
         /// Gets course content by GUID
         /// </summary>
-        public CourseContent GetCourseContentByGuid(string guid)
+        public CourseContent? GetCourseContentByGuid(string guid)
         {
             try
             {
@@ -190,32 +192,32 @@ namespace BusinessLogic
         /// <summary>
         /// Indexes a course for navigation
         /// </summary>
-        public ObservableCollection<CourseIndex> IndexCourse(int courseId)
+        public ObservableCollection<CourseIndex> IndexCourse(long courseId)
         {
-			ObservableCollection<CourseIndex> Indices = new();
-			ObservableCollection<int> chapterIds = new CourseService(new()).GetCourseChapterIds(courseId);
+            ObservableCollection<CourseIndex> Indices = new();
+            ObservableCollection<long> chapterIds = GetCourseChapterIds(courseId);
 
-			int count = 0;
-			foreach (int cId in chapterIds)
-			{
-				var lessonIds = new CourseService(new()).GetCourseLessonIds(cId);
-				foreach (int lId in lessonIds)
-				{
-					var contentIds = new CourseService(new()).GetCourseContentIds(lId);
-					foreach (int ccId in contentIds)
-					{
-						count++;
-						Indices.Add(new()
-						{
-							CourseIndexId = count,
-							CourseId = courseId,
-							ChapterId = cId,
-							LessonId = lId,
-							ContentId = ccId
-						});
-					}
-				}
-			}
+            long count = 0;
+            foreach (long cId in chapterIds)
+            {
+                var lessonIds = GetCourseLessonIds(cId);
+                foreach (long lId in lessonIds)
+                {
+                    var contentIds = GetCourseContentIds(lId);
+                    foreach (long ccId in contentIds)
+                    {
+                        count++;
+                        Indices.Add(new()
+                        {
+                            CourseIndexId = count,
+                            CourseId = courseId,
+                            ChapterId = cId,
+                            LessonId = lId,
+                            ContentId = ccId
+                        });
+                    }
+                }
+            }
 			return Indices;
 		}
 
@@ -224,22 +226,22 @@ namespace BusinessLogic
 		#region CourseChapter
 		public ResponseModel CreateCourseChapter(CourseChapter courseChapter)
         {
-            return Crud.Create(courseChapter.ChapterId, courseChapter, DatabaseContext);
+            return Crud.Create(courseChapter.Id, courseChapter, _databaseContext);
         }
 
-        public ResponseModel DeleteCourseChapter(int chapterId)
+        public ResponseModel DeleteCourseChapter(long chapterId)
         {
-            return Crud.Delete<CourseChapter>(chapterId, DatabaseContext);
+            return Crud.Delete<CourseChapter>(chapterId, _databaseContext);
         }
 
         public ResponseModel UpdateCourse(CourseChapter courseChapter)
         {
-            return Crud.Update(courseChapter.ChapterId, courseChapter, DatabaseContext);
+            return Crud.Update(courseChapter.Id, courseChapter, _databaseContext);
         }
 
-        public CourseChapter GetCourseChapter(int chapterId)
+        public CourseChapter? GetCourseChapter(long chapterId)
         {
-            return Crud.Read<CourseChapter>(chapterId, DatabaseContext);
+            return Crud.Read<CourseChapter>(chapterId, _databaseContext);
         }
 
         public ObservableCollection<CourseChapter> GetCourseChapters()
@@ -249,15 +251,15 @@ namespace BusinessLogic
             return AddAuthors<CourseChapter>(chapters);
         }
 
-        public ObservableCollection<CourseChapter> GetCourseChapters(int courseId)
+        public ObservableCollection<CourseChapter> GetCourseChapters(long courseId)
         {
             var chapters = new ObservableCollection<CourseChapter>(_databaseContext.CourseChapters.Where(c => c.CourseId == courseId).ToList());
             return chapters;
         }
 
-        public ObservableCollection<CourseChapter> GetCourseChapters(int chapterId, int courseId)
+        public ObservableCollection<CourseChapter> GetCourseChapters(long chapterId, long courseId)
         {
-            var chapters = new ObservableCollection<CourseChapter>(_databaseContext.CourseChapters.Where(c => c.ChapterId == chapterId && c.CourseId == courseId).ToList());
+            var chapters = new ObservableCollection<CourseChapter>(_databaseContext.CourseChapters.Where(c => c.Id == chapterId && c.CourseId == courseId).ToList());
             return chapters;
         }
         #endregion
@@ -265,22 +267,22 @@ namespace BusinessLogic
         #region CourseLesson
         public ResponseModel CreateCourseLesson(CourseLesson courseLesson)
         {
-            return Crud.Create(courseLesson.LessonId, courseLesson, DatabaseContext);
+            return Crud.Create(courseLesson.Id, courseLesson, _databaseContext);
         }
 
-        public ResponseModel DeleteCourseLesson(int lessonId)
+        public ResponseModel DeleteCourseLesson(long lessonId)
         {
-            return Crud.Delete<CourseLesson>(lessonId, DatabaseContext);
+            return Crud.Delete<CourseLesson>(lessonId, _databaseContext);
         }
 
         public ResponseModel UpdateCourseLesson(CourseLesson courseLesson)
         {
-            return Crud.Update(courseLesson.LessonId, courseLesson, DatabaseContext);
+            return Crud.Update(courseLesson.Id, courseLesson, _databaseContext);
         }
 
-        public CourseLesson GetCourseLesson(int lessonId)
+        public CourseLesson? GetCourseLesson(long lessonId)
         {
-            return Crud.Read<CourseLesson>(lessonId, DatabaseContext);
+            return Crud.Read<CourseLesson>(lessonId, _databaseContext);
         }
 
         public ObservableCollection<CourseLesson> GetCourseLessons()
@@ -289,7 +291,7 @@ namespace BusinessLogic
             return lessons;
         }
 
-        public ObservableCollection<CourseLesson> GetCourseLessons(int chapterId)
+        public ObservableCollection<CourseLesson> GetCourseLessons(long chapterId)
         {
             var lessons = new ObservableCollection<CourseLesson>(_databaseContext.CourseLessons.Where(l => l.ChapterId == chapterId).ToList());
             return lessons;
@@ -297,10 +299,10 @@ namespace BusinessLogic
         #endregion
         ObservableCollection<T> AddAuthors<T>(dynamic list) where T: class
         {
-            for (int i = 0; i < list.Count; i++)
+            for (long i = 0; i < list.Count; i++)
             {
                 list[i].Author = new Creator();
-                list[i].Author = DatabaseContext.Creators.Find(list[i].AuthorId);
+                list[i].Author = _databaseContext.Creators.Find(list[i].AuthorId);
                 //list[i].Course = new();
                 //list[i].Chapter = DatabaseContext.CourseChapters.Where(a => a.ChapterId == chapters[i].CourseId).FirstOrDefault();
             }
@@ -310,22 +312,22 @@ namespace BusinessLogic
         #region CourseContent
         public ResponseModel CreateCourseContent(CourseContent content)
         {
-            return Crud.Create(content.ContentId, content, DatabaseContext);
+            return Crud.Create(content.Id, content, _databaseContext);
         }
 
-        public ResponseModel DeleteCourseContent(int contentId)
+        public ResponseModel DeleteCourseContent(long contentId)
         {
-            return Crud.Delete<CourseContent>(contentId, DatabaseContext);
+            return Crud.Delete<CourseContent>(contentId, _databaseContext);
         }
 
         public ResponseModel UpdateCourseContent(CourseContent content)
         {
-            return Crud.Update(content.ContentId, content, DatabaseContext);
+            return Crud.Update(content.Id, content, _databaseContext);
         }
 
-        public CourseContent GetCourseContent(int contentId)
+        public CourseContent? GetCourseContent(long contentId)
         {
-            return Crud.Read<CourseContent>(contentId, DatabaseContext);
+            return Crud.Read<CourseContent>(contentId, _databaseContext);
         }
 
         public ObservableCollection<CourseContent> GetCourseContents()
@@ -333,11 +335,11 @@ namespace BusinessLogic
             return new(_databaseContext.CourseContents.ToList());
         }
 
-        public SubContent GetContentFeilds(int contentId)
+        public SubContent GetContentFeilds(long contentId)
         {
             return _databaseContext.CourseContents.Select(x => new SubContent
             {
-                ContentId = x.ContentId,
+                ContentId = (long)x.Id,
                 LessonId = x.LessonId,
                 Title = x.Title,
                 ContentNumber = x.ContentNumber,
@@ -345,11 +347,11 @@ namespace BusinessLogic
             }).FirstOrDefault(x => x.ContentId == contentId);
         }
 
-        public ObservableCollection<SubContent> GetContentFeildsByLessonId(int lessonId)
+        public ObservableCollection<SubContent> GetContentFeildsByLessonId(long lessonId)
         {
             return new(_databaseContext.CourseContents.Select(x => new SubContent
             {
-                ContentId = x.ContentId,
+                ContentId = (int)x.Id,
                 LessonId = x.LessonId,
                 Title = x.Title,
                 ContentNumber = x.ContentNumber,
@@ -357,44 +359,44 @@ namespace BusinessLogic
             }).Where(x => x.ContentId == lessonId));
         }
 
-        public ObservableCollection<CourseContent> GetCourseContents(int lessonId)
+        public ObservableCollection<CourseContent> GetCourseContents(long lessonId)
         {
             return new(_databaseContext.CourseContents.Where(cc => cc.LessonId == lessonId).ToList());
         }
         #endregion
 
         #region CourseData
-        public ResponseModel CreateCourseDatum(CourseDatum courseData)
+        public ResponseModel CreateCourseDatum(CourseData courseData)
         {
-            return Crud.Create<CourseDatum>(courseData.DataId, courseData, DatabaseContext);
+            return Crud.Create<CourseData>(courseData.Id, courseData, _databaseContext);
         }
 
-        public ResponseModel DeleteCourseDatum(int dataId)
+        public ResponseModel DeleteCourseDatum(long dataId)
         {
-            return Crud.Delete<CourseDatum>(dataId, DatabaseContext);
+            return Crud.Delete<CourseData>(dataId, _databaseContext);
         }
 
-        public ResponseModel UpdateCourseDatum(CourseDatum courseData)
+        public ResponseModel UpdateCourseDatum(CourseData courseData)
         {
-            return Crud.Update(courseData.DataId, courseData, DatabaseContext);
+            return Crud.Update(courseData.Id, courseData, _databaseContext);
         }
 
-        public CourseDatum GetCourseDatum(int dataId)
+        public CourseData GetCourseDatum(long dataId)
         {
-            return Crud.Read<CourseDatum>(dataId, DatabaseContext);
+            return Crud.Read<CourseData>(dataId, _databaseContext);
         }
 
-        public ObservableCollection<CourseDatum> GetCourseData()
+        public ObservableCollection<CourseData> GetCourseData()
         {
             return new(_databaseContext.CourseData.ToList());
         }
 
-        public ObservableCollection<CourseDatum> GetCourseData(int enrollmentId)
+        public ObservableCollection<CourseData> GetCourseData(long enrollmentId)
         {
             return new(_databaseContext.CourseData.Where(cd => cd.EnrollmentId == enrollmentId).ToList());
         }
 
-        public CourseDatum GetCourseDatumByEnrollmentId(int enrollmentId)
+        public CourseData? GetCourseDatumByEnrollmentId(long enrollmentId)
         {
             return _databaseContext.CourseData.FirstOrDefault(cd => cd.EnrollmentId == enrollmentId);
         }
@@ -404,24 +406,24 @@ namespace BusinessLogic
 		#region Selects
 
 
-		public ObservableCollection<int> GetCourseIds()
+		public ObservableCollection<long> GetCourseIds()
 		{
-			return new ObservableCollection<int>(_databaseContext.CourseChapters.Select(x => x.ChapterId).ToList());
+			return new ObservableCollection<long>(_databaseContext.CourseChapters.Select(x => (long)x.Id).ToList());
 		}
 
-		public ObservableCollection<int> GetCourseChapterIds(int courseId)
+		public ObservableCollection<long> GetCourseChapterIds(long courseId)
 		{
-			return new ObservableCollection<int>(_databaseContext.CourseChapters.OrderBy(x => x.ChapterNumber).Where(c => c.CourseId == courseId).Select(x => x.ChapterId).ToList());
+			return new ObservableCollection<long>(_databaseContext.CourseChapters.OrderBy(x => x.ChapterNumber).Where(c => c.CourseId == courseId).Select(x => (long)x.Id).ToList());
 		}
 
-		public ObservableCollection<int> GetCourseLessonIds(int chapterId)
+		public ObservableCollection<long> GetCourseLessonIds(long chapterId)
 		{
-			return new ObservableCollection<int>(_databaseContext.CourseLessons.OrderBy(x => x.LessonNumber).Where(c => c.ChapterId == chapterId).Select(x => x.LessonId).ToList());
+			return new ObservableCollection<long>(_databaseContext.CourseLessons.OrderBy(x => x.LessonNumber).Where(c => c.ChapterId == chapterId).Select(x => (long)x.Id).ToList());
 		}
 
-		public ObservableCollection<int> GetCourseContentIds(int lessonId)
+		public ObservableCollection<long> GetCourseContentIds(long lessonId)
 		{
-			return new ObservableCollection<int>(_databaseContext.CourseContents.OrderBy(x => x.ContentNumber).Where(c => c.LessonId == lessonId).Select(x => x.ContentId).ToList());
+			return new ObservableCollection<long>(_databaseContext.CourseContents.OrderBy(x => x.ContentNumber).Where(c => c.LessonId == lessonId).Select(x => (long)x.Id).ToList());
 		}
 
 		//public ObservableCollection<int, int> GetCourseIds()
@@ -429,42 +431,42 @@ namespace BusinessLogic
 		//	return new(DatabaseContext.CourseChapters.Select(x => x.ChapterId).ToList());
 		//}
 
-		public ObservableCollection<MiniINT> GetCourseChapterIdsAndNumber(int courseId)
+		public ObservableCollection<MiniINT> GetCourseChapterIdsAndNumber(long courseId)
 		{
-			return new(_databaseContext.CourseChapters.OrderBy(x => x.ChapterNumber).Where(c => c.CourseId == courseId).Select(x => new MiniINT() { ObjectId = x.ChapterId, Number = x.ChapterNumber, Guid = x.Guid }).ToList());
+			return new(_databaseContext.CourseChapters.OrderBy(x => x.ChapterNumber).Where(c => c.CourseId == courseId).Select(x => new MiniINT() { ObjectId = (int)x.Id, Number = x.ChapterNumber, Guid = x.Guid }).ToList());
 		}
 
-		public ObservableCollection<MiniINT> GetCourseLessonIdsAndNumber(int chapterId)
+		public ObservableCollection<MiniINT> GetCourseLessonIdsAndNumber(long chapterId)
 		{
-			return new(_databaseContext.CourseLessons.OrderBy(x => x.LessonNumber).Where(c => c.ChapterId == chapterId).Select(x => new MiniINT() { ObjectId = x.LessonId, Number = x.LessonNumber, Guid = x.Guid }).ToList());
+			return new(_databaseContext.CourseLessons.OrderBy(x => x.LessonNumber).Where(c => c.ChapterId == chapterId).Select(x => new MiniINT() { ObjectId = (int)x.Id, Number = x.LessonNumber, Guid = x.Guid }).ToList());
 		}
 
-		public ObservableCollection<MiniINT> GetCourseContentIdsAndNumber(int lessonId)
+		public ObservableCollection<MiniINT> GetCourseContentIdsAndNumber(long lessonId)
 		{
-			return new (_databaseContext.CourseContents.OrderBy(x => x.ContentNumber).Where(c => c.LessonId == lessonId).Select(x => new MiniINT() { ObjectId = x.ContentId, Number = x.ContentNumber, Guid = x.Guid } ).ToList());
+			return new (_databaseContext.CourseContents.OrderBy(x => x.ContentNumber).Where(c => c.LessonId == lessonId).Select(x => new MiniINT() { ObjectId = (int)x.Id, Number = x.ContentNumber, Guid = x.Guid } ).ToList());
 		}
 		#endregion
 
 		#region Index_data
-        public DataIndex GetDataIndex(int indexId)
+        public DataIndex? GetDataIndex(long indexId)
         {
-            return Crud.Read<DataIndex>(indexId, DatabaseContext);
+            return Crud.Read<DataIndex>(indexId, _databaseContext);
 		}
-		public DataIndex GetDataIndexByCourseId(int courseId)
+		public DataIndex? GetDataIndexByCourseId(long courseId)
 		{
-			return _databaseContext.DataIndices.FirstOrDefault(d => d.CourseId == courseId);
+			return _databaseContext.DataIndexes.FirstOrDefault(d => d.CourseId == courseId);
 		}
 		public ObservableCollection<DataIndex> GetDataIndices()
         {
-            return new(_databaseContext.DataIndices);
+            return new(_databaseContext.DataIndexes);
         }
-        public ObservableCollection<DataIndex> GetDataIndices(int courseId)
+        public ObservableCollection<DataIndex> GetDataIndices(long courseId)
         {
-            return new(_databaseContext.DataIndices.Where(i => i.CourseId == courseId));
+            return new(_databaseContext.DataIndexes.Where(i => i.CourseId == courseId));
         }
-        public DataIndex GetCourseDataIndex(int courseId)
+        public DataIndex? GetCourseDataIndex(long courseId)
         {
-            return _databaseContext.DataIndices.FirstOrDefault(i => i.CourseId == courseId);
+            return _databaseContext.DataIndexes.FirstOrDefault(i => i.CourseId == courseId);
         }
 		#endregion
 	}

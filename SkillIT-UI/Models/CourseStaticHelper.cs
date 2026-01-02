@@ -1,9 +1,13 @@
 ﻿using BusinessLogic;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Core;
+using SkillIT_Models.Entities.Learning;
+using SkillIT_Models.Entities.Analytics;
+using SkillIT_Models.Data;
 using SkillIT_Models.Models;
 using System.Collections.ObjectModel;
+using SkillIT_Models.Entities.Courses;
 
 namespace SkillIT_UI.Models
 {
@@ -18,13 +22,20 @@ namespace SkillIT_UI.Models
         {
             try
             {
-                Course course = new CourseService(new skill_it_dbContext()).GetCourseByGuid(guid);
+                Course course = new CourseService(new ApplicationDbContext(new())).GetCourseByGuid(guid);
                 course.Author = new();
-                course.Author = new AccountService(new skill_it_dbContext()).GetCreator(course.AuthorId);
+                course.Author = new AccountService(new ApplicationDbContext(new())).GetCreator(course.AuthorId);
                 course.Author.Account = new();
-                course.Author.Account = new AccountService(new skill_it_dbContext()).GetAccount(course.Author.AccountId);
+                course.Author.Account = new AccountService(new ApplicationDbContext(new())).GetAccount(course.Author.AccountId);
                 course.Author.Account.User = new();
-                course.Author.Account.User = new UserService(new skill_it_dbContext()).GetUser(course.Author.Account.UserId);
+                course.Author.Account.User = new UserService(new ApplicationDbContext(new())).GetUser(course.Author.Account.UserId);/*
+                Course course = new CourseService(new ApplicationDbContext(new())).GetCourseByGuid(guid);
+                course.Author = new();
+                course.Author = new AccountService(new ApplicationDbContext(new())).GetCreator(course.AuthorId);
+                course.Author.Account = new();
+                course.Author.Account = new AccountService(new ApplicationDbContext(new())).GetAccount(course.Author.AccountId);
+                course.Author.Account.User = new();
+                course.Author.Account.User = new UserService(new ApplicationDbContext(new())).GetUser(course.Author.Account.UserId);*/
                 return course;
             }
             catch (Exception)
@@ -33,17 +44,17 @@ namespace SkillIT_UI.Models
             }
         }
         [JSInvokable]
-        public static Course GetCourse(int courseId)
+        public static Course GetCourse(long courseId)
         {
             try
             {
-                Course course = new CourseService(new skill_it_dbContext()).GetCourse(courseId);
+                Course course = new CourseService(new ApplicationDbContext(new())).GetCourse(courseId);
                 course.Author = new();
-                course.Author = new AccountService(new skill_it_dbContext()).GetCreator(course.AuthorId);
+                course.Author = new AccountService(new ApplicationDbContext(new())).GetCreator(course.AuthorId);
                 course.Author.Account = new();
-                course.Author.Account = new AccountService(new skill_it_dbContext()).GetAccount(course.Author.AccountId);
+                course.Author.Account = new AccountService(new ApplicationDbContext(new())).GetAccount(course.Author.AccountId);
                 course.Author.Account.User = new();
-                course.Author.Account.User = new UserService(new skill_it_dbContext()).GetUser(course.Author.Account.UserId);
+                course.Author.Account.User = new UserService(new ApplicationDbContext(new())).GetUser(course.Author.Account.UserId);
                 return course;
             }
             catch (Exception)
@@ -53,19 +64,19 @@ namespace SkillIT_UI.Models
         }
 
         [JSInvokable]
-        public static ObservableCollection<CourseIndex> IndexCourse(int courseId)
+        public static ObservableCollection<CourseIndex> IndexCourse(long courseId)
         {
 			ObservableCollection<CourseIndex> Indices = new();
 
-			var chapterIds = new CourseService(new()).GetCourseChapterIdsAndNumber(courseId).OrderBy(x => x.Number);
+			var chapterIds = new CourseService(new(new())).GetCourseChapterIdsAndNumber(courseId).OrderBy(x => x.Number);
 
 			int count = 0;
 			foreach (var cId in chapterIds)
 			{
-				var lessonIds = new CourseService(new()).GetCourseLessonIdsAndNumber(cId.ObjectId).OrderBy(x => x.Number);
+				var lessonIds = new CourseService(new(new())).GetCourseLessonIdsAndNumber(cId.ObjectId).OrderBy(x => x.Number);
 				foreach (var lId in lessonIds)
 				{
-					var contentIds = new CourseService(new()).GetCourseContentIdsAndNumber(lId.ObjectId).OrderBy(x => x.Number);
+					var contentIds = new CourseService(new(new())).GetCourseContentIdsAndNumber(lId.ObjectId).OrderBy(x => x.Number);
 					foreach (var ccId in contentIds)
 					{
 						count++;
@@ -100,7 +111,7 @@ namespace SkillIT_UI.Models
 							
 						}
 
-						if (new QuizService(new skill_it_dbContext()).GetChapterQuizzes(cId.ObjectId).Count > 0) index.HasQuiz = true;
+						if (new QuizService(new ApplicationDbContext(new())).GetChapterQuizzes(cId.ObjectId).Count > 0) index.HasQuiz = true;
 
 						Indices.Add(index);
 					}
@@ -115,7 +126,7 @@ namespace SkillIT_UI.Models
 		[JSInvokable]
 		public static ObservableCollection<CourseIndex> MergeIndex(int courseId, ObservableCollection<CourseIndex> existingIndex)
 		{
-			var DataIndex = new CourseService(new()).GetCourseDataIndex(courseId);
+			var DataIndex = new CourseService(new(new())).GetCourseDataIndex(courseId);
 			var CourseDataIndex = JsonConvert.DeserializeObject<ObservableCollection<CourseIndex>>(DataIndex.IndexData);
 			ObservableCollection<CourseIndex> Indices = new();
 
@@ -185,7 +196,7 @@ namespace SkillIT_UI.Models
 
 			for (int i = 0; i < newIndex.ToList().Count(); i++)
 			{
-				if (new QuizService(new skill_it_dbContext()).GetChapterQuizzes(newIndex[i].ChapterId).Count > 0)
+				if (new QuizService(new ApplicationDbContext(new())).GetChapterQuizzes(newIndex[i].ChapterId).Count > 0)
 				{
 					newIndex[i].HasQuiz = true;
 				}
@@ -217,68 +228,68 @@ namespace SkillIT_UI.Models
         [JSInvokable]
         public static ObservableCollection<Course> GetCourses()
         {
-            var courses =  new CourseService(new skill_it_dbContext()).GetCourses();
+            var courses =  new CourseService(new ApplicationDbContext(new())).GetCourses();
             for (int i = 0; i < courses.Count; i++)
             {
                 courses[i].Author = new();
-                courses[i].Author = new AccountService(new skill_it_dbContext()).GetCreator(courses[i].AuthorId);
+                courses[i].Author = new AccountService(new ApplicationDbContext(new())).GetCreator(courses[i].AuthorId);
                 courses[i].Author.Account = new();
-                courses[i].Author.Account = new AccountService(new skill_it_dbContext()).GetAccount(courses[i].Author.AccountId);
+                courses[i].Author.Account = new AccountService(new ApplicationDbContext(new())).GetAccount(courses[i].Author.AccountId);
                 courses[i].Author.Account.User = new();
-                courses[i].Author.Account.User = new UserService(new skill_it_dbContext()).GetUser(courses[i].Author.Account.UserId);
+                courses[i].Author.Account.User = new UserService(new ApplicationDbContext(new())).GetUser(courses[i].Author.Account.UserId);
             }
             return courses;
         }
         [JSInvokable]
         public static ObservableCollection<CourseChapter> GetCourseChapters(int courseId)
         {
-            ObservableCollection<CourseChapter> chapters = new CourseService(new skill_it_dbContext()).GetCourseChapters(courseId);
+            ObservableCollection<CourseChapter> chapters = new CourseService(new ApplicationDbContext(new())).GetCourseChapters(courseId);
             for(int i = 0; i < chapters.Count; i++)
             {
                 chapters[i].Course = new();
-                chapters[i].Course = new CourseService(new skill_it_dbContext()).GetCourse(chapters[i].CourseId);
+                chapters[i].Course = new CourseService(new ApplicationDbContext(new())).GetCourse(chapters[i].CourseId);
                 //chapters[i].CourseLessons = new();
-                chapters[i].CourseLessons = new CourseService(new skill_it_dbContext()).GetCourseLessons(chapters[i].CourseId);
+                chapters[i].Lessons = new CourseService(new ApplicationDbContext(new())).GetCourseLessons(chapters[i].CourseId);
                 chapters[i].Author = new();
-                chapters[i].Author = new AccountService(new skill_it_dbContext()).GetCreator(chapters[i].AuthorId);
+                chapters[i].Author = new AccountService(new ApplicationDbContext(new())).GetCreator(chapters[i].AuthorId);
             }
             return chapters;
         }
         [JSInvokable]
         public static ObservableCollection<CourseLesson> GetCourseLessons(int chapterId)
         {
-            ObservableCollection<CourseLesson> lessons = new CourseService(new skill_it_dbContext()).GetCourseLessons(chapterId);
+            ObservableCollection<CourseLesson> lessons = new CourseService(new ApplicationDbContext(new())).GetCourseLessons(chapterId);
             for(int i = 0; i < lessons.Count; i++)
             {
                 lessons[i].Chapter = new();
-                lessons[i].Chapter = new CourseService(new skill_it_dbContext()).GetCourseChapter(lessons[i].ChapterId);
+                lessons[i].Chapter = new CourseService(new ApplicationDbContext(new())).GetCourseChapter(lessons[i].ChapterId);
                 //lessons[i].CourseContents = GetCourseContents(lessons[i].ChapterId);
                 lessons[i].Author = new();
-                lessons[i].Author = new AccountService(new skill_it_dbContext()).GetCreator(lessons[i].AuthorId);
+                lessons[i].Author = new AccountService(new ApplicationDbContext(new())).GetCreator(lessons[i].AuthorId);
             }
             return lessons;
         }
         [JSInvokable]
         public static ObservableCollection<CourseContent> GetCourseContents(int enrollmentId)
         {
-            ObservableCollection<CourseContent> contents = new CourseService(new skill_it_dbContext()).GetCourseContents(enrollmentId);
+            ObservableCollection<CourseContent> contents = new CourseService(new ApplicationDbContext(new())).GetCourseContents(enrollmentId);
             for(int i = 0; i < contents.Count; i++)
             {
                 contents[i].Lesson = new();
-                contents[i].Lesson = new CourseService(new skill_it_dbContext()).GetCourseLesson(contents[i].LessonId);
+                contents[i].Lesson = new CourseService(new ApplicationDbContext(new())).GetCourseLesson(contents[i].LessonId);
                 contents[i].Author = new();
-                contents[i].Author = new AccountService(new skill_it_dbContext()).GetCreator(contents[i].AuthorId);
+                contents[i].Author = new AccountService(new ApplicationDbContext(new())).GetCreator(contents[i].AuthorId);
             }
             return contents;
         }
         [JSInvokable]
-        public static ObservableCollection<CourseDatum> GetCourseData(int enrollmentId)
+        public static ObservableCollection<CourseData> GetCourseData(int enrollmentId)
         {
-            ObservableCollection<CourseDatum> data = new CourseService(new skill_it_dbContext()).GetCourseData(enrollmentId);
+            ObservableCollection<CourseData> data = new CourseService(new ApplicationDbContext(new())).GetCourseData(enrollmentId);
             for(int i = 0; i < data.Count; i++)
             {
                 data[i].Enrollment = new();
-                data[i].Enrollment = new EnrollmentService(new skill_it_dbContext()).GetEnrollment(data[i].EnrollmentId);
+                data[i].Enrollment = new EnrollmentService(new ApplicationDbContext(new())).GetEnrollment(data[i].EnrollmentId);
             }
             return data;
         }
@@ -286,37 +297,37 @@ namespace SkillIT_UI.Models
         #region Creates
         public static ResponseModel CreateEnrollment(Enrollment enrollment)
         {
-            return new EnrollmentService(new skill_it_dbContext()).CreateEnrollment(enrollment);
+            return new EnrollmentService(new ApplicationDbContext(new())).CreateEnrollment(enrollment);
         }
         public static ResponseModel UpdateEnrollment(Enrollment enrollment)
         {
-            return new EnrollmentService(new skill_it_dbContext()).UpdateEnrollment(enrollment);
+            return new EnrollmentService(new ApplicationDbContext(new())).UpdateEnrollment(enrollment);
         }
         public static ResponseModel DeleteEnrollment(int enrollmentId)
         {
-            return new EnrollmentService(new skill_it_dbContext()).DeleteEnrollment(enrollmentId);
+            return new EnrollmentService(new ApplicationDbContext(new())).DeleteEnrollment(enrollmentId);
         }
         public static ObservableCollection<Enrollment> GetEnrollments(int enrollmentId, long userId)
         {
-            return new EnrollmentService(new skill_it_dbContext()).GetUserEnrollments(enrollmentId, userId);
+            return new EnrollmentService(new ApplicationDbContext(new())).GetUserEnrollments(enrollmentId, userId);
         }
         public static ObservableCollection<Enrollment> GetEnrollments()
         {
-            return new EnrollmentService(new skill_it_dbContext()).GetEnrollments();
+            return new EnrollmentService(new ApplicationDbContext(new())).GetEnrollments();
         }
         #endregion
         #region userCourse
-        public static ResponseModel CreateCourseDatum(CourseDatum datum)
+        public static ResponseModel CreateCourseDatum(CourseData datum)
         {
-            return new CourseService(new skill_it_dbContext()).CreateCourseDatum(datum);
+            return new CourseService(new ApplicationDbContext(new())).CreateCourseDatum(datum);
         }
-        public static ResponseModel UpdateCourseData(CourseDatum datum)
+        public static ResponseModel UpdateCourseData(CourseData datum)
         {
-            return new CourseService(new skill_it_dbContext()).UpdateCourseDatum(datum);
+            return new CourseService(new ApplicationDbContext(new())).UpdateCourseDatum(datum);
         }
         public static ResponseModel DeleteCourseDatum(int dataId)
         {
-            return new CourseService(new skill_it_dbContext()).DeleteCourseDatum(dataId);
+            return new CourseService(new ApplicationDbContext(new())).DeleteCourseDatum(dataId);
         }
         #endregion
     }

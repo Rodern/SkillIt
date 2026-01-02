@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Interfaces;
+﻿using AutoMapper;
+using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using SkillIT_Models.DatabaseModels;
@@ -12,9 +13,11 @@ namespace SkillItAPI.Controllers
     public class CertificateController : Controller
     {
         private readonly IUserCertificateService userCertificateService;
-        public CertificateController(IUserCertificateService userCertificateService)
+        private readonly IMapper _mapper;
+        public CertificateController(IUserCertificateService userCertificateService, IMapper mapper)
         {
             this.userCertificateService = userCertificateService;
+            this._mapper = mapper;
         }
 
         [AllowAnonymous]
@@ -22,7 +25,8 @@ namespace SkillItAPI.Controllers
         [Route("add")]
         public IActionResult Add(UserCertificate userCertificate)
         {
-            return Ok(userCertificateService.AddUserCerticate(userCertificate));
+            var entity = _mapper.Map<SkillIT_Models.Entities.Learning.UserCertificate>(userCertificate);
+            return Ok(userCertificateService.AddUserCerticate(entity));
         }
 
         [AllowAnonymous]
@@ -30,7 +34,8 @@ namespace SkillItAPI.Controllers
         [Route("update")]
         public IActionResult Update(UserCertificate userCertificate)
         {
-            return Ok(userCertificateService.UpdateUserCertificate(userCertificate));
+            var entity = _mapper.Map<SkillIT_Models.Entities.Learning.UserCertificate>(userCertificate);
+            return Ok(userCertificateService.UpdateUserCertificate(entity));
         }
 
         [AllowAnonymous]

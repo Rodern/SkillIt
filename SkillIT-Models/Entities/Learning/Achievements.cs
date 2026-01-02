@@ -52,23 +52,23 @@ public class UserAchievement : BaseEntity
 
     [Required]
     [Column("achievementID")]
-    public int AchievementId { get; set; }
+    public long AchievementId { get; set; }
 
     [Required]
     [Column("userID")]
     public long UserId { get; set; }
 
     [Column("enrollmentID")]
-    public int? EnrollmentId { get; set; }
+    public long? EnrollmentId { get; set; }
 
     [Column("catalogID")]
-    public int? CatalogId { get; set; }
+    public long? CatalogId { get; set; }
 
     [Column("user_skillID")]
-    public int? UserSkillId { get; set; }
+    public long? UserSkillId { get; set; }
 
     [Column("languageID")]
-    public int? LanguageId { get; set; }
+    public long? LanguageId { get; set; }
 
     // Navigation properties
     [ForeignKey(nameof(AchievementId))]
@@ -140,14 +140,14 @@ public class UserCertificate : BaseEntity
 
     [Required]
     [Column("certificateID")]
-    public int CertificateId { get; set; }
+    public long CertificateId { get; set; }
 
     [Required]
     [Column("userID")]
     public long UserId { get; set; }
 
     [Column("courseID")]
-    public int? CourseId { get; set; }
+    public long? CourseId { get; set; }
 
     // Navigation properties
     [ForeignKey(nameof(CertificateId))]

@@ -1,4 +1,5 @@
-﻿using BusinessLogic;
+﻿using AutoMapper;
+using BusinessLogic;
 using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -13,9 +14,11 @@ namespace SkillItAPI.Controllers
     public class OTPController : Controller
     {
         private readonly IOTPService oTPService_service;
-        public OTPController(IOTPService oTPService_service)
+        private readonly IMapper _mapper;
+        public OTPController(IOTPService oTPService_service, IMapper mapper)
         {
             this.oTPService_service = oTPService_service;
+            this._mapper = mapper;
         }
         [AllowAnonymous]
         [HttpGet]
@@ -29,7 +32,8 @@ namespace SkillItAPI.Controllers
         [Route("setOtp")]
         public IActionResult Set(Otp otp)
         {
-            return Ok(oTPService_service.AddOTP(otp));
+            var entity = _mapper.Map<SkillIT_Models.Entities.Core.Otp>(otp);
+            return Ok(oTPService_service.AddOTP(entity));
         }
         [AllowAnonymous]
         [HttpGet]

@@ -38,8 +38,8 @@
         long UserId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
         //AccountId = long.Parse(await JSRuntime.InvokeAsync<string>("getAccountId"));
 
-        Account = new AccountService(new()).GetUserAccount(UserId);
-        AccountId = Account.AccountId;
+        Account = new AccountService(new(new())).GetUserAccount(UserId);
+        AccountId = Account.Id;
 
         //Notifications = new(NotificationService.GetAccountNotifications(AccountId).Take(10));
         //JSRuntime.InvokeVoidAsync("console.log", Notifications.Select(x => x.Caption));
@@ -60,7 +60,7 @@
 
     void NP_Envent(object source, System.Timers.ElapsedEventArgs e)
     {
-        var nots = new NotificationService(new()).GetAccountNotifications(AccountId);
+        var nots = new NotificationService(new(new())).GetAccountNotifications(AccountId);
 
 
         Notifications = new();

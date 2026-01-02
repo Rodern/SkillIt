@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SkillIT_Models;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Analytics;
+using SkillIT_Models.Entities.Courses;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace BusinessLogic
 
         public AnalyticsService(
             ApplicationDbContext dbContext, 
-            ILogger<AnalyticsService> logger = null)
+            ILogger<AnalyticsService>? logger = null)
         {
             _databaseContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _logger = logger;
@@ -74,17 +75,17 @@ namespace BusinessLogic
                     .AsNoTracking()
                     .CountAsync();
 
-                var enrollments = await _databaseContext.CourseEnrollments
+                var enrollments = await _databaseContext.Enrollments
                     .Where(ce => ce.CourseId == courseId)
                     .AsNoTracking()
                     .CountAsync();
 
-                var completions = await _databaseContext.CourseEnrollments
+                var completions = await _databaseContext.Enrollments
                     .Where(ce => ce.CourseId == courseId && ce.CompletionPercentage >= 100)
                     .AsNoTracking()
                     .CountAsync();
 
-                var averageProgress = await _databaseContext.CourseEnrollments
+                var averageProgress = await _databaseContext.Enrollments
                     .Where(ce => ce.CourseId == courseId)
                     .AsNoTracking()
                     .AverageAsync(ce => (double?)ce.CompletionPercentage) ?? 0;
@@ -116,7 +117,7 @@ namespace BusinessLogic
             {
                 _logger?.LogInformation("Getting engagement metrics for UserId={UserId}", userId);
 
-                var enrollments = await _databaseContext.CourseEnrollments
+                var enrollments = await _databaseContext.Enrollments
                     .Where(ce => ce.UserId == userId)
                     .AsNoTracking()
                     .ToListAsync();
@@ -143,7 +144,7 @@ namespace BusinessLogic
                     TotalAchievements = achievements,
                     TotalCertificates = certificates,
                     AverageCompletionRate = enrollments.Any() 
-                        ? enrollments.Average(e => e.CompletionPercentage) 
+                        ? (double)enrollments.Average(e => e.CompletionPercentage) 
                         : 0,
                     LastActivityDate = enrollments.Any() 
                         ? enrollments.Max(e => e.LastAccessed ?? e.EnrolledAt) 
@@ -174,7 +175,7 @@ namespace BusinessLogic
                     .GroupBy(cv => cv.CourseId)
                     .Select(g => new TrendingCourse
                     {
-                        CourseId = g.Key,
+                        CourseId = (int)g.Key,
                         ViewCount = g.Count(),
                         UniqueViewers = g.Select(cv => cv.UserId).Distinct().Count()
                     })
@@ -187,7 +188,7 @@ namespace BusinessLogic
                 foreach (var trending in trendingCourses)
                 {
                     var course = await _databaseContext.Courses
-                        .Where(c => c.CourseId == trending.CourseId)
+                        .Where(c => c.Id == trending.CourseId)
                         .AsNoTracking()
                         .FirstOrDefaultAsync();
 

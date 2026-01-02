@@ -1,6 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Core;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -52,7 +52,7 @@ namespace BusinessLogic
 
         public Notification GetAccountNotificationyId(long notificationId)
         {
-            return DbContext.Notifications.FirstOrDefault(n => n.NotificationId == notificationId);
+            return DbContext.Notifications.FirstOrDefault(n => n.Id == notificationId);
         }
 
         public Notification GetAccountNotification(string notificationGuid)

@@ -3,7 +3,7 @@ using Google.Protobuf.WellKnownTypes;
 using Microsoft.EntityFrameworkCore;
 using SkillIT_Models.CRUD;
 using SkillIT_Models.Data;
-using SkillIT_Models.DatabaseModels;
+using SkillIT_Models.Entities.Learning;
 using SkillIT_Models.Models;
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace BusinessLogic
 
         public ResponseModel CreateEnrollment(Enrollment enrollment)
         {
-            return Crud.Create(enrollment.EnrollmentId, enrollment, DatabaseContext);
+            return Crud.Create(enrollment.Id, enrollment, DatabaseContext);
         }
 
         //public Enrollment CreateUserEnrollment(Enrollment enrollment)
@@ -43,17 +43,17 @@ namespace BusinessLogic
         //    }
         //}
 
-        public ResponseModel DeleteEnrollment(int enrollmentId)
+        public ResponseModel DeleteEnrollment(long enrollmentId)
         {
             return Crud.Delete<Enrollment>(enrollmentId, DatabaseContext);
         }
 
         public ResponseModel UpdateEnrollment(Enrollment enrollment)
         {
-            return Crud.Update(enrollment.EnrollmentId, enrollment, DatabaseContext);
+            return Crud.Update(enrollment.Id, enrollment, DatabaseContext);
         }
 
-        public Enrollment GetEnrollment(int enrollmentId)
+        public Enrollment GetEnrollment(long enrollmentId)
         {
             return Crud.Read<Enrollment>(enrollmentId, DatabaseContext);
         }
@@ -63,40 +63,40 @@ namespace BusinessLogic
             return new(DatabaseContext.Enrollments.ToList());
         }
 
-        public ObservableCollection<Enrollment> GetCourseEnrollments(int enrollmentId)
+        public ObservableCollection<Enrollment> GetCourseEnrollments(long enrollmentId)
         {
-            return new(DatabaseContext.Enrollments.Where(e => e.EnrollmentId == enrollmentId));
+            return new(DatabaseContext.Enrollments.Where(e => e.Id == enrollmentId));
         }
 
-        public int CountCourseEnrollments(int enrollmentId)
+        public long CountCourseEnrollments(long enrollmentId)
         {
             return DatabaseContext.Enrollments.Where(e => e.CourseId == enrollmentId).Count();
         }
 
-        public ObservableCollection<Enrollment> GetUserEnrollments(int enrollmentId, long userId)
+        public ObservableCollection<Enrollment> GetUserEnrollments(long enrollmentId, long userId)
         {
-            return new(DatabaseContext.Enrollments.Where(e => e.EnrollmentId == enrollmentId && e.UserId == userId).ToList());
+            return new(DatabaseContext.Enrollments.Where(e => e.Id == enrollmentId && e.UserId == userId).ToList());
         }
 
-        public int CountAllUserEnrollments(int enrollmentId, long userId)
+        public long CountAllUserEnrollments(long enrollmentId, long userId)
         {
-            return DatabaseContext.Enrollments.Where(e => e.EnrollmentId == enrollmentId && e.UserId == userId).Count();
+            return DatabaseContext.Enrollments.Where(e => e.Id == enrollmentId && e.UserId == userId).Count();
         }
 
-        public int CountAllUserEnrollments(long userId)
+        public long CountAllUserEnrollments(long userId)
         {
             return DatabaseContext.Enrollments.Where(e => e.UserId == userId).Count();
         }
 
-        public int CountCompletedUserEnrollments(int enrollmentId, long userId)
+        public long CountCompletedUserEnrollments(long enrollmentId, long userId)
         {
-            ObservableCollection<Enrollment> enrollments = new(DatabaseContext.Enrollments.Where(e => e.EnrollmentId == enrollmentId && e.UserId == userId));
+            ObservableCollection<Enrollment> enrollments = new(DatabaseContext.Enrollments.Where(e => e.Id == enrollmentId && e.UserId == userId));
             return enrollments.Where(e => e.IsCompleted == true).Count();
         }
 
-        public int CountUnCompletedUserEnrollments(int enrollmentId, long userId)
+        public long CountUnCompletedUserEnrollments(long enrollmentId, long userId)
         {
-            ObservableCollection<Enrollment> enrollments = new(DatabaseContext.Enrollments.Where(e => e.EnrollmentId == enrollmentId && e.UserId == userId));
+            ObservableCollection<Enrollment> enrollments = new(DatabaseContext.Enrollments.Where(e => e.Id == enrollmentId && e.UserId == userId));
             return enrollments.Where(e => e.IsCompleted == false).Count();
         }
 
@@ -110,12 +110,12 @@ namespace BusinessLogic
 			return DatabaseContext.Enrollments.FirstOrDefault(e => e.UserId == userId);
 		}
 
-		public Enrollment GetEnrollmentByCourseId(int courseId)
+		public Enrollment GetEnrollmentByCourseId(long courseId)
 		{
 			return DatabaseContext.Enrollments.FirstOrDefault(e => e.CourseId == courseId);
 		}
 
-		public Enrollment GetEnrollment(long userId, int courseId)
+		public Enrollment GetEnrollment(long userId, long courseId)
 		{
 			return DatabaseContext.Enrollments.FirstOrDefault(e => e.UserId == userId && e.CourseId == courseId);
 		}

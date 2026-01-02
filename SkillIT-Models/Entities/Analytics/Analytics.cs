@@ -17,7 +17,7 @@ public class CourseView : BaseEntity
 
     [Required]
     [Column("course_id")]
-    public int CourseId { get; set; }
+    public long CourseId { get; set; }
 
     [Required]
     [Column("user_id")]
@@ -60,11 +60,11 @@ public class CourseEnrollmentAnalytics : BaseEntity
 
     [Required]
     [Column("enrollment_id")]
-    public int EnrollmentId { get; set; }
+    public long EnrollmentId { get; set; }
 
     [Required]
     [Column("course_id")]
-    public int CourseId { get; set; }
+    public long CourseId { get; set; }
 
     [Required]
     [Column("user_id")]

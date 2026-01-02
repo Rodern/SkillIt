@@ -17,7 +17,7 @@ public class Account : AuditableEntity
 
     [Required]
     [Column("roleID")]
-    public int RoleId { get; set; }
+    public long RoleId { get; set; }
 
     [Required]
     [Column("accountType")]
@@ -68,5 +68,9 @@ public enum AccountStatus
     [Display(Name = "Active")]
     ACTIVE,
     [Display(Name = "Passive")]
-    PASSIVE
+    PASSIVE,
+    [Display(Name = "Verified")]
+    VERIFIED,
+    [Display(Name = "Not Verified")]
+    NOT_VERIFIED
 }
