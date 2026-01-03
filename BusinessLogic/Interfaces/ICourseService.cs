@@ -1,4 +1,5 @@
-﻿using SkillIT_Models.Entities.Courses;
+﻿using SkillIT_Models.Entities.Core;
+using SkillIT_Models.Entities.Courses;
 using SkillIT_Models.Entities.Learning;
 using SkillIT_Models.Models;
 using System;
@@ -23,6 +24,7 @@ namespace BusinessLogic.Interfaces
         ResponseModel DeleteCourseDatum(long dataId);
         ResponseModel DeleteCourseLesson(long lessonId);
         Course? GetCourse(long courseId);
+        User GetCourseAuthorDetails(long? authorId);
         Course? GetCourseByGuid(string guid);
         CourseChapter? GetCourseChapter(long chapterId);
 		CourseChapter? GetCourseChapterByGuid(string guid);

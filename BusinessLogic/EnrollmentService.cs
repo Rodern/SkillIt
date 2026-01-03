@@ -100,7 +100,17 @@ namespace BusinessLogic
             return enrollments.Where(e => e.IsCompleted == false).Count();
         }
 
-		public ObservableCollection<Enrollment> GetEnrollments(long userId)
+		/*public Enrollment GetEnrollment(long enrollmentId)
+		{
+			return DatabaseContext.Enrollments.FirstOrDefault(e => e.Id == enrollmentId)!;
+		}*/
+
+		public ObservableCollection<Enrollment> GetEnrollments(long enrollmentId)
+		{
+			return new(DatabaseContext.Enrollments.Where(e => e.Id == enrollmentId).ToList());
+		}
+
+		public ObservableCollection<Enrollment> GetEnrollmentsByUserId(long userId)
 		{
 			return new(DatabaseContext.Enrollments.Where(e => e.UserId == userId).ToList());
 		}

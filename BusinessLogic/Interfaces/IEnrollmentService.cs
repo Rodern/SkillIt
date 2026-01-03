@@ -29,5 +29,6 @@ namespace BusinessLogic.Interfaces
 		Enrollment GetEnrollmentByUserId(long userId);
         Enrollment GetEnrollment(long userId, long courseId);
 		long CountCourseEnrollments(long enrollmentId);
-	}
+        ObservableCollection<Enrollment> GetEnrollmentsByUserId(long userId);
+    }
 }

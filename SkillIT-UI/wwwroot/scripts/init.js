@@ -62,8 +62,8 @@ let userSocial = new UserSocial()//(8, 9, UserId, social)
 let userSocials = new Array()
 
 
-let _Detail = new AccountDetail()
-let _user = new User();
+window._Detail = new AccountDetail()
+window._user = new User();
 
 let userCredential = new UserCredential()
 /* new UserCredential(
@@ -142,7 +142,7 @@ if(KeyExists(skillitUserIPKey)){
 getIP();
 
 function isLoggedIn() {
-	if (_Detail.userId === undefined || _user.userId === undefined) {
+	if (_Detail.userId === undefined || _user.id === undefined) {
 		return false
 	}
 	return true

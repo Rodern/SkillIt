@@ -70,7 +70,7 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("UserId", "IsCompleted")
                         .HasDatabaseName("idx_courseenrollment_user_completed");
 
-                    b.ToTable("course_enrollments_analytics");
+                    b.ToTable("course_enrollments_analytics", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Analytics.CourseView", b =>
@@ -119,7 +119,7 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("UserId", "ViewedAt")
                         .HasDatabaseName("idx_courseview_user_date");
 
-                    b.ToTable("course_views");
+                    b.ToTable("course_views", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Account", b =>
@@ -191,7 +191,7 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("account");
+                    b.ToTable("account", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.City", b =>
@@ -234,7 +234,7 @@ namespace SkillIT_Models.Migrations
                         .IsUnique()
                         .HasDatabaseName("idx_city_guid_unique");
 
-                    b.ToTable("city");
+                    b.ToTable("city", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Country", b =>
@@ -298,7 +298,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("country");
+                    b.ToTable("country", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Creator", b =>
@@ -327,7 +327,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("creator");
+                    b.ToTable("creator", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Email", b =>
@@ -394,7 +394,7 @@ namespace SkillIT_Models.Migrations
                         .IsUnique()
                         .HasDatabaseName("idx_email_address_unique");
 
-                    b.ToTable("email");
+                    b.ToTable("email", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Feedback", b =>
@@ -491,7 +491,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("feedback");
+                    b.ToTable("feedback", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Language", b =>
@@ -515,7 +515,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("language");
+                    b.ToTable("language", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.NewsLetter", b =>
@@ -561,7 +561,7 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("Status", "ScheduleDate")
                         .HasDatabaseName("idx_newsletter_status_schedule");
 
-                    b.ToTable("news_letter");
+                    b.ToTable("news_letter", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.NewsLetterSubscriber", b =>
@@ -599,7 +599,7 @@ namespace SkillIT_Models.Migrations
                         .IsUnique()
                         .HasDatabaseName("idx_newslettersubscriber_code_unique");
 
-                    b.ToTable("news_letter_subscriber");
+                    b.ToTable("news_letter_subscriber", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Notification", b =>
@@ -680,7 +680,7 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("AccountId", "MarkedAsRead", "DateCreated")
                         .HasDatabaseName("idx_notification_account_read_date");
 
-                    b.ToTable("notification");
+                    b.ToTable("notification", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Otp", b =>
@@ -721,7 +721,7 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("UserId", "Code", "ExpiryDate")
                         .HasDatabaseName("idx_otp_user_code_expiry");
 
-                    b.ToTable("otp");
+                    b.ToTable("otp", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Password", b =>
@@ -763,7 +763,7 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("idx_password_user");
 
-                    b.ToTable("password");
+                    b.ToTable("password", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Phone", b =>
@@ -830,7 +830,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("phone");
+                    b.ToTable("phone", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Project", b =>
@@ -883,7 +883,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("project");
+                    b.ToTable("project", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Region", b =>
@@ -940,7 +940,7 @@ namespace SkillIT_Models.Migrations
                         .IsUnique()
                         .HasDatabaseName("idx_region_guid_unique");
 
-                    b.ToTable("region");
+                    b.ToTable("region", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Role", b =>
@@ -964,7 +964,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("role");
+                    b.ToTable("role", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.SentMail", b =>
@@ -993,7 +993,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("sentmails");
+                    b.ToTable("sentmails", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.SimpleLocation", b =>
@@ -1023,7 +1023,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasKey("LocationId");
 
-                    b.ToTable("simple_location");
+                    b.ToTable("simple_location", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Skill", b =>
@@ -1045,7 +1045,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("skill");
+                    b.ToTable("skill", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Social", b =>
@@ -1069,7 +1069,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("social");
+                    b.ToTable("social", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.Testimonial", b =>
@@ -1127,7 +1127,7 @@ namespace SkillIT_Models.Migrations
                         .IsUnique()
                         .HasDatabaseName("idx_testimonial_user_unique");
 
-                    b.ToTable("testimonial");
+                    b.ToTable("testimonial", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.User", b =>
@@ -1231,7 +1231,7 @@ namespace SkillIT_Models.Migrations
                         .IsUnique()
                         .HasDatabaseName("idx_user_username_unique");
 
-                    b.ToTable("user");
+                    b.ToTable("user", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.UserCity", b =>
@@ -1261,7 +1261,7 @@ namespace SkillIT_Models.Migrations
                         .IsUnique()
                         .HasDatabaseName("idx_usercity_user_city_unique");
 
-                    b.ToTable("user_city");
+                    b.ToTable("user_city", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.UserCountry", b =>
@@ -1291,7 +1291,7 @@ namespace SkillIT_Models.Migrations
                         .IsUnique()
                         .HasDatabaseName("idx_usercountry_user_country_unique");
 
-                    b.ToTable("user_country");
+                    b.ToTable("user_country", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.UserEmail", b =>
@@ -1315,7 +1315,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("user_email");
+                    b.ToTable("user_email", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.UserPhone", b =>
@@ -1339,7 +1339,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("user_phone");
+                    b.ToTable("user_phone", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.UserRegion", b =>
@@ -1369,7 +1369,7 @@ namespace SkillIT_Models.Migrations
                         .IsUnique()
                         .HasDatabaseName("idx_userregion_user_region_unique");
 
-                    b.ToTable("user_region");
+                    b.ToTable("user_region", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.UserSkill", b =>
@@ -1393,7 +1393,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("user_skill");
+                    b.ToTable("user_skill", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.UserSocial", b =>
@@ -1417,7 +1417,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("user_social");
+                    b.ToTable("user_social", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Core.UserToken", b =>
@@ -1455,7 +1455,7 @@ namespace SkillIT_Models.Migrations
                         .IsUnique()
                         .HasDatabaseName("idx_usertoken_user_unique");
 
-                    b.ToTable("user_token");
+                    b.ToTable("user_token", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Courses.Course", b =>
@@ -1552,7 +1552,7 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("IsPublished", "Level", "DatePublish")
                         .HasDatabaseName("idx_course_published_level");
 
-                    b.ToTable("course");
+                    b.ToTable("course", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Courses.CourseChapter", b =>
@@ -1622,7 +1622,7 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("CourseId", "ChapterNumber")
                         .HasDatabaseName("idx_chapter_course_number");
 
-                    b.ToTable("course_chapter");
+                    b.ToTable("course_chapter", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Courses.CourseContent", b =>
@@ -1709,7 +1709,7 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("LessonId", "ContentNumber")
                         .HasDatabaseName("idx_content_lesson_number");
 
-                    b.ToTable("course_content");
+                    b.ToTable("course_content", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Courses.CourseLesson", b =>
@@ -1779,7 +1779,7 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("ChapterId", "LessonNumber")
                         .HasDatabaseName("idx_lesson_chapter_number");
 
-                    b.ToTable("course_lesson");
+                    b.ToTable("course_lesson", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.Achievement", b =>
@@ -1807,7 +1807,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("achievement");
+                    b.ToTable("achievement", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.Catalog", b =>
@@ -1880,7 +1880,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("catalog");
+                    b.ToTable("catalog", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.Certificate", b =>
@@ -1924,7 +1924,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("certificate");
+                    b.ToTable("certificate", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.ChapterQuiz", b =>
@@ -1954,7 +1954,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("chapter_quiz");
+                    b.ToTable("chapter_quiz", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.CourseData", b =>
@@ -2006,7 +2006,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("EnrollmentId");
 
-                    b.ToTable("course_data");
+                    b.ToTable("course_data", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.DataIndex", b =>
@@ -2033,7 +2033,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("data_index");
+                    b.ToTable("data_index", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.Engagement", b =>
@@ -2091,7 +2091,7 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("UserId", "Completed", "EngagedDate")
                         .HasDatabaseName("idx_engagement_user_completed");
 
-                    b.ToTable("engagement");
+                    b.ToTable("engagement", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.Enrollment", b =>
@@ -2168,7 +2168,7 @@ namespace SkillIT_Models.Migrations
                     b.HasIndex("UserId", "IsCompleted", "DateEnrolled")
                         .HasDatabaseName("idx_enrollment_user_completed");
 
-                    b.ToTable("enrollment");
+                    b.ToTable("enrollment", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.EnrollmentQuiz", b =>
@@ -2208,7 +2208,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("enrollment_quiz");
+                    b.ToTable("enrollment_quiz", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.Question", b =>
@@ -2231,7 +2231,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("question");
+                    b.ToTable("question", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.QuestionAnswer", b =>
@@ -2258,7 +2258,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("question_answer");
+                    b.ToTable("question_answer", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.QuestionAnswerResponse", b =>
@@ -2292,7 +2292,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("question_answer_response");
+                    b.ToTable("question_answer_response", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.Quiz", b =>
@@ -2318,7 +2318,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("quiz");
+                    b.ToTable("quiz", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.QuizQuestion", b =>
@@ -2342,7 +2342,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("quiz_question");
+                    b.ToTable("quiz_question", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.UserAchievement", b =>
@@ -2388,7 +2388,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("UserSkillId");
 
-                    b.ToTable("user_achievement");
+                    b.ToTable("user_achievement", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Learning.UserCertificate", b =>
@@ -2418,7 +2418,7 @@ namespace SkillIT_Models.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("user_certificate");
+                    b.ToTable("user_certificate", (string)null);
                 });
 
             modelBuilder.Entity("SkillIT_Models.Entities.Analytics.CourseEnrollmentAnalytics", b =>

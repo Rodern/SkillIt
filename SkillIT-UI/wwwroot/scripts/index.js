@@ -166,7 +166,22 @@ const info_edit_template = (name, type, max, placeholder, callback) => {
             callback(val)
             updateUser(
                 UserId,
-                new User(UserId, _user.gender, _user.firstName, _user.lastName, _user.email, decodeText(getKeyValue(userPassKey)), _user.dob, _user.address, _user.dateCreated, _user.phone, _user.profileImage, JSON.parse(_Detail.loginInfo), JSON.parse(_Detail.loginAttemp)),
+                new User(
+                    UserId, 
+                    _user.gender, 
+                    _user.firstName, 
+                    _user.lastName, 
+                    _user.email, 
+                    _user.username,  // username parameter
+                    decodeText(getKeyValue(userPassKey)),  // password parameter
+                    _user.dateOfBirth,  // dob parameter
+                    _user.address,  // address parameter
+                    _user.dateCreated, 
+                    _user.phone, 
+                    _user.profileImage, 
+                    JSON.parse(_Detail.loginInfo), 
+                    JSON.parse(_Detail.loginAttempt)
+                ),
                 //dataURLtoFile(_user.image, 'userImage'),
                 Token
             )
@@ -273,7 +288,7 @@ const loadDashbaord = () => {
             setEventHandlers()
         })
     }
-    if (_Detail.userId !== undefined || _user.userId !== undefined){
+    if (_Detail.userId !== undefined || _user.id !== undefined){
         cb()
         return
     }
@@ -469,7 +484,7 @@ window.onpageshow = function name(params) {
 const list1 = ".ms-btn, .ns-btn, .bs-btn, .ml-btn, .nl-btn, .bl-btn, .for-o, .p-avt"
 const list2 = ".m-usr, .n-usr, .for-l, .mlg-btn"
 function chAuth(){
-    if (_Detail.userId === undefined || _user.userId === undefined) {
+    if (_Detail.userId === undefined || _user.id === undefined) {
         //console.log(true)
         //$("" + list2 + "").hide()
         //$("" + list1 + "").show()

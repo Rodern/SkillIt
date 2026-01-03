@@ -6,7 +6,7 @@ function homer() {
 function initIndex() {
 	stickyHeader()
 	setEventHandlers()
-	if (_Detail.userId === undefined || _user.userId === undefined) initiateUser()
+	if (_Detail.userId === undefined || _user.id === undefined) initiateUser()
 	setTimeout(() => {
 		chAuth()
 		loader.addClass('hidden')
@@ -67,11 +67,20 @@ async function renderNotificationPanel(request) {
 	request.then(async (notifications) => {
 		let npWrapper = document.getElementById('np_wrapper');
 		if (npWrapper == null || npWrapper == undefined || !npWrapper) return
-		const rootComponent = await window.Blazor.rootComponents.add(npWrapper, 'fl-notification-panel', {
-			Notifications: notifications//.slice(0, 10)
-		})
-		//console.log(rootComponent)
-		globalRoot = rootComponent
+		
+		// Note: Dynamic root components are not fully supported in Blazor Server
+		// This feature requires Blazor WebAssembly or additional configuration
+		try {
+			const rootComponent = await window.Blazor.rootComponents.add(npWrapper, 'fl-notification-panel', {
+				Notifications: notifications//.slice(0, 10)
+			})
+			//console.log(rootComponent)
+			globalRoot = rootComponent
+		} catch (error) {
+			console.warn('Could not add dynamic component:', error.message);
+			// Fallback: Component should be rendered server-side instead
+		}
+		
 		if (isNPOpen) {
 			$('.notification-panel').show()
 		}
@@ -85,7 +94,12 @@ function reRenderNotificationPanel() {
 	if (isNPDetailOpen) {
 		return;
 	}
-	let request = getAccountNotifications(_Detail.accountId, Token)
+	// Skip if user is not logged in or accountId is not available
+	if (!_Detail || !_Detail.id || _Detail.id === undefined || !Token) {
+		return;
+	}
+	let request = getAccountNotifications(_Detail.id, Token)
+	if (!request) return; // Skip if getAccountNotifications returned early
 	try {
 		globalRoot.dispose()
 	} catch (e) {
@@ -211,7 +225,7 @@ function initCatalogPage(catalogId, userId) {
 		})
 	}
 
-	if (_Detail.userId === undefined || _user.userId === undefined) initiateUser()
+	if (_Detail.userId === undefined || _user.id === undefined) initiateUser()
 	setEventHandlers()
 	entryValidityCheck()
 	stickyHeader()
@@ -223,7 +237,7 @@ function initCatalogPage(catalogId, userId) {
 function initCatalogs() {
 
 	hideLoader();
-	if (_Detail.userId === undefined || _user.userId === undefined) initiateUser()
+	if (_Detail.userId === undefined || _user.id === undefined) initiateUser()
 	let = catList = $('.cat-list')
 	function gt(cat_template) {
 		try {
@@ -383,7 +397,7 @@ function initDashboard() {
 
 			$('#u_dob').click((e) => {
 				function cb(val) {
-					_user.dob = val
+					_user.dateOfBirth = val
 				}
 				info_edit_template('dob', 'date', 100, 'Date', cb)
 			})
@@ -404,7 +418,7 @@ function initDashboard() {
 		}, 20);
 	}
 
-	if (_Detail.userId === undefined || _user.userId === undefined) {
+	if (_Detail.userId === undefined || _user.id === undefined) {
 		initiateUser(function () {
 			thisFunction()
 		}, function () {
@@ -418,7 +432,7 @@ function initDashboard() {
 function initCourses() {
 	stickyHeader()
 	setEventHandlers()
-	if (_Detail.userId === undefined || _user.userId === undefined) initiateUser()
+	if (_Detail.userId === undefined || _user.id === undefined) initiateUser()
 	setTimeout(() => {
 		chAuth()
 		loader.addClass('hidden')
@@ -428,7 +442,7 @@ function initCourses() {
 function initAdminPanel() {
 	stickyHeader()
 	setEventHandlers()
-	if (_Detail.userId === undefined || _user.userId === undefined) initiateUser()
+	if (_Detail.userId === undefined || _user.id === undefined) initiateUser()
 	setTimeout(() => {
 		chAuth()
 		loader.addClass('hidden')
@@ -443,7 +457,7 @@ function changeToContinue(guid) {
 }
 
 function requireLogin() {
-	if (_Detail.userId === undefined || _user.userId === undefined) {
+	if (_Detail.userId === undefined || _user.id === undefined) {
 		initiateUser(function () {
 			loader.addClass('hidden')
 		}, function () {
@@ -455,7 +469,7 @@ function requireLogin() {
 
 function initCourseDetail() {
 	loader.addClass('hidden')
-	if (_Detail.userId === undefined || _user.userId === undefined) {
+	if (_Detail.userId === undefined || _user.id === undefined) {
 		initiateUser(function () {
 			//thisFunction()
 			chAuth()
@@ -469,7 +483,7 @@ function initCourseDetail() {
 }
 
 function initCourseCompletedPage() {
-	if (_Detail.userId === undefined || _user.userId === undefined) {
+	if (_Detail.userId === undefined || _user.id === undefined) {
 		initiateUser(function () {
 			//thisFunction()
 			chAuth()
@@ -492,7 +506,7 @@ function initResetPage() {
 
 function initCoursePage() {
 	loader.addClass('hidden')
-	if (_Detail.userId === undefined || _user.userId === undefined) {
+	if (_Detail.userId === undefined || _user.id === undefined) {
 		initiateUser(function () {
 			//thisFunction()
 			chAuth()

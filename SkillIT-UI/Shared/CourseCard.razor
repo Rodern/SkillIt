@@ -15,11 +15,13 @@
 			<p class="text-gray-500 mb-4">
 				<small>
 					Published <u>@course.DatePublish.ToString("M"), @course.DatePublish.ToString("yyyy")</u> by
-					<a href="" class="text-gray-900">@course.Author.Account.User.FirstName @course.Author.Account.User.LastName</a>
+					<a href="" class="text-gray-900">@(user == null ? "" : $"{user.FirstName} {user.LastName}")</a>
 				</small>
 			</p>
 			<p class="mb-4 pb-2">
-				@course.Description.Substring(0, 200)...
+				@(course.Description != null && course.Description.Length > 200 
+				? course.Description.Substring(0, 200) + "..." 
+				: course.Description ?? "")
 			</p>
 			<a href="/course_detail/@course.Guid" data-mdb-ripple="true" data-mdb-ripple-color="light"
 			   class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
@@ -32,6 +34,13 @@
 @code {
 	[Parameter]
 	public Course course { get; set; } = new();
+	public User user { get; set; } = null!;
+
+	protected override void OnAfterRender(bool firstRender)
+	{
+		if (firstRender) user = CourseService.GetCourseAuthorDetails(course.AuthorId);
+		base.OnAfterRender(firstRender);
+	}
 
 	async void checkAuth(string guid, long courseId)
 	{

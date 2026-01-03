@@ -405,6 +405,12 @@ namespace BusinessLogic
 
 		#region Selects
 
+        public User GetCourseAuthorDetails(long? authorId)
+        {
+            long? accountId = _databaseContext.Creators.FirstOrDefault(a => a.Id == authorId).AccountId;
+            long? userId = _databaseContext.Accounts.FirstOrDefault(a => a.Id == accountId).UserId;
+            return _databaseContext.Users.FirstOrDefault(u => u.Id == userId);
+        }
 
 		public ObservableCollection<long> GetCourseIds()
 		{

@@ -16,7 +16,7 @@ namespace SkillIT_Models.Data
             
             // Use a placeholder connection string for migrations
             // ServerVersion is hard-coded to avoid connecting to database during design-time
-            var connectionString = "Server=localhost;Database=skillit;User=root;";
+            var connectionString = "Server=localhost;Database=skillit;User=root;ConvertZeroDateTime=True";
             
             optionsBuilder.UseMySql(
                 connectionString,

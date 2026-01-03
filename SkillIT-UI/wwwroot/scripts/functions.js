@@ -363,8 +363,8 @@ function getUserId() {
 
 function getAccountId() {
     if (KeyExists(userIdKey) == true) {
-        //alert(_Detail.accountId);
-        return `${_Detail.accountId}`
+        //alert(_Detail.id);
+        return `${_Detail.id}`
     }
     return '0'
 }
@@ -378,7 +378,7 @@ function getUserToken() {
 
 function setUser(user) {
     _user = user
-    _user.dob = new Date(_user.dob)
+    _user.dateOfBirth = new Date(_user.dateOfBirth)
     //console.log(user)
     //getAccount(userId, token)
 }
@@ -557,10 +557,28 @@ const updateProfilePicture = (userId, image, token) => {
 }
 
 const updateUser = (userId, user, token) => {
+    // Convert JavaScript User object to C# UserModel format with proper property names and types
+    const userModel = {
+        UserId: user.userId,
+        Gender: user.gender ? String(user.gender) : "", // Ensure gender is a string
+        FirstName: user.firstName,
+        LastName: user.lastName,
+        Email: user.email,
+        Username: user.username,
+        Password: user.password,
+        Dob: user.dateOfBirth,
+        Address: user.address,
+        DateCreated: user.dateCreated,
+        Phone: user.phone,
+        ProfileImage: user.profileImage,
+        LoginInfos: user.loginInfos,
+        LoginAttemps: user.loginAttemps
+    };
+    
     $.ajax({
         type: 'put',
-        url: `${BaseURL}api/User/UpdateUser`, //?userJson=${JSON.stringify(user)}`,
-        data: JSON.stringify(user),
+        url: `${BaseURL}api/User/UpdateUser`,
+        data: JSON.stringify(userModel),
         dataType: 'json',
         contentType: 'application/json',
         beforeSend: (xhr) => {
@@ -606,7 +624,7 @@ const getUser = (userId, token, callback = () => { }) => {
         },
         success: (user) => {
             _user = user
-            _user.dob = new Date(_user.dob)
+            _user.dateOfBirth = new Date(_user.dateOfBirth)
             //console.log(user)
             getAccount(userId, token)
         }
@@ -717,8 +735,8 @@ function loadDash() {
     $('.u-email').text(_user.email)
     $('.u-phone').text(_user.phone)
     $('.u-phone').attr('href', `tel:${_user.phone}`)
-    $('.u-dob').text(formatDate(_user.dob))
-    $('.u-g').text(_user.gender)
+    $('.u-dob').text(formatDate(_user.dateOfBirth))
+    $('.u-g').text(_user.gender == 0 ? "Male" : "Female")
     $('.u-address').text(_user.address)
     if (_user.profileImage.length != 0)
         $('.u-img').attr('src', 'site_data/user_profile_pictures/' + _user.profileImage + "_thumbnail.png")
@@ -1252,7 +1270,8 @@ const deleteUserSocial = (id, token) => {
 }
 
 async function getAccountNotifications(accountId, token, callback) {
-    if (token == '') return
+    if (token == '' || !token) return
+    if (!accountId || accountId === 'undefined' || accountId === undefined) return
     let request = $.ajax({
         type: "get",
         url: `${BaseURL}api/account/notifications/getAccountNotifications?accountId=${accountId}`,

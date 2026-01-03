@@ -459,11 +459,11 @@
 			}
 			//JSRuntime.InvokeVoidAsync("initIndex");
 			await JSRuntime.InvokeVoidAsync("LoadScripts", "initIndex");
+
+			CoursesList = CourseStaticHelper.GetCourses();
+			this.StateHasChanged();
 		}
 		base.OnAfterRender(firstRender);
-
-		CoursesList = CourseStaticHelper.GetCourses();
-		this.StateHasChanged();
 	}
 
 	

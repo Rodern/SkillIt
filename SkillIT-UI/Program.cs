@@ -11,6 +11,7 @@ using SkillIT_Models.Models;
 using SkillIT_Models.Constants;
 using SkillIT_UI.Authentication;
 using SkillIT_UI.Shared;
+using SkillIT_UI.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,13 +21,32 @@ AuthenticationHelper.AuthenticationKey = builder.Configuration["JwtSettings:Secr
     ?? throw new InvalidOperationException("JWT Secret Key not configured");
 
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
+builder.Services.AddServerSideBlazor().AddHubOptions(options =>
+{
+    options.MaximumReceiveMessageSize = 32 * 1024 * 1024; // 32MB
+});
+
+// Enable dynamic root components for Blazor
+builder.Services.Configure<Microsoft.AspNetCore.Components.Web.HtmlRenderer>(options =>
+{
+    // This enables adding components dynamically via JavaScript
+});
 
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddMemoryCache();
 
+// Add AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Handle circular references by ignoring cycles
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        // Optional: Make property names camelCase in JSON responses
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    });
 
 // Configure database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -112,6 +132,9 @@ builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 builder.WebHost.UseStaticWebAssets();
 
 var app = builder.Build();
+
+// Initialize CourseStaticHelper with IServiceProvider
+CourseStaticHelper.Initialize(app.Services);
 
 if (!app.Environment.IsDevelopment())
 {

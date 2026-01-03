@@ -98,8 +98,6 @@
 
 	protected override Task OnInitializedAsync()
 	{
-		AllCourses = CourseStaticHelper.GetCourses();
-		CoursesList = AllCourses;
 
 		FilterValue = "new";
 
@@ -198,6 +196,10 @@
 		{
 			await JSRuntime.InvokeVoidAsync("showLoader");
 
+			// AllCourses = CourseStaticHelper.GetCourses();
+			AllCourses = CourseService.GetCourses();
+			CoursesList = AllCourses;
+
 			//JSRuntime.InvokeVoidAsync("initCourses");
 			await JSRuntime.InvokeVoidAsync("LoadScripts", "initCourses");
 
@@ -216,6 +218,8 @@
 			{
 
 			}
+
+			StateHasChanged();
 		}
 	}
 }

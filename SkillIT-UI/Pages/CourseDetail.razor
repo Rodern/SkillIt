@@ -48,7 +48,7 @@
 					</tr>
 					<tr>
 						<th>Author: </th>
-						<td>@Course.Author.Account.User.FirstName @Course.Author.Account.User.LastName</td>
+						<td>@(Author == null ? "N/A" : $"{Author.FirstName} {Author.LastName}")</td>
 					</tr>
 
 				</tbody>
@@ -83,6 +83,7 @@
 	public string guid { get; set; } = string.Empty;
 
 	private Course Course { get; set; } = new();
+	private User Author { get; set; } = null!;
 
 	int count = 0;
 
@@ -131,13 +132,16 @@
 		if (courseId != 0)
 		{
 			Course = GetCourse(courseId);
+			Author = CourseService.GetCourseAuthorDetails(Course.AuthorId);
 			this.StateHasChanged();
 		}
 		if (guid != "" && courseId == 0)
 		{
-			Course = GetCourseByGuid(guid);
+			Course = CourseService.GetCourseByGuid(guid);
+			Author = CourseService.GetCourseAuthorDetails(Course.AuthorId);
 			this.StateHasChanged();
 		}
+
 
 		base.OnParametersSet();
 	}
@@ -194,7 +198,7 @@
 		CourseData  courseDatum = new()
 		{
 			Id = 0,
-			EnrollmentId = EnrollmentService.GetEnrollments(userId).FirstOrDefault(e => e.Id == Course.Id).Id,
+			EnrollmentId = EnrollmentService.GetEnrollmentsByUserId(userId).FirstOrDefault(e => e.CourseId == Course.Id).Id,
 			StartDate = DateTime.UtcNow,
 			LastModified = DateTime.UtcNow,
 			StudyRecord = data.IndexData,
