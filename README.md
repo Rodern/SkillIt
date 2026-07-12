@@ -86,7 +86,7 @@ The setup script will:
 
 ### Manual Setup
 
-See [SETUP_USER_SECRETS.md](SETUP_USER_SECRETS.md) for detailed manual setup instructions.
+See [docs/secrets.md](docs/secrets.md) for detailed manual setup instructions.
 
 ## 📦 Installation
 
