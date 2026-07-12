@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+.env
+
+# node package manager
+npm-debug.log*
+**/wwwroot/node_modules/
+**/**/node_modules/
