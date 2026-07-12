@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +28,7 @@ namespace SkillIT_Models.Models
         public static string InfoEmail { get; } = "info@itskills.ovh";
         public static string SupportEmail { get; } = "support@itskills.ovh";
         public static string AccountHelperEmailPassword { get; } = "@skillASP2023";
-        public static string SendGrid_SMTP_API { get; } = "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";
+        public static string SendGrid_SMTP_API { get; } = "";
         public static int SSL_SMTP_Port { get; } = 465;
         public static int SMTP_Port_If_Google { get; } = 587;
         public static int SMTP_Port1 { get; } = 25;
