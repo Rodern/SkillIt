@@ -1,3 +1,10 @@
+# ⚠️ LEGACY PROJECT ⚠️
+
+> [!WARNING]
+> **This repository has been declared as legacy.** It is no longer under active development. The codebase is preserved here for historical purposes and reference.
+
+---
+
 # SkillIT - Learning Management System
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)](https://dotnet.microsoft.com/)
