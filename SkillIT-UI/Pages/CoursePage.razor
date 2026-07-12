@@ -1,4 +1,4 @@
-﻿@page "/course"
+@page "/course"
 @page "/course/{courseId:int}"
 @page "/course/{guid}"
 
@@ -695,11 +695,11 @@
 
 	Course GetCourse(long courseId)
 	{
-		return CourseStaticHelper.GetCourse(courseId);
+		return CourseService.GetCourse(courseId);
 	}
 	Course GetCourseByGuid(string guid)
 	{
-		return CourseStaticHelper.GetCourseByGuid(guid);
+		return CourseService.GetCourseByGuid(guid);
 	}
 
 	void NavigateTo(string guid, long chapterId, long lessonId)

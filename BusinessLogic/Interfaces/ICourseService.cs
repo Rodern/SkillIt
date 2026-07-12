@@ -1,4 +1,4 @@
-﻿using SkillIT_Models.Entities.Core;
+using SkillIT_Models.Entities.Core;
 using SkillIT_Models.Entities.Courses;
 using SkillIT_Models.Entities.Learning;
 using SkillIT_Models.Models;
@@ -32,6 +32,7 @@ namespace BusinessLogic.Interfaces
 		ObservableCollection<MiniINT> GetCourseChapterIdsAndNumber(long courseId);
 		ObservableCollection<CourseChapter> GetCourseChapters();
         ObservableCollection<CourseChapter> GetCourseChapters(long courseId);
+        ObservableCollection<CourseChapter> GetCourseChaptersWithDetails(long courseId);
         ObservableCollection<CourseChapter> GetCourseChapters(long chapterId, long courseId);
         CourseContent? GetCourseContent(long contentId);
 		CourseContent? GetCourseContentByGuid(string guid);
@@ -39,8 +40,10 @@ namespace BusinessLogic.Interfaces
 		ObservableCollection<MiniINT> GetCourseContentIdsAndNumber(long lessonId);
 		ObservableCollection<CourseContent> GetCourseContents();
         ObservableCollection<CourseContent> GetCourseContents(long lessonId);
+        ObservableCollection<CourseContent> GetCourseContentsWithDetails(long lessonId);
         ObservableCollection<CourseData> GetCourseData();
         ObservableCollection<CourseData> GetCourseData(long enrollmentId);
+        ObservableCollection<CourseData> GetCourseDataWithDetails(long enrollmentId);
 		DataIndex? GetCourseDataIndex(long courseId);
 		CourseData? GetCourseDatum(long dataId);
 		CourseData? GetCourseDatumByEnrollmentId(long enrollmentId);
@@ -51,12 +54,15 @@ namespace BusinessLogic.Interfaces
 		ObservableCollection<MiniINT> GetCourseLessonIdsAndNumber(long chapterId);
 		ObservableCollection<CourseLesson> GetCourseLessons();
         ObservableCollection<CourseLesson> GetCourseLessons(long chapterId);
+        ObservableCollection<CourseLesson> GetCourseLessonsWithDetails(long chapterId);
         ObservableCollection<Course> GetCourses();
+        ObservableCollection<Course> GetCoursesWithDetails();
 		DataIndex? GetDataIndex(long indexId);
 		DataIndex? GetDataIndexByCourseId(long courseId);
 		ObservableCollection<DataIndex> GetDataIndices();
 		ObservableCollection<DataIndex> GetDataIndices(long id);
 		ObservableCollection<CourseIndex> IndexCourse(long courseId);
+		ObservableCollection<CourseIndex> MergeIndex(long courseId, ObservableCollection<CourseIndex> existingIndex);
 		ResponseModel UpdateCourse(Course course);
         ResponseModel UpdateCourse(CourseChapter courseChapter);
         ResponseModel UpdateCourseContent(CourseContent content);

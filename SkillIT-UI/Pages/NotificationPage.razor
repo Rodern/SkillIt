@@ -1,4 +1,4 @@
-﻿@page "/user/notifications"
+@page "/user/notifications"
 @page "/notifications"
 
 
@@ -43,7 +43,7 @@
         }
     </div>
 
-    @*@((MarkupString)CourseStaticHelper.PageNotificationDetailMarkup)*@
+    @*@((MarkupString)NotificationStateService.PageNotificationDetailMarkup)*@
 
 </div>
 
@@ -86,7 +86,7 @@
 
     void NP_Envent(object source, System.Timers.ElapsedEventArgs e)
     {
-        var nots = new NotificationService(new(new())).GetAccountNotifications(AccountId);
+        var nots = NotificationService.GetAccountNotifications(AccountId);
 
 
         Notifications = new();

@@ -1,4 +1,4 @@
-﻿@page "/courses"
+@page "/courses"
 
 <PageTitle>SkillIT - Courses</PageTitle>
 
@@ -196,7 +196,7 @@
 		{
 			await JSRuntime.InvokeVoidAsync("showLoader");
 
-			// AllCourses = CourseStaticHelper.GetCourses();
+			// AllCourses = CourseService.GetCoursesWithDetails();
 			AllCourses = CourseService.GetCourses();
 			CoursesList = AllCourses;
 

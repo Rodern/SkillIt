@@ -1,4 +1,4 @@
-﻿@page "/course/completed/{guid}"
+@page "/course/completed/{guid}"
 
 <PageTitle>Completed! - @Course.Name</PageTitle>
 
@@ -28,7 +28,7 @@
 
 	Course GetCourseByGuid(string guid)
 	{
-		return CourseStaticHelper.GetCourseByGuid(guid);
+		return CourseService.GetCourseByGuid(guid);
 	}
 
 	public async Task<bool> SendCourseCompletedEmail(string email, long userId, DateTime completionDate)

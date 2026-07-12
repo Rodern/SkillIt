@@ -1,4 +1,4 @@
-﻿@page "/course_detail"
+@page "/course_detail"
 @page "/course_detail/{courseId:int}"
 @page "/course_detail/{guid}"
 
@@ -91,11 +91,11 @@
 
 	Course GetCourse(int courseId)
 	{
-		return CourseStaticHelper.GetCourse(courseId);
+		return CourseService.GetCourse(courseId);
 	}
 	Course GetCourseByGuid(string guid)
 	{
-		return CourseStaticHelper.GetCourseByGuid(guid);
+		return CourseService.GetCourseByGuid(guid);
 	}
 
 	private bool HasEnrolled { get; set; } = false;
@@ -188,7 +188,7 @@
 			{
 				Id = 0,
 				CourseId = Course.Id,
-				IndexData = JsonConvert.SerializeObject(CourseStaticHelper.IndexCourse(Course.Id)),
+				IndexData = JsonConvert.SerializeObject(CourseService.IndexCourse(Course.Id)),
 				LastModified = DateTime.UtcNow,
 			};
 

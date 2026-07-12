@@ -1,4 +1,4 @@
-﻿using BusinessLogic.Interfaces;
+using BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SkillIT_Models;
@@ -188,37 +188,163 @@ namespace BusinessLogic
                 return new ObservableCollection<Course>();
             }
         }
+        public ObservableCollection<Course> GetCoursesWithDetails()
+        {
+            try
+            {
+                var courses = _databaseContext.Courses
+                    .Include(c => c.Author)
+                        .ThenInclude(a => a.Account)
+                            .ThenInclude(ac => ac.User)
+                    .AsNoTracking()
+                    .ToList();
+                return new ObservableCollection<Course>(courses);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error retrieving all courses with details");
+                return new ObservableCollection<Course>();
+            }
+        }
          
-        /// <summary>
-        /// Indexes a course for navigation
-        /// </summary>
         public ObservableCollection<CourseIndex> IndexCourse(long courseId)
         {
-            ObservableCollection<CourseIndex> Indices = new();
-            ObservableCollection<long> chapterIds = GetCourseChapterIds(courseId);
+			ObservableCollection<CourseIndex> Indices = new();
+			var chapterIds = GetCourseChapterIdsAndNumber(courseId).OrderBy(x => x.Number).ToList();
 
-            long count = 0;
-            foreach (long cId in chapterIds)
-            {
-                var lessonIds = GetCourseLessonIds(cId);
-                foreach (long lId in lessonIds)
-                {
-                    var contentIds = GetCourseContentIds(lId);
-                    foreach (long ccId in contentIds)
-                    {
-                        count++;
-                        Indices.Add(new()
-                        {
-                            CourseIndexId = count,
-                            CourseId = courseId,
-                            ChapterId = cId,
-                            LessonId = lId,
-                            ContentId = ccId
-                        });
-                    }
-                }
-            }
+			int count = 0;
+			foreach (var cId in chapterIds)
+			{
+				var lessonIds = GetCourseLessonIdsAndNumber(cId.ObjectId).OrderBy(x => x.Number).ToList();
+				foreach (var lId in lessonIds)
+				{
+					var contentIds = GetCourseContentIdsAndNumber(lId.ObjectId).OrderBy(x => x.Number).ToList();
+					foreach (var ccId in contentIds)
+					{
+						count++;
+						var index = new CourseIndex(count, courseId, cId.ObjectId, lId.ObjectId, ccId.ObjectId)
+						{
+							ChapterNumber = cId.Number,
+							LessonNumber = lId.Number,
+							ContentNumber = ccId.Number,
+							ChapterGuid = cId.Guid,
+							LessonGuid = lId.Guid,
+							ContentGuid = ccId.Guid
+						};
+
+						if (count == 1)
+						{
+							index.IsUnlocked = true;
+							index.DateUnlocked = DateTime.UtcNow;
+						}
+						
+						if (chapterIds.LastOrDefault()?.Guid == cId.Guid)
+						{
+							index.IsLastChapter = true;
+						}
+						if (lessonIds.LastOrDefault()?.Guid == lId.Guid)
+						{
+							index.IsLastLesson = true;
+						}
+						if (contentIds.LastOrDefault()?.Guid == ccId.Guid)
+						{
+							index.IsLastContent = true;
+						}
+
+						if (_databaseContext.ChapterQuizzes.Any(q => q.ChapterId == cId.ObjectId)) 
+                            index.HasQuiz = true;
+
+						Indices.Add(index);
+					}
+				}
+			}
 			return Indices;
+		}
+
+        public ObservableCollection<CourseIndex> MergeIndex(long courseId, ObservableCollection<CourseIndex> existingIndex)
+        {
+			var DataIndex = GetCourseDataIndex(courseId);
+            if (DataIndex == null || string.IsNullOrEmpty(DataIndex.IndexData))
+                return existingIndex;
+                
+			var CourseDataIndex = Newtonsoft.Json.JsonConvert.DeserializeObject<ObservableCollection<CourseIndex>>(DataIndex.IndexData);
+            if (CourseDataIndex == null) return existingIndex;
+
+			ObservableCollection<CourseIndex> newIndex = new();
+			foreach (var di in CourseDataIndex)
+			{
+				if (existingIndex.Count(ei => 
+					ei.ChapterId == di.ChapterId 
+					&& ei.LessonId == di.LessonId 
+					&& ei.ContentId == di.ContentId 
+					&& ei.ChapterNumber == di.ChapterNumber 
+					&& ei.LessonNumber == di.LessonNumber 
+					&& ei.ContentNumber == di.ContentNumber
+					&& ei.ChapterGuid == di.ChapterGuid
+					&& ei.LessonGuid == di.LessonGuid
+					&& ei.ContentGuid == di.ContentGuid
+				) < 1)
+				{
+					existingIndex.Add(di);
+				}
+			}
+
+			foreach (var i in existingIndex)
+			{
+				if (CourseDataIndex.Count(ei => 
+					ei.ChapterId == i.ChapterId 
+					&& ei.LessonId == i.LessonId 
+					&& ei.ContentId == i.ContentId 
+					&& ei.ChapterNumber == i.ChapterNumber 
+					&& ei.LessonNumber == i.LessonNumber 
+					&& ei.ContentNumber == i.ContentNumber
+					&& ei.ChapterGuid == i.ChapterGuid
+					&& ei.LessonGuid == i.LessonGuid
+					&& ei.ContentGuid == i.ContentGuid
+				) < 1)
+				{
+					var toDelete = existingIndex.FirstOrDefault(ei => 
+					ei.ChapterId == i.ChapterId 
+					&& ei.LessonId == i.LessonId 
+					&& ei.ContentId == i.ContentId 
+					&& ei.ChapterNumber == i.ChapterNumber 
+					&& ei.LessonNumber == i.LessonNumber 
+					&& ei.ContentNumber == i.ContentNumber
+					&& ei.ChapterGuid == i.ChapterGuid
+					&& ei.LessonGuid == i.LessonGuid
+					&& ei.ContentGuid == i.ContentGuid
+					);
+                    if (toDelete != null) toDelete.IsDeleted = true;
+				}
+			}
+
+			newIndex = new(existingIndex.OrderBy(x => x.ChapterNumber).ThenBy(x => x.LessonNumber).ThenBy(x => x.ContentNumber));
+
+			for (int i = 0; i < newIndex.Count; i++)
+			{
+				newIndex[i].CourseIndexId = i + 1;
+			}
+
+			for (int i = 0; i < newIndex.ToList().Count(); i++)
+			{
+				if (_databaseContext.ChapterQuizzes.Any(q => q.ChapterId == newIndex[i].ChapterId))
+				{
+					newIndex[i].HasQuiz = true;
+				}
+				newIndex[i].IsLastChapter = false;
+				newIndex[i].IsLastLesson = false;
+				newIndex[i].IsLastContent = false;
+			}
+			var List = newIndex.ToList();
+            if (List.Any())
+            {
+			    List.Where(x => x.ChapterNumber >= List.Max(x => x.ChapterNumber)).ToList().ForEach(x => x.IsLastChapter = true);
+			    List.GroupBy(x => x.ChapterGuid).ToList().ForEach(x => x.GroupBy(x => x.LessonNumber).Last().ToList().ForEach(x => x.IsLastLesson = true));
+			    List.GroupBy(x => x.LessonGuid).ToList().ForEach(x => x.Last().IsLastContent = true);
+            }
+			newIndex = new(List);
+
+			return newIndex;
 		}
 
 		#endregion
@@ -262,6 +388,18 @@ namespace BusinessLogic
             var chapters = new ObservableCollection<CourseChapter>(_databaseContext.CourseChapters.Where(c => c.Id == chapterId && c.CourseId == courseId).ToList());
             return chapters;
         }
+
+        public ObservableCollection<CourseChapter> GetCourseChaptersWithDetails(long courseId)
+        {
+            var chapters = _databaseContext.CourseChapters
+                .Include(c => c.Course)
+                .Include(c => c.Lessons)
+                .Include(c => c.Author)
+                .Where(c => c.CourseId == courseId)
+                .AsNoTracking()
+                .ToList();
+            return new ObservableCollection<CourseChapter>(chapters);
+        }
         #endregion
 
         #region CourseLesson
@@ -295,6 +433,17 @@ namespace BusinessLogic
         {
             var lessons = new ObservableCollection<CourseLesson>(_databaseContext.CourseLessons.Where(l => l.ChapterId == chapterId).ToList());
             return lessons;
+        }
+
+        public ObservableCollection<CourseLesson> GetCourseLessonsWithDetails(long chapterId)
+        {
+            var lessons = _databaseContext.CourseLessons
+                .Include(l => l.Chapter)
+                .Include(l => l.Author)
+                .Where(l => l.ChapterId == chapterId)
+                .AsNoTracking()
+                .ToList();
+            return new ObservableCollection<CourseLesson>(lessons);
         }
         #endregion
         ObservableCollection<T> AddAuthors<T>(dynamic list) where T: class
@@ -363,6 +512,17 @@ namespace BusinessLogic
         {
             return new(_databaseContext.CourseContents.Where(cc => cc.LessonId == lessonId).ToList());
         }
+
+        public ObservableCollection<CourseContent> GetCourseContentsWithDetails(long lessonId)
+        {
+            var contents = _databaseContext.CourseContents
+                .Include(c => c.Lesson)
+                .Include(c => c.Author)
+                .Where(c => c.LessonId == lessonId)
+                .AsNoTracking()
+                .ToList();
+            return new ObservableCollection<CourseContent>(contents);
+        }
         #endregion
 
         #region CourseData
@@ -399,6 +559,16 @@ namespace BusinessLogic
         public CourseData? GetCourseDatumByEnrollmentId(long enrollmentId)
         {
             return _databaseContext.CourseData.FirstOrDefault(cd => cd.EnrollmentId == enrollmentId);
+        }
+
+        public ObservableCollection<CourseData> GetCourseDataWithDetails(long enrollmentId)
+        {
+            var data = _databaseContext.CourseData
+                .Include(cd => cd.Enrollment)
+                .Where(cd => cd.EnrollmentId == enrollmentId)
+                .AsNoTracking()
+                .ToList();
+            return new ObservableCollection<CourseData>(data);
         }
 
 		#endregion

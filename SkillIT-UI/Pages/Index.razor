@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 @page "/index"
 @page "/home"
 
@@ -460,7 +460,7 @@
 			//JSRuntime.InvokeVoidAsync("initIndex");
 			await JSRuntime.InvokeVoidAsync("LoadScripts", "initIndex");
 
-			CoursesList = CourseStaticHelper.GetCourses();
+			CoursesList = CourseService.GetCoursesWithDetails();
 			this.StateHasChanged();
 		}
 		base.OnAfterRender(firstRender);

@@ -1203,7 +1203,8 @@ const getUserSocial = (userId, token) => {
         loadSocials()
 
         $('.sc-del').click((e) => {
-            let id = e.target.id.substring(6) || e.target.parentElement.id.substring(6);
+            let id = e.target.id ? e.target.id.substring(6) : (e.target.parentElement.id ? e.target.parentElement.id.substring(6) : null);
+            if (!id || id === 'undefined') return;
             deleteUserSocial(id, Token)
             $(e.target.closest('.social')).remove()
         })

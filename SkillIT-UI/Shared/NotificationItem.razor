@@ -1,4 +1,4 @@
-﻿
+
 <li id="@MarkupId" class="notification-item border-b mb-[1px]">
     <img class="ni-icon" src="assets/icons/@Notification.Icon" />
     <a class="ni-body">
@@ -26,6 +26,7 @@
 @code {
     [Parameter]
     public string Type { get; set; } = string.Empty;
+    [Inject] SkillIT_UI.Services.NotificationStateService NotificationStateService { get; set; }
     [Parameter]
     public Notification Notification { get; set; } = new();
     [Parameter]
@@ -71,15 +72,15 @@
     {
         if(Type == "page")
         {
-            CourseStaticHelper.PageNotificationDetailMarkup = SiteSettings.CreatePageNotificationDetailMarkup1(Notification, Account, Actions);
+            NotificationStateService.PageNotificationDetailMarkup = SiteSettings.CreatePageNotificationDetailMarkup1(Notification, Account, Actions);
 
-            await JSRuntime.InvokeVoidAsync("showNdpgCard", markupId, CourseStaticHelper.PageNotificationDetailMarkup, elementReference);
+            await JSRuntime.InvokeVoidAsync("showNdpgCard", markupId, NotificationStateService.PageNotificationDetailMarkup, elementReference);
             MarkAsRead(markupId, id, guid);
 
             return;
         }
-        CourseStaticHelper.PanelNotificationDetailMarkup = SiteSettings.CreatePanelNotificationDetailMarkup1(Notification, Account, Actions);
-        await JSRuntime.InvokeVoidAsync("showNdpnCard", markupId, CourseStaticHelper.PanelNotificationDetailMarkup, elementReference);
+        NotificationStateService.PanelNotificationDetailMarkup = SiteSettings.CreatePanelNotificationDetailMarkup1(Notification, Account, Actions);
+        await JSRuntime.InvokeVoidAsync("showNdpnCard", markupId, NotificationStateService.PanelNotificationDetailMarkup, elementReference);
 
         MarkAsRead(markupId, id, guid);
     }

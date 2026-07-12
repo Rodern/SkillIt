@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
@@ -7,8 +7,7 @@ using SkillIT_Models.Models;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Telerik.DataSource.Extensions;
-using Telerik.SvgIcons;
+
 
 namespace SkillIT_UI.Controllers
 {
@@ -75,9 +74,9 @@ namespace SkillIT_UI.Controllers
 			else path = "/" + path[..^1];
 			//path = path.Replace("path=", "");
 
-			ObservableCollection<FileObjectInfo> fileObjectInfos = new();
+			List<FileObjectInfo> fileObjectInfos = new();
 
-			ObservableCollection<string> folders = new();
+			List<string> folders = new();
 			folders.AddRange(Directory.GetDirectories(RootPath + path));
 
 			foreach (var folder in folders.OrderBy(x => x))
@@ -94,10 +93,10 @@ namespace SkillIT_UI.Controllers
 				}
 			}
 
-			ObservableCollection<string> tFiles = new();
+			List<string> tFiles = new();
 			tFiles.AddRange(Directory.GetFiles(RootPath + path));
 
-			var files = new ObservableCollection<string>();
+			var files = new List<string>();
 			files.AddRange(tFiles.Where(x => MyRegex().IsMatch(x) == true));
 
 			foreach (var file in files.OrderBy(x => x))
@@ -120,9 +119,9 @@ namespace SkillIT_UI.Controllers
 		{
 			if (string.IsNullOrEmpty(path)) return BadRequest("Path not provided!");
 
-			ObservableCollection<FileObjectInfo> fileObjectInfos = new();
+			List<FileObjectInfo> fileObjectInfos = new();
 
-			ObservableCollection<string> folders = new(); folders.AddRange(Directory.GetDirectories("\\site_data\\"));
+			List<string> folders = new(); folders.AddRange(Directory.GetDirectories("\\site_data\\"));
 
 			foreach (var folder in folders.OrderBy(x => x))
 			{
@@ -135,8 +134,8 @@ namespace SkillIT_UI.Controllers
 				});
 			}
 
-			ObservableCollection<string> tFiles = new(); tFiles.AddRange(Directory.GetFiles("\\site_data\\"));
-			var files = new ObservableCollection<string>();
+			List<string> tFiles = new(); tFiles.AddRange(Directory.GetFiles("\\site_data\\"));
+			var files = new List<string>();
 			files.AddRange(tFiles.Where(x => MyRegex().IsMatch(x) == true));
 
 			foreach (var file in files.OrderBy(x => x))

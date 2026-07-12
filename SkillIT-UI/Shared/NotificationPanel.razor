@@ -1,4 +1,5 @@
-﻿
+
+
 <nav class="notification-panel hidden absolute ml-auto rounded-lg border border-slate-200 shadow-2xl text-slate-900 text-md p-3 backdrop-blur-sm backdrop-opacity-25 bg-white">
     <div class="notification-page-header navbar navbar-expand-lg py-1 pb-2 bg-white relative flex items-center w-full justify-between">
         <span class="left-section">
@@ -17,7 +18,7 @@
         </ul>
     </div>
 
-    @*@((MarkupString)CourseStaticHelper.PanelNotificationDetailMarkup)*@
+    @*@((MarkupString)NotificationStateService.PanelNotificationDetailMarkup)*@
 
 </nav>
 
@@ -38,7 +39,7 @@
         long UserId = long.Parse(await JSRuntime.InvokeAsync<string>("getUserId"));
         //AccountId = long.Parse(await JSRuntime.InvokeAsync<string>("getAccountId"));
 
-        Account = new AccountService(new(new())).GetUserAccount(UserId);
+        Account = AccountService.GetUserAccount(UserId);
         AccountId = Account.Id;
 
         //Notifications = new(NotificationService.GetAccountNotifications(AccountId).Take(10));
@@ -60,7 +61,7 @@
 
     void NP_Envent(object source, System.Timers.ElapsedEventArgs e)
     {
-        var nots = new NotificationService(new(new())).GetAccountNotifications(AccountId);
+        var nots = NotificationService.GetAccountNotifications(AccountId);
 
 
         Notifications = new();

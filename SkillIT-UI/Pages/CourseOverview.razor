@@ -1,4 +1,4 @@
-﻿@page "/course_overview"
+@page "/course_overview"
 @page "/course_overview/{courseId:int}"
 @page "/course_overview/{guid}"
 
@@ -88,11 +88,11 @@
 
 	Course GetCourse(int courseId)
 	{
-		return CourseStaticHelper.GetCourse(courseId);
+		return CourseService.GetCourse(courseId);
 	}
 	Course GetCourseByGuid(string guid)
 	{
-		return CourseStaticHelper.GetCourseByGuid(guid);
+		return CourseService.GetCourseByGuid(guid);
 	}
 
 	protected override void OnParametersSet()

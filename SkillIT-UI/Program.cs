@@ -3,6 +3,7 @@ using BusinessLogic;
 using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SkillIT_Models.Data;
@@ -21,15 +22,12 @@ AuthenticationHelper.AuthenticationKey = builder.Configuration["JwtSettings:Secr
     ?? throw new InvalidOperationException("JWT Secret Key not configured");
 
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor().AddHubOptions(options =>
+builder.Services.AddServerSideBlazor(options => 
+{
+    options.RootComponents.RegisterForJavaScript<SkillIT_UI.Shared.NotificationPanel>("fl-notification-panel");
+}).AddHubOptions(options =>
 {
     options.MaximumReceiveMessageSize = 32 * 1024 * 1024; // 32MB
-});
-
-// Enable dynamic root components for Blazor
-builder.Services.Configure<Microsoft.AspNetCore.Components.Web.HtmlRenderer>(options =>
-{
-    // This enables adding components dynamically via JavaScript
 });
 
 builder.Services.AddBlazoredLocalStorage();
@@ -79,6 +77,7 @@ builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 builder.Services.AddScoped<IEntityService, EntityService>();
 builder.Services.AddScoped<IMailingService, MailingService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<SkillIT_UI.Services.NotificationStateService>();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -132,9 +131,6 @@ builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 builder.WebHost.UseStaticWebAssets();
 
 var app = builder.Build();
-
-// Initialize CourseStaticHelper with IServiceProvider
-CourseStaticHelper.Initialize(app.Services);
 
 if (!app.Environment.IsDevelopment())
 {
